@@ -1,26 +1,27 @@
-# Hoja de ruta técnica
+# Roadmap de Villa Anura
 
-## Fase 1 — Base del proyecto
-- [x] Separar HTML, CSS y JavaScript.
-- [x] Mantener el renderizado con Canvas 2D.
-- [ ] Verificar ejecución local en navegador.
+## Base side-scroller Pixel HD
+- [x] Proyecto organizado en HTML, CSS y módulos JavaScript.
+- [x] Perspectiva lateral con cámara de seguimiento.
+- [x] Flying con animación procedural: reposo, carrera, salto, caída y aterrizaje.
+- [x] Centro de control claro y colorido.
+- [x] Plataformas y gravedad.
+- [x] Tickets coleccionables.
+- [x] Mosca como recompensa por completar el desafío de prueba.
+- [x] Efectos sonoros básicos.
+- [x] Guardado local de recompensas.
 
-## Fase 2 — Modularización
-- [ ] Crear módulo de configuración.
-- [ ] Separar el bucle principal y el renderizado.
-- [ ] Separar controles y entrada del usuario.
-- [ ] Separar Flying y su animación.
-- [ ] Separar escenas/salas.
-- [ ] Separar misiones y reglas de ingeniería.
-- [ ] Separar interfaz y diálogos.
+## Próximas etapas
+1. Reemplazar el dibujo procedural por un sprite sheet final de Flying.
+2. Diseñar y probar animaciones de idle, run, jump, fall, land, blink e interacción.
+3. Construir tienda de atuendos con tickets y vista previa de accesorios.
+4. Integrar progresión y dificultad de las seis misiones originales.
+5. Convertir cada misión en minijuegos breves con instrucciones coloquiales.
+6. Añadir música, efectos adicionales y controles de sonido.
+7. Probar colisiones, rendimiento, accesibilidad y guardado.
 
-## Fase 3 — Mejoras del juego
-- [ ] Sprite sheet de Flying.
-- [ ] Animaciones de caminar en cuatro direcciones.
-- [ ] Colisiones y límites del escenario.
-- [ ] Escenarios de nave con elementos interactivos.
-- [ ] Audio y efectos.
-- [ ] Pruebas de las seis misiones.
-
-## Regla de trabajo
-Cada cambio debe hacerse en una rama o commit identificable y no debe eliminar mecánicas existentes sin una decisión explícita.
+## Criterios de diseño
+- Las misiones conservan sus objetivos y fundamentos educativos.
+- La interfaz muestra instrucciones breves y visuales.
+- Los tickets se obtienen explorando; las moscas se ganan al completar misiones.
+- Las recompensas cosméticas no sustituyen ni saltan los desafíos educativos.
