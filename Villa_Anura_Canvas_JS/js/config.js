@@ -1,0 +1,1 @@
+export const C={W:960,H:540,world:1900,ground:450,gravity:1900,speed:280,jump:-690};
