@@ -1,55 +1,21 @@
 # Villa Anura
+Videojuego educativo 2D con JavaScript ES Modules y Canvas 2D.
 
-Videojuego educativo 2D desarrollado con JavaScript y la API Canvas de HTML5.
+## Dirección visual y jugabilidad
+- Perspectiva lateral (side-scrolling).
+- Pixel art HD con un centro de control espacial luminoso.
+- Flying con estados de animación: idle, run, jump, fall y land.
+- Tickets recogidos durante la exploración.
+- Moscas como recompensa por completar misiones.
+- Efectos de sonido y progreso guardado localmente.
 
-## Tecnologías
+## Ejecutar
+Abre esta carpeta en VS Code y usa Live Server. Alternativamente, ejecuta `python -m http.server 8000` y visita http://localhost:8000.
 
-- HTML5: estructura mínima y elemento `<canvas>`.
-- CSS3: interfaz y presentación.
-- JavaScript: lógica del videojuego, controles, escenas, misiones y dibujo mediante Canvas 2D.
-- Git y GitHub: control de versiones.
+## Controles
+Flechas o A/D para moverse; Espacio, W o flecha arriba para saltar.
 
-## Ejecutar localmente
+## Módulos
+`main.js` coordina el juego; `player.js` controla Flying y sus físicas; `scene.js` dibuja el escenario; `collectibles.js` gestiona tickets; `progress.js` guarda recompensas; `audio.js` produce efectos; `input.js` gestiona teclado; `config.js` contiene parámetros.
 
-No abras `index.html` directamente con doble clic si el navegador bloquea recursos. Inicia un servidor local desde esta carpeta:
-
-### Opción 1: VS Code
-1. Abre esta carpeta en Visual Studio Code.
-2. Instala la extensión **Live Server**.
-3. Haz clic derecho en `index.html`.
-4. Selecciona **Open with Live Server**.
-
-### Opción 2: Python
-```bash
-python -m http.server 8000
-```
-Luego abre http://localhost:8000
-
-## Estructura
-
-```text
-Villa_Anura_Canvas_JS/
-├── index.html
-├── css/
-│   └── style.css
-├── js/
-│   └── main.js
-├── assets/
-│   ├── sprites/
-│   └── audio/
-├── docs/
-├── .gitignore
-└── README.md
-```
-
-## Estado del proyecto
-
-Esta primera organización conserva el prototipo Canvas existente y separa HTML, CSS y JavaScript. El siguiente refactor dividirá `main.js` en módulos como `engine`, `input`, `player`, `scenes`, `missions` y `ui`, sin cambiar las mecánicas de golpe.
-
-## Controles actuales
-
-- WASD o flechas: mover a Flying.
-- E o Espacio: interactuar.
-- L: abrir la pizarra.
-- M: activar/desactivar audio.
-- Esc: cerrar paneles.
+Esta es la base lateral. Las seis misiones educativas, la tienda y los atuendos se integrarán progresivamente conservando sus objetivos originales.
