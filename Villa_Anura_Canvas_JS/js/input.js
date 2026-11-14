@@ -1,0 +1,1 @@
+export class Input{constructor(){this.keys=new Set();addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight','Space','ArrowUp'].includes(e.code))e.preventDefault();this.keys.add(e.code)});addEventListener('keyup',e=>this.keys.delete(e.code));addEventListener('blur',()=>this.keys.clear())}down(...codes){return codes.some(c=>this.keys.has(c))}}
