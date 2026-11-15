@@ -276,7 +276,7 @@ const resourceCategories=[
 {id:'oxygen',name:'OXÍGENO',icon:'◉',options:[['Holgada',400,0.8],['Estándar',750,1.4],['Moderada',1200,2.2],['Muy limitada',1200,2.2]]},
 {id:'safety',name:'SEGURIDAD',icon:'🛡',options:[['Escape en el Lanzamiento',500,0.7],['Protección Térmica',950,1.5],['Soporte Vital y Control Ambiental',1400,2.3],['Blindaje contra Micrometeoritos',1400,2.3],['Sistema de Paracaídas y Aterrizaje',1400,2.3],['Trajes Espaciales',1400,2.3],['Sistemas de Supresión de Incendios',1400,2.3],['Equipos de Supervivencia y Botiquines',1400,2.3]]},
 {id:'materials',name:'MATERIALES',icon:'▣',options:[['Económica',350,0.6],['Ligera',700,1.3],['Compuesta',1100,2.0],['Carga especializada',1100,2.0]]},
-{id:'technology',name:'TECNOLOGÍA',icon:'⌘',options:[['Sistema de propulsión',500,0.5],['Software de vuelo',900,1.0],['Sistemas mecánicos',1350,1.7],['Sistemas de energía',1350,1.7],['Aislante Térmico',1350,1.7]]}
+{id:'technology',name:'TECNOLOGÍA',icon:'⌘',options:[['Blindaje contra radiación',1350,1.7],['Autonomía inteligente',900,1.0],['Instrumentos científicos',900,1.0],['Sensores avanzados',900,1.0],['Comunicaciones',500,0.5],['Sistema de propulsión',500,0.5],['Software de vuelo',900,1.0],['Sistemas mecánicos y estructurales',1350,1.7],['Sistemas de energía',1350,1.7],['Aislante y control térmico',1350,1.7]]}
 ];
 let particles = [], pulse = 0, message = '', messageTimer = 0, jumpWasDown = false;
 function totalMass(){return Object.values(selectedResources).reduce((sum,item)=>sum+(item.mass||0),0);}
@@ -452,7 +452,18 @@ function controlRoom(){
     const cat=resourceCategories.find(v=>v.id===activeCategory);
     roundPanel(502,141,412,36,'#15516e','#58c9cf',8);txt(cat.name+' · ELIGE UNA OPCIÓN',708,164,12,'#ffffff','center');
     txt('Selecciona una alternativa para configurar este sistema.',708,193,9,'#547782','center');
-    cat.options.forEach((opt,i)=>{const yy=207+i*Math.min(37,190/cat.options.length),hh=Math.min(31,190/cat.options.length-4),canPay=missionBudget>=opt[1];roundPanel(508,yy,400,hh,canPay?'#edf8f5':'#f2eeee',canPay?'#9acbbd':'#d9c5c5',6);txt((i+1)+'. '+opt[0],520,yy+hh*.68,opt[0].length>31?8:10,canPay?'#31596c':'#a18e8e');txt('ELEGIR',895,yy+hh*.68,8,canPay?'#397d65':'#a18e8e','right');});
+    if(cat.id==='technology'){
+      const chosen=selectedResources.technology?.items||[],rowH=18.5;
+      cat.options.forEach((opt,i)=>{const yy=204+i*rowH,checked=chosen.some(v=>v[0]===opt[0]);roundPanel(508,yy,400,17,checked?'#dff4e6':'#edf8f5',checked?'#69b78a':'#9acbbd',5);roundPanel(515,yy+3,11,11,checked?'#4ba878':'#ffffff',checked?'#398b66':'#8fbdb2',2);if(checked)txt('✓',520,yy+12,9,'#ffffff','center');txt((i+1)+'. '+opt[0],534,yy+12,opt[0].length>29?7:8,'#31596c');txt(opt[1]+' CR',899,yy+12,8,'#397d65','right');});
+      txt('Marca todas las tecnologías que necesite la misión.',708,400,8,'#547782','center');
+    }else if(cat.id==='safety'){
+      const chosen=selectedResources.safety?.items||[],rowH=24;
+      txt('Valora cada elemento en una escala de cinco niveles.',708,199,8,'#547782','center');
+      cat.options.forEach((opt,i)=>{const yy=204+i*rowH,entry=chosen.find(v=>v[0]===opt[0]),level=entry?Number(entry[3]??2):null;txt((i+1)+'. '+opt[0],512,yy+14,7,'#31596c');for(let j=0;j<5;j++){const xx=700+j*40,active=level===j;roundPanel(xx,yy+2,36,18,active?'#dff4e6':'#edf8f5',active?'#69b78a':'#9acbbd',4);txt(String(j+1),xx+18,yy+14,8,active?'#28764f':'#547782','center');}txt(opt[1]+' CR',899,yy+14,7,'#397d65','right');});
+      txt('1 Muy en desacuerdo  ·  5 Muy de acuerdo',708,402,7,'#547782','center');
+    }else{
+      cat.options.forEach((opt,i)=>{const rowH=Math.min(37,190/cat.options.length),yy=207+i*rowH,hh=Math.min(31,rowH-4),canPay=missionBudget>=opt[1];roundPanel(508,yy,400,hh,canPay?'#edf8f5':'#f2eeee',canPay?'#9acbbd':'#d9c5c5',6);txt((i+1)+'. '+opt[0],520,yy+hh*.68,opt[0].length>31?8:10,canPay?'#31596c':'#a18e8e');txt(opt[1]+' CR',895,yy+hh*.68,8,canPay?'#397d65':'#a18e8e','right');});
+    }
     if(activeCategory==='aero'){const selected=selectedResources.aero;txt(selected?'Perfil instalado: '+selected.label:'Cada perfil tiene un diseño de cohete diferente.',708,408,9,'#547782','center');}
   }else{
     txt('CONFIGURACIÓN DE LA NAVE',708,174,14,'#397d6c','center');txt('Selecciona uno de los seis sistemas.',708,201,10,'#547782','center');
@@ -741,7 +752,7 @@ function keyDown(e){
  if(mode==='landing'){if(e.code==='KeyR'&&landingStatus==='crashed'){beginLandingMission();audio.start();}return;}
  if(mode==='hangar'){
    if(chosenAllResources()&&(e.code==='Enter'||e.code==='NumpadEnter')){mode='launch';launchTimer=0;activeCategory=null;utilityPanel=null;audio.launch();return;}
-   if(activeCategory&&/^Digit[1-8]$/.test(e.code)){const cat=resourceCategories.find(v=>v.id===activeCategory),choice=Number(e.code.slice(-1))-1,opt=cat.options[choice];if(opt)chooseResource(cat,choice,opt);}
+   if(activeCategory&&/^Digit[1-8]$/.test(e.code)){const cat=resourceCategories.find(v=>v.id===activeCategory),choice=Number(e.code.slice(-1))-1,opt=cat.options[choice];if(opt&&cat.id!=='safety')chooseResource(cat,choice,opt);}
    if(e.code==='Escape'){activeCategory=null;utilityPanel=null;}return;
  }
  if(mode==='complete'){
@@ -754,16 +765,29 @@ function keyDown(e){
    if(challengeCorrect&&(e.code==='Enter'||e.code==='NumpadEnter')){if(missionIndex===1){beginLandingMission();return;}if(missionIndex===2){mode='title';return;}}
  }
 }
+const SAFETY_LEVELS=['Totalmente en desacuerdo','En desacuerdo','Ni de acuerdo ni en desacuerdo','De acuerdo','Totalmente de acuerdo'];
+function commitCategorySelection(cat,items,choiceForRocket=null){
+ const cost=items.reduce((s,o)=>s+o[1],0),mass=items.reduce((s,o)=>s+o[2],0),previous=selectedResources[cat.id];
+ const projected=totalMass()-(previous?previous.mass:0)+mass;
+ if(missionBudget+(previous?previous.cost:0)<cost){budgetFailureReason='¡Agotaste todo el presupuesto! La misión ha fallado.';setFrogMood('sad',5);mode='budgetFailed';audio.bump();return false;}
+ if(projected>missionBriefs[0].limit){notify('La masa superaría el límite de 12.5 kg. Ajusta tu selección.');setFrogMood('nervous');return false;}
+ missionBudget+=(previous?previous.cost:0)-cost;
+ if(items.length)selectedResources[cat.id]={label:items.map(o=>o[0]).join(', '),cost,mass,items};else delete selectedResources[cat.id];
+ if(cat.id==='aero'&&choiceForRocket!==null)rocketProfile=choiceForRocket;
+ actionAnimation=1.8;actionLabel='FLYN ESTÁ INSTALANDO: '+cat.name;setFrogMood(cat.id==='aero'?'mischievous':'happy');say('¡Selección confirmada!');audio.confirm();return true;
+}
 function chooseResource(cat,choice,opt){
- const previous=selectedResources[cat.id],projected=totalMass()-(previous?previous.mass:0)+opt[2];
- if(missionBudget+(previous?previous.cost:0)<opt[1]){
-   missionBudget=0;budgetFailureReason='¡Agotaste todo el presupuesto! La misión ha fallado.';setFrogMood('sad',5);mode='budgetFailed';audio.bump();return;
+ if(cat.id==='technology'){
+  const current=(selectedResources.technology?.items||[]).slice(),found=current.findIndex(v=>v[0]===opt[0]);
+  if(found>=0)current.splice(found,1);else current.push(opt);
+  if(commitCategorySelection(cat,current))activeCategory='technology';return;
  }
- if(projected>missionBriefs[0].limit){notify('La masa superaría el límite de 12.5 kg. Elige una opción más ligera.');setFrogMood('nervous');return;}
- if(previous)missionBudget+=previous.cost;
- missionBudget-=opt[1];selectedResources[cat.id]={label:opt[0],cost:opt[1],mass:opt[2]};
- if(cat.id==='aero')rocketProfile=choice;
- activeCategory=null;actionAnimation=1.8;actionLabel='FLYN ESTÁ INSTALANDO: '+cat.name;setFrogMood(cat.id==='aero'?'mischievous':'happy');say('¡Recurso instalado!');audio.confirm();
+ if(cat.id==='safety'){
+  const previous=selectedResources.safety?.items||[],current=previous.filter(v=>v[0]!==opt[0]);
+  current.push([opt[0],opt[1],opt[2],2]);
+  if(commitCategorySelection(cat,current))activeCategory='safety';return;
+ }
+ if(commitCategorySelection(cat,[opt],choice))activeCategory=null;
 }
 function loop(now){
  const dt=Math.min(.035,(now-last)/1000||0);last=now;clock+=dt;if((mode==='title'||mode==='hangar')&&frogMood==='neutral'){idleMoodClock+=dt;if(idleMoodClock>12){setFrogMood('sleepy',2.4);idleMoodClock=0;}}
@@ -790,7 +814,10 @@ canvas.addEventListener('click',(e)=>{
    if(x>=198&&x<=348&&y>=70&&y<=112){utilityPanel='mass';audio.data();return;}
    if(x>=810&&x<=932&&y>=70&&y<=118){if(!activeCategory){notify('Abre primero una categoría para recibir una pista.');return;}if(mdlHints<=0){notify('No quedan pistas disponibles.');return;}mdlHints--;setFrogMood('surprised');const cat=resourceCategories.find(v=>v.id===activeCategory);hintMessage=({fuel:'Compara la autonomía que necesitas con el peso y el presupuesto: no siempre hace falta la opción mayor.',oxygen:'Elige una reserva que cubra la duración de la misión sin cargar oxígeno innecesario.',aero:'El perfil aerodinámico modifica el consumo durante el vuelo. Compara las cuatro formas antes de elegir.',safety:'Piensa en el riesgo principal de esta misión y elige la protección adecuada.',materials:'Lleva los materiales necesarios para cumplir el objetivo, evitando añadir masa sin utilidad.',technology:'Prioriza la tecnología que permita cumplir el objetivo científico y enviar los datos.'})[cat.id];utilityPanel='hint';audio.data();return;}
    if(chosenAllResources()&&x>=75&&x<=885&&y>=408&&y<=440){mode='launch';launchTimer=0;activeCategory=null;utilityPanel=null;audio.launch();return;}
-   if(activeCategory){const cat=resourceCategories.find(v=>v.id===activeCategory),rowH=Math.min(37,190/cat.options.length);if(x>=508&&x<=908&&y>=207&&y<207+cat.options.length*rowH){const choice=Math.max(0,Math.min(cat.options.length-1,Math.floor((y-207)/rowH)));chooseResource(cat,choice,cat.options[choice]);return;}if(x<500||x>920||y<135||y>425)activeCategory=null;return;}
+   if(activeCategory){const cat=resourceCategories.find(v=>v.id===activeCategory);
+     if(cat.id==='technology'&&x>=508&&x<=908&&y>=204&&y<389){const choice=Math.floor((y-204)/18.5),opt=cat.options[choice];if(opt)chooseResource(cat,choice,opt);return;}
+     if(cat.id==='safety'&&x>=700&&x<=900&&y>=206&&y<398){const row=Math.floor((y-204)/24),level=Math.max(0,Math.min(4,Math.floor((x-700)/40))),opt=cat.options[row];if(opt){const previous=selectedResources.safety?.items||[],items=previous.filter(v=>v[0]!==opt[0]);items.push([opt[0],opt[1],opt[2],level]);if(commitCategorySelection(cat,items))activeCategory='safety';}return;}
+     const rowH=Math.min(37,190/cat.options.length);if(x>=508&&x<=908&&y>=207&&y<207+cat.options.length*rowH){const choice=Math.max(0,Math.min(cat.options.length-1,Math.floor((y-207)/rowH)));chooseResource(cat,choice,cat.options[choice]);return;}if(x<500||x>920||y<135||y>425)activeCategory=null;return;}
    const bx=28,by=451,bw=146,gap=7;if(y>=by&&y<=by+66){const i=Math.floor((x-bx)/(bw+gap));if(i>=0&&i<6){activeCategory=resourceCategories[i].id;setFrogMood(i===0?'mischievous':'confused');audio.select();return;}}
    return;
  }
