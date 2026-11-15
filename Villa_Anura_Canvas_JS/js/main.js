@@ -106,7 +106,8 @@ const EN_US_TRANSLATIONS={
   "OBJETIVO DE ATERRIZAJE": "LANDING TARGET",
   "MANTÉN ESPACIO": "HOLD SPACE",
   "Pulsa para reducir velocidad": "Press to slow down",
-  "FRENANDO AHORA": "BRAKING NOW"
+  "FRENANDO AHORA": "BRAKING NOW",
+  "≤ 18 km/h  ·  combustible > 0%": "≤ 18 km/h · fuel > 0%",
   "RESERVA": "REMAINING FUEL",
   "VELOCIDAD": "SPEED",
   "km/h": "km/h",
