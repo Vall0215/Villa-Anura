@@ -13,9 +13,10 @@ let mode = 'title', clock = 0, last = 0, dialogue = '', dialogueTimer = 0;
 let installed = new Set(), missionPhase = 0, cometX = 1030, observationWindow = 0, dataSaved = false, dataSent = false;
 const missionNames = ['SOBREVUELO','ORBITADOR','SONDA ATMOSFÉRICA','ATERRIZADOR','ROVER EXPLORADOR','RETORNO DE MUESTRAS'];
 let missionIndex = 0, challengeAnswered = false, challengeFeedback = '', challengeCorrect = false;
-let missionBudget=5000, mdlHints=3, activeCategory=null, selectedResources={}, actionAnimation=0, actionLabel='';
-const resourceCategories=[{id:'fuel',name:'COMBUSTIBLE',icon:'⛽',options:[['1 galón',500],['2 galones',900],['3 galones',1500]]},{id:'oxygen',name:'OXÍGENO',icon:'◉',options:[['Reserva básica',400],['Reserva estándar',750],['Reserva extendida',1200]]},{id:'energy',name:'ENERGÍA',icon:'⚡',options:[['Batería compacta',450],['Batería reforzada',850],['Panel + batería',1300]]},{id:'safety',name:'SEGURIDAD',icon:'🛡',options:[['Protección básica',500],['Protección reforzada',950],['Sistema redundante',1400]]},{id:'materials',name:'MATERIALES',icon:'▣',options:[['Kit ligero',350],['Kit científico',700],['Kit avanzado',1100]]},{id:'technology',name:'TECNOLOGÍA',icon:'⌘',options:[['Sistema básico',500],['Sistema mejorado',900],['Sistema avanzado',1350]]}];
+let missionBudget=5000, mdlHints=3, activeCategory=null, selectedResources={}, actionAnimation=0, actionLabel='', utilityPanel=null, hintMessage='';
+const resourceCategories=[{id:'fuel',name:'COMBUSTIBLE',icon:'⛽',options:[['1 galón',500,1.2],['2 galones',900,2.1],['3 galones',1500,3.2]]},{id:'oxygen',name:'OXÍGENO',icon:'◉',options:[['Reserva básica',400,0.8],['Reserva estándar',750,1.4],['Reserva extendida',1200,2.2]]},{id:'energy',name:'ENERGÍA',icon:'⚡',options:[['Batería compacta',450,1.0],['Batería reforzada',850,1.8],['Panel + batería',1300,2.6]]},{id:'safety',name:'SEGURIDAD',icon:'🛡',options:[['Protección básica',500,0.7],['Protección reforzada',950,1.5],['Sistema redundante',1400,2.3]]},{id:'materials',name:'MATERIALES',icon:'▣',options:[['Kit ligero',350,0.6],['Kit científico',700,1.3],['Kit avanzado',1100,2.0]]},{id:'technology',name:'TECNOLOGÍA',icon:'⌘',options:[['Sistema básico',500,0.5],['Sistema mejorado',900,1.0],['Sistema avanzado',1350,1.7]]}];
 let particles = [], pulse = 0, message = '', messageTimer = 0, jumpWasDown = false;
+function totalMass(){return Object.values(selectedResources).reduce((sum,item)=>sum+(item.mass||0),0);}
 
 const stations = [
   { id: 'camera', x: 170, icon: '📷', name: 'CÁMARA', desc: 'Captura imágenes científicas' },
@@ -113,10 +114,14 @@ function controlRoom(){
   roundPanel(28,12,904,50,'#fffdf5','#b9d8d4',12);
   txt('VILLA ANURA  ·  CENTRO DE CONTROL',48,33,13,'#397d6c');
   txt('MISIÓN '+(missionIndex+1)+' / 6  ·  '+missionNames[missionIndex],48,51,10,'#426879');
-  roundPanel(735,18,178,38,'#fff0bd','#e4bd55',12);
-  txt('$ '+missionBudget.toLocaleString('es-CO'),824,43,17,'#8b5b23','center');
-  roundPanel(844,68,88,36,'#fffdf5','#c5ded8',10);
-  txt('MDL  '+mdlHints,888,91,13,'#315d77','center');
+  // Presupuesto y masa como controles visibles en la esquina izquierda
+  roundPanel(38,70,150,42,'#fff0bd','#e4bd55',10);
+  txt('$ '+missionBudget.toLocaleString('es-CO'),113,97,18,'#8b5b23','center');
+  roundPanel(38,119,150,38,'#ffd13e','#e4b52e',10);
+  txt('MASA  ·  '+totalMass().toFixed(1)+' kg',113,143,12,'#8b315f','center');
+  // MDL es el botón de pistas
+  roundPanel(810,70,122,48,'#ffd13e','#e4b52e',20);
+  txt('MDL  '+mdlHints,871,100,17,'#8b315f','center');
   // Escena central contenida como pantalla de simulación
   roundPanel(54,75,852,326,'#f7fcfa','#9abdc0',14);
   ctx.save();ctx.beginPath();ctx.roundRect(60,81,840,314,10);ctx.clip();
@@ -171,6 +176,21 @@ function controlRoom(){
     txt('Pulsa 1, 2 o 3 · ESC para cerrar',480,361,9,'#66828a','center');
   }
   if(messageTimer>0){roundPanel(330,388,300,26,'#fffef5','#c6e0d7',8);txt(message,480,406,10,'#3e8066','center');}
+  if(utilityPanel){
+    roundPanel(300,155,360,190,'#fffef8','#62aeb4',13);
+    roundPanel(318,169,324,37,'#15516e','#58c9cf',8);
+    txt(utilityPanel==='mass'?'CONTROL DE MASA':'PISTA DE FLYING',480,193,13,'#ffffff','center');
+    if(utilityPanel==='mass'){
+      txt('MASA INSTALADA',480,235,11,'#66828a','center');
+      txt(totalMass().toFixed(1)+' kg',480,269,24,'#397d65','center');
+      txt('Suma de los recursos seleccionados',480,296,10,'#66828a','center');
+    }else{
+      const hint=hintMessage||'Selecciona primero una categoría para recibir una pista.';
+      wrapText(hint,480,237,290,15,'#426879','center');
+      txt('Pistas restantes: '+mdlHints,480,320,10,'#66828a','center');
+    }
+    txt('Pulsa ESC o haz clic fuera para cerrar',480,333,9,'#66828a','center');
+  }
 }
 function hud(){roundPanel(18,14,210,43,'#fffdf5','#c8e3d8',8);txt('VILLA ANURA',32,32,11,'#58936d');txt('HANGAR ESPACIAL',32,48,10,'#456879');roundPanel(805,14,137,43,'#fffdf5','#c8e3d8',8);txt('🪰 '+progress.data.flies+'    🎟 '+progress.data.tickets,819,41,13,'#456879');}
 function dialogBox(t){roundPanel(675,390,265,65,'#fffef8','#c9e4d7',9);txt('FLYING',690,411,10,'#65a078');txt(t.length>35?t.slice(0,34)+'…':t,690,435,11,'#456879');}
@@ -234,20 +254,32 @@ function completeScene(){
 }
 function draw(){ctx.clearRect(0,0,W,H);if(mode==='title')titleScreen();else if(mode==='hangar')controlRoom();else if(mode==='flyby')flybyScene();else if(mode==='complete')completeScene();else if(mode==='missed'){flybyScene();roundPanel(280,205,400,115,'#fffef5','#c6e3d7',10);txt('¡EL COMETA YA PASÓ!',480,245,20,'#a66d4d','center');txt('Pulsa R para intentarlo otra vez.',480,277,13,'#547a82','center');}}
 function startGame(){if(mode!=='title')return;mode='hangar';missionBudget=5000;mdlHints=3;selectedResources={};activeCategory=null;say('¡Hola! Soy Flying. Prepara los seis sistemas sin superar el presupuesto.');audio.start();canvas.focus();}
-function keyDown(e){if(['ArrowLeft','ArrowRight','ArrowUp',' ','Space'].includes(e.key))e.preventDefault();keys[e.code]=true;if(e.repeat)return;if(mode==='title'&&(e.code==='Enter'||e.code==='NumpadEnter')){e.preventDefault();startGame();}else if(mode==='hangar'){if(activeCategory&&['Digit1','Digit2','Digit3'].includes(e.code)){const cat=resourceCategories.find(v=>v.id===activeCategory),opt=cat.options[Number(e.code.slice(-1))-1];if(opt&&missionBudget>=opt[1]){if(selectedResources[cat.id])missionBudget+=selectedResources[cat.id].cost;missionBudget-=opt[1];selectedResources[cat.id]={label:opt[0],cost:opt[1]};activeCategory=null;actionAnimation=1.8;actionLabel='FLYING INSTALANDO RECURSOS';say('¡Selección confirmada!');audio.data();}}else if(e.code==='Escape')activeCategory=null;}else if(mode==='flyby'){if(e.code==='KeyE')interactFlyby();}else if(mode==='missed'&&e.code==='KeyR'){mode='flyby';cometX=1050;observationWindow=0;missionPhase=0;resetPlayer();say('¡Nueva oportunidad! Prepárate.');}else if(mode==='complete'&&(e.code==='KeyA'||e.code==='Digit1'||e.code==='KeyB'||e.code==='Digit2')&&!challengeCorrect){const q=[{"q":"El cometa pasa muy rápido. ¿Qué sistema necesitas para obtener imágenes?","a":"Cámara científica","b":"Antena de comunicación","correct":0,"why":"¡Correcto! La cámara captura imágenes. La antena sirve para enviar los datos a la Tierra.","icon":"camera"},{"q":"Tu nave se acerca al planeta demasiado rápido. ¿Qué debes hacer para entrar en órbita?","a":"Encender motores para frenar","b":"Acelerar hacia el planeta","correct":0,"why":"¡Bien pensado! Reducir la velocidad permite que la nave sea capturada por una órbita estable.","icon":"orbit"},{"q":"La sonda va a entrar en una atmósfera muy caliente. ¿Qué componente la protege?","a":"Un panel solar más grande","b":"Un escudo térmico","correct":1,"why":"¡Exacto! El escudo térmico ayuda a soportar el calor durante la entrada atmosférica.","icon":"shield"},{"q":"Hay rocas y una pendiente pronunciada. ¿Dónde debería aterrizar la nave?","a":"En una zona plana y despejada","b":"En la pendiente junto a las rocas","correct":0,"why":"¡Correcto! Una superficie plana reduce el riesgo de volcar o dañar las patas de aterrizaje.","icon":"lander"},{"q":"El rover tiene poca energía y encuentra dos caminos. ¿Cuál conviene elegir?","a":"El camino corto y despejado","b":"El camino largo con muchas rocas","correct":0,"why":"¡Buena decisión! Una ruta despejada y corta ayuda a ahorrar energía y evitar daños.","icon":"rover"},{"q":"Ya recogiste una muestra. ¿Cómo la conservas durante el regreso?","a":"Dejarla expuesta para ahorrar peso","b":"Sellarla en un contenedor protegido","correct":1,"why":"¡Excelente! Sellar y proteger la muestra evita contaminación y ayuda a conservarla para su análisis.","icon":"sample"}][missionIndex];const choice=(e.code==='KeyA'||e.code==='Digit1')?0:1;challengeAnswered=true;challengeCorrect=choice===q.correct;challengeFeedback=challengeCorrect?q.why:'No exactamente. Piensa en el objetivo de la misión e inténtalo otra vez.';if(challengeCorrect)audio.win();else audio.data();}else if(mode==='complete'&&e.code==='Enter'&&challengeCorrect){if(missionIndex<5){missionIndex++;challengeAnswered=false;challengeFeedback='';challengeCorrect=false;installed.clear();mode='hangar';resetPlayer();say('¡Vamos con la misión '+(missionIndex+1)+': '+missionNames[missionIndex]+'. Revisa el centro de control!');}else{missionIndex=0;challengeAnswered=false;challengeFeedback='';challengeCorrect=false;installed.clear();mode='title';say('¡Has completado las seis misiones espaciales!');}}}
+function keyDown(e){if(['ArrowLeft','ArrowRight','ArrowUp',' ','Space'].includes(e.key))e.preventDefault();keys[e.code]=true;if(e.repeat)return;if(mode==='title'&&(e.code==='Enter'||e.code==='NumpadEnter')){e.preventDefault();startGame();}else if(mode==='hangar'){if(activeCategory&&['Digit1','Digit2','Digit3'].includes(e.code)){const cat=resourceCategories.find(v=>v.id===activeCategory),opt=cat.options[Number(e.code.slice(-1))-1];if(opt&&missionBudget>=opt[1]){if(selectedResources[cat.id])missionBudget+=selectedResources[cat.id].cost;missionBudget-=opt[1];selectedResources[cat.id]={label:opt[0],cost:opt[1],mass:opt[2]};activeCategory=null;actionAnimation=1.8;actionLabel='FLYING INSTALANDO RECURSOS';say('¡Selección confirmada!');audio.data();}}else if(e.code==='Escape'){activeCategory=null;utilityPanel=null;}}else if(mode==='flyby'){if(e.code==='KeyE')interactFlyby();}else if(mode==='missed'&&e.code==='KeyR'){mode='flyby';cometX=1050;observationWindow=0;missionPhase=0;resetPlayer();say('¡Nueva oportunidad! Prepárate.');}else if(mode==='complete'&&(e.code==='KeyA'||e.code==='Digit1'||e.code==='KeyB'||e.code==='Digit2')&&!challengeCorrect){const q=[{"q":"El cometa pasa muy rápido. ¿Qué sistema necesitas para obtener imágenes?","a":"Cámara científica","b":"Antena de comunicación","correct":0,"why":"¡Correcto! La cámara captura imágenes. La antena sirve para enviar los datos a la Tierra.","icon":"camera"},{"q":"Tu nave se acerca al planeta demasiado rápido. ¿Qué debes hacer para entrar en órbita?","a":"Encender motores para frenar","b":"Acelerar hacia el planeta","correct":0,"why":"¡Bien pensado! Reducir la velocidad permite que la nave sea capturada por una órbita estable.","icon":"orbit"},{"q":"La sonda va a entrar en una atmósfera muy caliente. ¿Qué componente la protege?","a":"Un panel solar más grande","b":"Un escudo térmico","correct":1,"why":"¡Exacto! El escudo térmico ayuda a soportar el calor durante la entrada atmosférica.","icon":"shield"},{"q":"Hay rocas y una pendiente pronunciada. ¿Dónde debería aterrizar la nave?","a":"En una zona plana y despejada","b":"En la pendiente junto a las rocas","correct":0,"why":"¡Correcto! Una superficie plana reduce el riesgo de volcar o dañar las patas de aterrizaje.","icon":"lander"},{"q":"El rover tiene poca energía y encuentra dos caminos. ¿Cuál conviene elegir?","a":"El camino corto y despejado","b":"El camino largo con muchas rocas","correct":0,"why":"¡Buena decisión! Una ruta despejada y corta ayuda a ahorrar energía y evitar daños.","icon":"rover"},{"q":"Ya recogiste una muestra. ¿Cómo la conservas durante el regreso?","a":"Dejarla expuesta para ahorrar peso","b":"Sellarla en un contenedor protegido","correct":1,"why":"¡Excelente! Sellar y proteger la muestra evita contaminación y ayuda a conservarla para su análisis.","icon":"sample"}][missionIndex];const choice=(e.code==='KeyA'||e.code==='Digit1')?0:1;challengeAnswered=true;challengeCorrect=choice===q.correct;challengeFeedback=challengeCorrect?q.why:'No exactamente. Piensa en el objetivo de la misión e inténtalo otra vez.';if(challengeCorrect)audio.win();else audio.data();}else if(mode==='complete'&&e.code==='Enter'&&challengeCorrect){if(missionIndex<5){missionIndex++;challengeAnswered=false;challengeFeedback='';challengeCorrect=false;installed.clear();mode='hangar';resetPlayer();say('¡Vamos con la misión '+(missionIndex+1)+': '+missionNames[missionIndex]+'. Revisa el centro de control!');}else{missionIndex=0;challengeAnswered=false;challengeFeedback='';challengeCorrect=false;installed.clear();mode='title';say('¡Has completado las seis misiones espaciales!');}}}
 function loop(now){const dt=Math.min(.035,(now-last)/1000||0);last=now;clock+=dt;if(dialogueTimer>0)dialogueTimer-=dt;if(messageTimer>0)messageTimer-=dt;if(actionAnimation>0)actionAnimation=Math.max(0,actionAnimation-dt);if(mode==='flyby')updateFlyby(dt);draw();requestAnimationFrame(loop);}
 canvas.tabIndex=0;canvas.style.cursor='pointer';document.addEventListener('keydown',keyDown);document.addEventListener('keyup',e=>keys[e.code]=false);window.addEventListener('blur',()=>Object.keys(keys).forEach(k=>keys[k]=false));canvas.addEventListener('pointerdown',()=>{canvas.focus();if(mode==='title')startGame();else if(mode==='complete')keyDown({key:'Enter',code:'Enter',repeat:false,preventDefault(){}});});canvas.addEventListener('click',(e)=>{
   canvas.focus();
   const r=canvas.getBoundingClientRect(),x=(e.clientX-r.left)*W/r.width,y=(e.clientY-r.top)*H/r.height;
   if(mode==='title'){startGame();return;}
   if(mode==='hangar'){
+    if(utilityPanel){
+      if(x<300||x>660||y<155||y>345){utilityPanel=null;return;}
+      return;
+    }
+    if(x>=38&&x<=188&&y>=119&&y<=157){utilityPanel='mass';audio.data();return;}
+    if(x>=810&&x<=932&&y>=70&&y<=118){
+      if(mdlHints<=0){notify('No quedan pistas disponibles.');return;}
+      mdlHints--;
+      const cat=activeCategory?resourceCategories.find(v=>v.id===activeCategory):null;
+      hintMessage=cat?({fuel:'Elige combustible suficiente para la duración de la misión, sin cargar de más.',oxygen:'Piensa cuánto tiempo debe mantenerse la tripulación o los instrumentos protegidos.',energy:'Los instrumentos consumen energía: busca un equilibrio entre autonomía y peso.',safety:'La protección debe responder al mayor riesgo de esta misión.',materials:'Lleva solo los materiales necesarios para cumplir el objetivo científico.',technology:'Prioriza la tecnología que permita observar, almacenar y comunicar los datos.'}[cat.id]):'Antes de elegir, revisa qué necesita la misión y evita gastar recursos que no vas a utilizar.';
+      utilityPanel='hint';audio.data();return;
+    }
     if(activeCategory){
       const cat=resourceCategories.find(v=>v.id===activeCategory);
       if(x>=280&&x<=680&&y>=215&&y<=344){
         const choice=Math.max(0,Math.min(2,Math.floor((y-215)/43))),opt=cat.options[choice];
         if(missionBudget<opt[1]){notify('Presupuesto insuficiente. Elige otra opción.');return;}
         if(selectedResources[cat.id])missionBudget+=selectedResources[cat.id].cost;
-        missionBudget-=opt[1];selectedResources[cat.id]={label:opt[0],cost:opt[1]};
+        missionBudget-=opt[1];selectedResources[cat.id]={label:opt[0],cost:opt[1],mass:opt[2]};
         activeCategory=null;actionAnimation=1.8;actionLabel='FLYING ESTÁ INSTALANDO: '+cat.name;
         say('¡Recurso instalado! Se descontaron $'+opt[1].toLocaleString('es-CO')+'.');audio.data();return;
       }
