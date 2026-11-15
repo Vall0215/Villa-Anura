@@ -104,6 +104,3 @@ El módulo de audio utiliza los siguientes archivos dentro de `assets/audio/`:
 
 Los archivos MP3 no están incluidos actualmente en el repositorio. Para disponer de la música y los efectos, agrega allí los recursos correspondientes.
 
-## Alcance del proyecto
-
-Villa Anura es un proyecto educativo independiente. Sus misiones y parámetros físicos son representaciones simplificadas creadas con fines didácticos; no constituyen una simulación astrodinámica validada ni un producto oficial o certificado por NASA.
