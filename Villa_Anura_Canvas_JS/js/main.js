@@ -64,40 +64,34 @@ function drawFrog(x,y,scale=1){
   ctx.restore();
 }
 function background(){
-  // Bright white assembly hangar with glass roof and exterior light
-  const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#f9fcff');g.addColorStop(.58,'#eaf5f6');g.addColorStop(1,'#dcebee');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
-  // distant glass panes
-  rect(0,54,W,300,'#e7f4f7');
-  for(let x=0;x<W;x+=120){rect(x,55,4,290,'#c3d7df');rect(x+7,62,100,270,'#f8fdff');}
-  for(let y=70;y<340;y+=82)rect(0,y,W,3,'#c5dbe2');
-  // soft sky and planet visible outside
-  planet(840,142,53,'#a9d7ed');planet(840,142,42,'#bfe7f4');rect(805,137,72,3,'#eafaff');
-  // ceiling trusses
-  rect(0,0,W,54,'#e4edf1');for(let x=0;x<W;x+=80){rect(x,0,5,55,'#aabec9');rect(x,14,80,4,'#c1d1d8');}
-  for(let x=-40;x<W;x+=160){ctx.strokeStyle='#9eb3bf';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x+90,54);ctx.stroke();ctx.beginPath();ctx.moveTo(x+90,0);ctx.lineTo(x,54);ctx.stroke();}
-  // hanging industrial lights
-  for(let x=70;x<W;x+=180){rect(x,49,3,20,'#8ba4b1');roundPanel(x-19,64,42,9,'#fff9df','#d6e1dc',4);rect(x-12,66,28,3,'#fff3b8');}
-  // clean white floor with perspective tiles
-  rect(0,354,W,186,'#e9f1ef');rect(0,354,W,5,'#9dbbb8');
-  for(let x=-100;x<W+100;x+=100){ctx.strokeStyle='#c6d8d5';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(480,354);ctx.lineTo(x,540);ctx.stroke();}
-  for(let y=390;y<540;y+=42)rect(0,y,W,2,'#d1e0dd');
-  // safety markings
-  rect(0,516,W,8,'#f1c75d');for(let x=0;x<W;x+=34){rect(x,516,17,8,'#fff3c4');}
-  // side workbenches and monitor clusters
-  roundPanel(24,230,170,108,'#dce8ec','#9db8c4',8);rect(37,244,144,65,'#174f70');rect(44,251,130,51,'#1b6d91');
-  for(let i=0;i<5;i++){rect(52+i*22,266,12,3,'#7ce2e0');rect(52+i*22,277,8,14,'#65c8cf');}
-  roundPanel(765,235,170,104,'#dce8ec','#9db8c4',8);rect(779,248,142,68,'#164b6c');planet(850,280,20,'#8ad1dc');rect(806,307,85,3,'#6cd5df');
-  // structural rocket gantry in the middle
-  rect(370,112,18,244,'#e4b34b');rect(572,112,18,244,'#e4b34b');rect(370,112,220,13,'#e4b34b');
-  for(let y=132;y<350;y+=48){rect(370,y,220,5,'#f3cf71');rect(370,y,12,42,'#c38b37');rect(578,y,12,42,'#c38b37');}
-  // spacecraft assembly module
-  rect(447,145,67,188,'#d6e3e9');rect(454,143,53,188,'#fbfdff');rect(454,205,53,8,'#4aa6a7');rect(454,278,53,7,'#4aa6a7');
-  rect(465,130,35,18,'#d9e8ed');rect(459,125,47,9,'#9db4c1');rect(442,325,77,13,'#c4d4db');rect(434,337,93,13,'#e2e9ec');
-  // crane above rocket
-  rect(450,76,64,9,'#e8b94d');rect(477,52,10,27,'#d89f37');rect(469,42,27,11,'#e7b64c');rect(481,79,3,49,'#8ba0a9');
-  // potted plants soften the hangar
-  rect(212,325,24,28,'#ffffff');rect(207,317,34,8,'#c9d8d6');for(let i=0;i<4;i++){rect(213+i*5,303-(i%2)*6,5,17,'#66b779');}
-  rect(710,325,24,28,'#ffffff');rect(705,317,34,8,'#c9d8d6');for(let i=0;i<4;i++){rect(711+i*5,303-(i%2)*6,5,17,'#66b779');}
+  // Villa Anura: hangar pastel, luminoso y limpio, basado en la referencia aprobada
+  const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#dff2ee');g.addColorStop(.64,'#f4f8ef');g.addColorStop(1,'#d7e9e4');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  // ventanales panorámicos: exterior claro y estructura geométrica
+  rect(0,54,W,300,'#f8fcfa');
+  for(let x=0;x<=W;x+=120){rect(x,54,4,300,'#b9cfd2');}
+  for(let y=56;y<=354;y+=82){rect(0,y,W,4,'#c5dadd');}
+  // cielo suave y planeta a través del ventanal
+  planet(842,138,54,'#a9d7e9');planet(842,138,43,'#b9e2ed');
+  // cerchas superiores azul grisáceo
+  rect(0,0,W,55,'#d9e8e9');rect(0,0,W,5,'#c0d5d9');
+  for(let x=-35;x<W;x+=145){ctx.strokeStyle='#9fb6c0';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x+82,54);ctx.moveTo(x+82,0);ctx.lineTo(x,54);ctx.stroke();}
+  for(let x=72;x<W;x+=180){rect(x,53,3,16,'#a7bdc2');roundPanel(x-19,68,42,9,'#fff9dc','#d5e2d9',4);}
+  // gran pórtico amarillo de ensamblaje, visible detrás de Flying
+  rect(369,83,12,276,'#d9a63e');rect(579,83,12,276,'#d9a63e');rect(369,83,222,12,'#e6b84e');
+  rect(390,95,9,250,'#efc85f');rect(560,95,9,250,'#efc85f');
+  for(let y=128;y<350;y+=56){rect(380,y,190,5,'#e7bd58');}
+  rect(470,69,28,11,'#e7b94b');rect(482,80,4,25,'#d39a36');
+  // pantallas laterales de telemetría
+  roundPanel(20,245,160,101,'#dce8eb','#a9c5cb',8);rect(37,258,130,61,'#164e70');
+  for(let i=0;i<5;i++){rect(47+i*22,278,13,3,'#7ddbd7');rect(47+i*22,288,7,14,'#52b7bb');}
+  roundPanel(766,250,150,96,'#dce8eb','#a9c5cb',8);rect(782,261,118,64,'#174d6c');planet(850,289,18,'#83cbd4');rect(818,315,64,3,'#79d4d5');
+  // pequeños indicadores verdes en los extremos
+  for(const x of [218,710]){rect(x,311,5,18,'#65b87e');rect(x+7,306,5,23,'#65b87e');rect(x+14,313,5,16,'#65b87e');}
+  // suelo claro con perspectiva, líneas finas y franja de seguridad
+  rect(0,360,W,180,'#e8f0ed');rect(0,359,W,5,'#9ebfba');
+  for(let x=-80;x<=1040;x+=72){ctx.strokeStyle='#c4d8d4';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(480,364);ctx.lineTo(x,540);ctx.stroke();}
+  for(let y=395;y<540;y+=42){rect(0,y,W,2,'#cbdcd8');}
+  rect(0,514,W,8,'#edc85d');for(let x=0;x<W;x+=34){rect(x,514,17,8,'#fff0bd');}
 }
 function controlRoom(){background();
   // mission banner
