@@ -136,7 +136,8 @@ function controlRoom(){
   roundPanel(28,12,904,50,'#fffdf5','#b9d8d4',12);
   txt('VILLA ANURA  ·  CENTRO DE CONTROL',48,33,13,'#397d6c');
   txt('★ '+earnedStars+'  ESTRELLAS',690,42,11,'#a47727','right');
-  txt('MISIÓN '+(missionIndex+1)+' / 6  ·  '+missionBriefs[missionIndex].title,48,51,10,'#426879');
+  txt('MISIÓN 1 / 1  ·  EXPLORACIÓN ESPACIAL',48,51,10,'#426879');
+c  txt('SECCIÓN '+(missionIndex+1)+' / 6  ·  '+missionBriefs[missionIndex].title,48,64,9,'#66828a');
   // Presupuesto y masa como controles visibles en la esquina izquierda
   roundPanel(38,70,150,42,'#fff0bd','#e4bd55',10);
   txt('$ '+missionBudget.toLocaleString('es-CO'),113,97,18,'#8b5b23','center');
@@ -263,10 +264,10 @@ function interactFlyby(){if(missionPhase===0){if(cometX<400&&cometX>95){missionP
 function completeScene(){
   background();planet(480,215,112,'#abd9cf');drawFrog(480,365,0.78);
   const q=missionChallenges[missionIndex];
-  txt('¡LANZAMIENTO COMPLETADO!',480,57,25,'#4c8668','center');
+  txt('¡SECCIÓN '+(missionIndex+1)+' COMPLETADA!',480,57,25,'#4c8668','center');
   roundPanel(185,105,590,330,'#fffef8','#9fcbd1',13);
   roundPanel(205,122,550,46,'#15516e','#58c9cf',9);
-  txt('DESAFÍO DE MISIÓN '+(missionIndex+1),480,151,15,'#ffffff','center');
+  txt('DESAFÍO DE LA SECCIÓN '+(missionIndex+1)+' / 6',480,151,15,'#ffffff','center');
   roundPanel(220,184,105,100,'#e7f5f4','#b6d9d5',8);
   if(missionIndex===0){rect(252,213,42,44,'#f7ffff');rect(260,204,26,10,'#e4bd55');rect(264,226,18,18,'#4d9cc1');}
   else if(missionIndex===1){planet(272,231,27,'#9da69c');}
@@ -287,7 +288,7 @@ function completeScene(){
 }
 function launchScene(){background();planet(760,170,62,'#b5dce8');roundPanel(60,55,840,410,'#eaf5f2','#9abdc0',16);for(let x=100;x<880;x+=100)rect(x,80,3,300,'#c0d5d7');for(let y=120;y<390;y+=65)rect(60,y,840,3,'#c5dadd');rect(410,350,140,14,'#e4bd55');rect(425,315,110,35,'#d7e5e7');const lift=Math.min(210,launchTimer*72);ctx.save();ctx.translate(0,-lift);rect(452,175,57,168,'#f8ffff');ctx.fillStyle='#fff';ctx.beginPath();ctx.moveTo(452,177);ctx.lineTo(480,137);ctx.lineTo(509,177);ctx.closePath();ctx.fill();rect(459,206,42,7,'#48b5aa');rect(459,271,42,7,'#48b5aa');ctx.fillStyle='#f3a34b';ctx.beginPath();ctx.moveTo(462,344);ctx.lineTo(480,390+Math.sin(clock*18)*8);ctx.lineTo(498,344);ctx.closePath();ctx.fill();ctx.restore();drawFrog(480,390,0.55);txt('LANZAMIENTO DE MISIÓN',480,95,22,'#397d65','center');txt('¡Todos los sistemas preparados! Flying está despegando.',480,430,12,'#547a82','center');}
 function draw(){ctx.clearRect(0,0,W,H);if(mode==='title')titleScreen();else if(mode==='hangar')controlRoom();else if(mode==='launch')launchScene();else if(mode==='flyby')flybyScene();else if(mode==='complete')completeScene();else if(mode==='missed'){flybyScene();roundPanel(280,205,400,115,'#fffef5','#c6e3d7',10);txt('¡EL COMETA YA PASÓ!',480,245,20,'#a66d4d','center');txt('Pulsa R para intentarlo otra vez.',480,277,13,'#547a82','center');}}
-function startGame(){if(mode!=='title')return;mode='hangar';missionIndex=0;missionBudget=5000;mdlHints=3;selectedResources={};activeCategory=null;say('¡Hola! Soy Flying. Prepara los seis sistemas sin superar el presupuesto.');audio.start();canvas.focus();}
+function startGame(){if(mode!=='title')return;mode='hangar';missionIndex=0;missionBudget=5000;mdlHints=3;selectedResources={};activeCategory=null;say('¡Hola! Soy Flying. Esta es nuestra misión de exploración espacial. Completa sus seis secciones administrando el presupuesto total.');audio.start();canvas.focus();}
 function keyDown(e){
  if(['ArrowLeft','ArrowRight','ArrowUp',' ','Space'].includes(e.key))e.preventDefault();
  keys[e.code]=true;if(e.repeat)return;
@@ -307,8 +308,8 @@ function keyDown(e){
      if(challengeCorrect){audio.win();if(!completedMissions.includes(missionIndex)){earnedStars+=2;completedMissions.push(missionIndex);saveProgress();}}else audio.data();return;
    }
    if(challengeCorrect&&(e.code==='Enter'||e.code==='NumpadEnter')){
-     if(missionIndex<5){missionIndex++;missionBudget=5000;mdlHints=3;selectedResources={};activeCategory=null;utilityPanel=null;challengeAnswered=false;challengeFeedback='';challengeCorrect=false;mode='hangar';resetPlayer();say('Nueva misión: '+missionBriefs[missionIndex].objective);audio.start();}
-     else{mode='title';say('¡Has completado las seis misiones espaciales!');}
+     if(missionIndex<5){missionIndex++;selectedResources={};activeCategory=null;utilityPanel=null;challengeAnswered=false;challengeFeedback='';challengeCorrect=false;mode='hangar';resetPlayer();say('Continúa la misión 1: '+missionBriefs[missionIndex].objective);audio.start();}
+     else{mode='title';say('¡Has completado la misión de exploración espacial y sus seis secciones!');}
    }
  }
 }
