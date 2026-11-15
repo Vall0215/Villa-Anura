@@ -13,7 +13,8 @@ let mode = 'title', clock = 0, last = 0, dialogue = '', dialogueTimer = 0;
 let installed = new Set(), missionPhase = 0, cometX = 1030, observationWindow = 0, dataSaved = false, dataSent = false;
 const missionNames = ['SOBREVUELO','ORBITADOR','SONDA ATMOSFÉRICA','ATERRIZADOR','ROVER EXPLORADOR','RETORNO DE MUESTRAS'];
 let missionIndex = 0, challengeAnswered = false, challengeFeedback = '', challengeCorrect = false;
-let missionBudget=7000, mdlHints=3, activeCategory=null, selectedResources={}, actionAnimation=0, actionLabel='', utilityPanel=null, hintMessage='', launchTimer=0;
+const INITIAL_MISSION_BUDGET=7000;
+let missionBudget=INITIAL_MISSION_BUDGET, mdlHints=3, activeCategory=null, selectedResources={}, actionAnimation=0, actionLabel='', utilityPanel=null, hintMessage='', launchTimer=0;
 let botanyFactors={water:null,uv:null,co2:null}, botanyActiveInput=null, botanyTested=new Set(), botanyResult=null, botanyNotice='Selecciona 0 o 1 en cada casilla.';
 let landingAltitude=650, landingSpeed=55, landingFuel=100, landingStatus='ready', landingThrottle=false, landingMessage='Usa ↑ para frenar y ↓ para acelerar el descenso.';
 const missionBriefs=[
@@ -30,6 +31,7 @@ let earnedStars=Number(localStorage.getItem('villaAnuraStars')||0);
 let completedMissions=JSON.parse(localStorage.getItem('villaAnuraCompleted')||'[]');
 function saveProgress(){localStorage.setItem('villaAnuraStars',String(earnedStars));localStorage.setItem('villaAnuraCompleted',JSON.stringify(completedMissions));}
 
+// Catálogo de respuestas de la Misión 1. Cada categoría conserva las opciones indicadas para el juego.
 const resourceCategories=[
 {id:'fuel',name:'COMBUSTIBLE',icon:'⛽',options:[['Criogénico',500,1.2],['Hidrocarburo',900,2.1],['Hipergólico',1500,3.2],['Sólido',1500,3.2],['Eléctrico / Iónico',1500,3.2]]},
 {id:'oxygen',name:'OXÍGENO',icon:'◉',options:[['Holgada',400,0.8],['Estándar',750,1.4],['Moderada',1200,2.2],['Muy limitada',1200,2.2]]},
@@ -470,7 +472,7 @@ function landingScene(){
 }
 
 function draw(){ctx.clearRect(0,0,W,H);if(mode==='title')titleScreen();else if(mode==='hangar')controlRoom();else if(mode==='launch')launchScene();else if(mode==='botany')botanyScene();else if(mode==='landing')landingScene();else if(mode==='flyby')flybyScene();else if(mode==='complete')completeScene();else if(mode==='missed'){flybyScene();roundPanel(280,205,400,115,'#fffef5','#c6e3d7',10);txt('¡EL COMETA YA PASÓ!',480,245,20,'#a66d4d','center');txt('Pulsa R para intentarlo otra vez.',480,277,13,'#547a82','center');}}
-function startGame(){if(mode!=='title')return;mode='hangar';missionIndex=0;missionBudget=7000;mdlHints=3;selectedResources={};activeCategory=null;say('¡Hola! Soy Flyn. Esta es nuestra misión de exploración espacial. Completa las tres misiones y administra el presupuesto inicial de 7.000 créditos.');audio.start();canvas.focus();}
+function startGame(){if(mode!=='title')return;mode='hangar';missionIndex=0;missionBudget=INITIAL_MISSION_BUDGET;mdlHints=3;selectedResources={};activeCategory=null;say('¡Hola! Soy Flyn. Esta es nuestra misión de exploración espacial. Completa las tres misiones y administra el presupuesto inicial de 7.000 créditos.');audio.start();canvas.focus();}
 function keyDown(e){
  if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown',' ','Space'].includes(e.key))e.preventDefault();
  keys[e.code]=true;if(e.repeat)return;
