@@ -301,6 +301,7 @@ function botanyScene(){
   roundPanel(55,76,850,54,'#e8f5ef','#a9d2c4',10);txt('Completa las tres casillas escribiendo 0 o 1 en cada una.',480,99,13,'#285d60','center');txt('Agua · Radiación UV · CO₂',480,117,10,'#5c7d7b','center');
   roundPanel(48,150,205,265,'#e5f1f0','#9dbfc2',12);txt('FLYN · OPERADORA',150,177,11,'#397d6c','center');
   roundPanel(70,192,161,78,'#164e70','#78b8bf',8);txt('SISTEMA',150,212,9,'#9de8df','center');txt('BOTÁNICO',150,232,14,'#ffffff','center');for(let i=0;i<4;i++)rect(94,246+i*5,35+i*10,2,'#6ed8d5');
+  drawEnvironmentIndicators(150,290);
   drawPlantPreview(150,335);
   drawFrog(150,405,0.52);
   roundPanel(275,150,637,265,'#fffef8','#c8ded8',12);txt('CONFIGURACIÓN DE VARIABLES',593,185,13,'#397d6c','center');
@@ -313,6 +314,13 @@ function botanyScene(){
   else wrapText(botanyNotice,68,480,650,13,'#547782','left');
   txt('PRUEBAS: '+botanyTested.size+'/7',842,451,9,'#397d6c','center');
   if(botanyResult){roundPanel(755,478,160,35,'#ffd13e','#e4b52e',8);txt('CONTINUAR ▶',835,501,10,'#754c24','center');}
+}
+function drawEnvironmentIndicators(x,y){
+  const water=botanyFactors.water,uv=botanyFactors.uv,co2=botanyFactors.co2;
+  ctx.fillStyle=water===1?'#36a9d6':'#9aaeb3';ctx.beginPath();ctx.moveTo(x-42,y-10);ctx.quadraticCurveTo(x-57,y+7,x-42,y+12);ctx.quadraticCurveTo(x-27,y+7,x-42,y-10);ctx.fill();
+  ctx.strokeStyle=uv===1?'#e5b84b':'#a8b5b5';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x-4,y-9);ctx.lineTo(x-4,y+7);ctx.moveTo(x-14,y-1);ctx.lineTo(x+6,y-1);ctx.moveTo(x-11,y-8);ctx.lineTo(x+3,y+6);ctx.moveTo(x+3,y-8);ctx.lineTo(x-11,y+6);ctx.stroke();
+  ctx.fillStyle=co2===1?'#6e9db1':'#a7b8bb';ctx.beginPath();ctx.arc(x+35,y+2,7,0,Math.PI*2);ctx.arc(x+43,y-4,9,0,Math.PI*2);ctx.arc(x+52,y+2,7,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#ffffff';ctx.font='bold 7px system-ui';ctx.textAlign='center';ctx.fillText('CO₂',x+43,y+5);ctx.textAlign='left';
 }
 function drawPlantPreview(x,y){
   const ready=Object.values(botanyFactors).every(v=>v!==null),water=botanyFactors.water,uv=botanyFactors.uv,co2=botanyFactors.co2;
