@@ -4,7 +4,7 @@ Videojuego educativo para niños, centrado en el diseño guiado y la ejecución 
 
 ## Enfoque actual
 - Público objetivo: niños.
-- Diseño de nave: guiado, con explicaciones de Flying.
+- Diseño de nave: guiado, con explicaciones de Flyn.
 - Realismo físico: simple, mediante reglas educativas visuales.
 - Objetivo principal: aprender a preparar, ejecutar y evaluar misiones espaciales. Tickets y moscas son recompensas secundarias.
 
