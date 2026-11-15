@@ -1,24 +1,30 @@
-# Villa Anura
-Videojuego educativo 2D de exploración espacial, desarrollado con JavaScript ES Modules y Canvas 2D.
+# Villa Anura — Space Mission Simulator
 
-## Experiencia actual (prototipo jugable)
-- Centro de control con interfaz clara y luminosa.
-- Seis misiones en progresión: Sobrevuelo, Orbitador, Sonda atmosférica, Aterrizador, Rover y Retorno de muestras.
-- Desbloqueo secuencial: cada misión se habilita al completar la anterior.
-- Cada recorrido incluye tres objetos de objetivo, tickets coleccionables y obstáculos cuya cantidad aumenta según la misión.
-- Recompensa por primera finalización: una mosca y tickets adicionales.
-- Tienda local de atuendos comprables con tickets; selección de apariencia de Flying.
-- Flying con paleta de colores intercambiable, parpadeo y pequeños saltos al moverse.
-- Efectos de sonido sintetizados para salto, datos, tickets, obstáculos, bonus y victoria.
-- Progreso guardado en localStorage del navegador.
+Videojuego educativo para niños, centrado en el diseño guiado y la ejecución conceptual de misiones espaciales robóticas.
+
+## Enfoque actual
+- Público objetivo: niños.
+- Diseño de nave: guiado, con explicaciones de Flying.
+- Realismo físico: simple, mediante reglas educativas visuales.
+- Objetivo principal: aprender a preparar, ejecutar y evaluar misiones espaciales. Tickets y moscas son recompensas secundarias.
+
+## Primer MVP: Misión 1 — Sobrevuelo
+Flujo implementado:
+1. Centro de control y mapa de seis misiones.
+2. Briefing interactivo del sobrevuelo.
+3. Selección guiada de componentes de nave.
+4. Comprobación simplificada de masa, energía y almacenamiento.
+5. Simulación por etapas: observar el cometa, guardar datos y transmitirlos a la Tierra.
+6. Informe de misión y desbloqueo de progreso.
+
+La misión requiere cámara científica, antena de comunicación, panel solar y unidad de almacenamiento. El catálogo también presenta componentes no necesarios para enseñar selección y restricciones. Los valores son parámetros didácticos simplificados, no especificaciones reales de una nave.
+
+## Estado de las seis misiones
+- Sobrevuelo: primer flujo funcional de prototipo.
+- Orbitador, Sonda atmosférica, Aterrizador, Rover y Retorno de muestras: visibles en el mapa, pendientes de diseño e implementación de sus mecánicas propias.
 
 ## Ejecutar localmente
 Abre esta carpeta en Visual Studio Code y ejecuta `index.html` con Live Server. También puedes ejecutar `python -m http.server 8000` desde esta carpeta y abrir `http://localhost:8000`.
 
-## Controles
-- Mover: flechas izquierda/derecha o A/D.
-- Saltar: Espacio, W o flecha arriba.
-- Sonido: botón de nota musical en la interfaz.
-
-## Alcance pendiente
-Esta versión implementa un ciclo de juego común y progresión para las seis misiones. Los objetivos, objetos visuales y obstáculos son una primera representación jugable; todavía falta desarrollar mecánicas científicas específicas por arquitectura (inserción orbital, perfiles atmosféricos, selección de zona de aterrizaje, análisis de muestras, etc.), arte final/spritesheets, pruebas de balance y pruebas completas en distintos navegadores.
+## Estado técnico
+Esta versión es un prototipo funcional de interfaz y flujo educativo. La simulación del sobrevuelo es conceptual y determinista; todavía no representa una simulación astrodinámica validada. El progreso se almacena en localStorage del navegador.
