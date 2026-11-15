@@ -462,7 +462,7 @@ function tr(value){
   if(gameLanguage==='es')return raw;
   if(Object.prototype.hasOwnProperty.call(EN_US_TRANSLATIONS,raw))return EN_US_TRANSLATIONS[raw];
   if(Object.prototype.hasOwnProperty.call(ADDITIONAL_EN_US_TRANSLATIONS,raw))return ADDITIONAL_EN_US_TRANSLATIONS[raw];
-  const option=raw.match(/^(\\d+\\.\\s+)(.+)$/);
+  const option=raw.match(/^(\d+\.\s+)(.+)$/);
   if(option)return option[1]+tr(option[2]);
   if(raw.startsWith('COMBINACIÓN '))return 'COMBINATION '+raw.slice('COMBINACIÓN '.length);
   if(raw.startsWith('Fuente: '))return 'Source: '+raw.slice('Fuente: '.length);
@@ -479,10 +479,14 @@ function setGameLanguage(next){
   document.documentElement.lang=gameLanguage;
   document.title=gameLanguage==='en-US'?'Villa Anura — Space Mission Game':'Villa Anura — Videojuego';
   canvas.setAttribute('aria-label',gameLanguage==='en-US'?'Villa Anura video game':'Videojuego Villa Anura');
+  const hint=document.querySelector('.screen-hint');
+  if(hint)hint.textContent=gameLanguage==='en-US'?'VILLA ANURA · SPACE MISSION GAME':'VILLA ANURA · VIDEOJUEGO ESPACIAL';
   audio.select();
 }
 document.documentElement.lang=gameLanguage;
 document.title=gameLanguage==='en-US'?'Villa Anura — Space Mission Game':'Villa Anura — Videojuego';
+const screenHint=document.querySelector('.screen-hint');
+if(screenHint)screenHint.textContent=gameLanguage==='en-US'?'VILLA ANURA · SPACE MISSION GAME':'VILLA ANURA · VIDEOJUEGO ESPACIAL';
 
 
 const player = { x: 118, y: 420, w: 34, h: 42, vx: 0, vy: 0, grounded: true, facing: 1, anim: 0 };
@@ -894,7 +898,7 @@ function updateLanding(dt){
       landingStatus='landed';
       landingMessage='¡Aterrizaje seguro! Has controlado la velocidad y el combustible.';
       awardCampaignVictory();
-      mode='victory';audio.stopMusic();audio.certificate();
+      mode='victory';audio.stopMusic();audio.landing();setTimeout(()=>audio.certificate(),220);
     }else{
       landingStatus='crashed';
       landingMessage='GAME OVER · La nave llegó con demasiada velocidad.';
