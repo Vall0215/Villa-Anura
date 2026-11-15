@@ -253,7 +253,7 @@ const INITIAL_MISSION_BUDGET=5000;
 let missionBudget=INITIAL_MISSION_BUDGET, mdlHints=3, activeCategory=null, selectedResources={}, actionAnimation=0, actionLabel='', utilityPanel=null, hintMessage='', launchTimer=0;
 let botanyFactors={water:null,uv:null,co2:null}, botanyActiveInput=null, botanyTested=new Set(), botanyResult=null, botanyNotice='Selecciona 0 o 1 en cada casilla.';
 let landingAltitude=460, landingSpeed=88, landingFuel=34, landingStatus='ready', landingThrottle=false, landingMessage='Mantén ESPACIO para frenar. Administra el combustible hasta tocar la plataforma.';
-let frogMood='neutral', rocketProfile=0, budgetFailureReason='';
+let frogMood='neutral', frogMoodTimer=0, rocketProfile=0, budgetFailureReason='';
 let landingAudioCooldown=0;
 const missionBriefs=[
 {title:'DISEÑO Y PUESTA EN ÓRBITA',objective:'Prepara una nave equilibrada y lista para el lanzamiento.',limit:12.5},
@@ -271,9 +271,9 @@ function saveProgress(){localStorage.setItem('villaAnuraStars',String(earnedStar
 
 // Catálogo de respuestas de la Misión 1. Cada categoría conserva las opciones indicadas para el juego.
 const resourceCategories=[
+{id:'aero',name:'AERODINÁMICA',icon:'✈',options:[['Elíptica',100,0],['Cónica',250,0],['Ojival',500,0],['Von Kármán',900,0]]},
 {id:'fuel',name:'COMBUSTIBLE',icon:'⛽',options:[['Criogénico',500,1.2],['Hidrocarburo',900,2.1],['Hipergólico',1500,3.2],['Sólido',1500,3.2],['Eléctrico / Iónico',1500,3.2]]},
 {id:'oxygen',name:'OXÍGENO',icon:'◉',options:[['Holgada',400,0.8],['Estándar',750,1.4],['Moderada',1200,2.2],['Muy limitada',1200,2.2]]},
-{id:'aero',name:'AERODINÁMICA',icon:'✈',options:[['Elíptica',100,0],['Cónica',250,0],['Ojival',500,0],['Von Kármán',900,0]]},
 {id:'safety',name:'SEGURIDAD',icon:'🛡',options:[['Escape en el Lanzamiento',500,0.7],['Protección Térmica',950,1.5],['Soporte Vital y Control Ambiental',1400,2.3],['Blindaje contra Micrometeoritos',1400,2.3],['Sistema de Paracaídas y Aterrizaje',1400,2.3],['Trajes Espaciales',1400,2.3],['Sistemas de Supresión de Incendios',1400,2.3],['Equipos de Supervivencia y Botiquines',1400,2.3]]},
 {id:'materials',name:'MATERIALES',icon:'▣',options:[['Económica',350,0.6],['Ligera',700,1.3],['Compuesta',1100,2.0],['Carga especializada',1100,2.0]]},
 {id:'technology',name:'TECNOLOGÍA',icon:'⌘',options:[['Sistema de propulsión',500,0.5],['Software de vuelo',900,1.0],['Sistemas mecánicos',1350,1.7],['Sistemas de energía',1350,1.7],['Aislante Térmico',1350,1.7]]}
@@ -345,33 +345,73 @@ function planet(x,y,r,color){ctx.fillStyle=color;ctx.beginPath();ctx.arc(x,y,r,0
 function stars(){for(let i=0;i<50;i++){const x=(i*191-clock*(i%3+1)*5)%W;const y=(i*79)%300;rect((x+W)%W,y,2+(i%3===0?1:0),2,'#ffffffaa');}}
 function drawFrog(x,y,scale=1){
   ctx.save();ctx.translate(Math.round(x),Math.round(y));ctx.scale(scale,scale);
-  const blink=Math.sin(clock*1.7)>0.985, mood=frogMood;
-  ctx.globalAlpha=.18;ctx.fillStyle='#173b38';ctx.beginPath();ctx.ellipse(0,1,31,7,0,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
+  const mood=frogMood,blink=Math.sin(clock*2.1)>0.988&& !['sleepy','love','proud'].includes(mood);
+  // Sombra y silueta pixelada base, conservando el diseño original de Flyn.
+  ctx.globalAlpha=.2;ctx.fillStyle='#000000';ctx.beginPath();ctx.ellipse(0,1,32,7,0,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
   rect(-36,-18,18,13,'#087d32');rect(-43,-13,18,9,'#39b923');rect(20,-18,18,13,'#087d32');rect(26,-13,18,9,'#39b923');rect(-39,-8,23,7,'#050d0b');rect(19,-8,23,7,'#050d0b');
   rect(-25,-48,50,37,'#050d0b');rect(-22,-46,44,34,'#168b26');rect(-18,-42,36,27,'#43bd27');rect(-16,-29,32,18,'#050d0b');rect(-13,-28,26,16,'#f0df8a');rect(-10,-24,20,11,'#f7e9a4');
   rect(-31,-42,13,31,'#050d0b');rect(-28,-40,12,27,'#15932b');rect(18,-42,13,31,'#050d0b');rect(16,-40,12,27,'#15932b');
   rect(-35,-91,70,55,'#050d0b');rect(-39,-81,8,31,'#050d0b');rect(31,-81,8,31,'#050d0b');rect(-32,-88,64,49,'#15962b');rect(-35,-78,70,30,'#15962b');rect(-30,-84,60,42,'#4bc52b');
   rect(-31,-105,26,28,'#050d0b');rect(5,-105,26,28,'#050d0b');rect(-28,-102,22,24,'#42c52b');rect(7,-102,22,24,'#42c52b');
-  rect(-25,-98,17,18,'#f2d96e');rect(8,-98,17,18,'#f2d96e');
-  if(mood==='surprised'){rect(-20,-97,12,16,'#050d0b');rect(11,-97,12,16,'#050d0b');}else if(mood==='confused'){rect(-19,-95,10,12,'#050d0b');rect(12,-94,10,12,'#050d0b');}else{rect(-20,-94,12,13,'#050d0b');rect(11,-94,12,13,'#050d0b');}
-  if(blink){rect(-19,-87,10,3,'#ffffff');rect(12,-87,10,3,'#ffffff');}else{rect(-18,-96,8,9,'#ffffff');rect(13,-96,8,9,'#ffffff');rect(-15,-93,5,7,'#050d0b');rect(16,-93,5,7,'#050d0b');}
+  // Ojos: doce variantes expresivas.
+  if(mood==='love'){
+    rect(-25,-98,17,18,'#f2d96e');rect(8,-98,17,18,'#f2d96e');
+    rect(-23,-95,7,7,'#ed6f9b');rect(-16,-95,7,7,'#ed6f9b');rect(-21,-88,10,7,'#ed6f9b');
+    rect(10,-95,7,7,'#ed6f9b');rect(17,-95,7,7,'#ed6f9b');rect(12,-88,10,7,'#ed6f9b');
+  }else if(mood==='sleepy'||mood==='proud'||mood==='happy'||mood==='excited'){
+    rect(-25,-98,17,18,'#f2d96e');rect(8,-98,17,18,'#f2d96e');
+    rect(-22,-91,12,3,'#050d0b');rect(-19,-94,3,3,'#050d0b');rect(11,-91,12,3,'#050d0b');rect(14,-94,3,3,'#050d0b');
+  }else if(mood==='angry'){
+    rect(-25,-98,17,18,'#f2d96e');rect(8,-98,17,18,'#f2d96e');
+    rect(-25,-101,18,5,'#050d0b');rect(8,-96,18,5,'#050d0b');rect(-20,-94,10,12,'#050d0b');rect(12,-94,10,12,'#050d0b');
+  }else if(mood==='wink'||mood==='mischievous'){
+    rect(-25,-98,17,18,'#f2d96e');rect(8,-98,17,18,'#f2d96e');rect(-21,-92,10,3,'#050d0b');rect(11,-96,9,10,'#ffffff');rect(14,-93,5,7,'#050d0b');
+  }else{
+    rect(-25,-98,17,18,'#f2d96e');rect(8,-98,17,18,'#f2d96e');
+    if(!blink){rect(-18,-96,8,9,'#ffffff');rect(13,-96,8,9,'#ffffff');rect(-15,-93,5,7,'#050d0b');rect(16,-93,5,7,'#050d0b');}
+    else{rect(-19,-88,11,3,'#050d0b');rect(12,-88,11,3,'#050d0b');}
+  }
   rect(-27,-67,9,7,'#f18b83');rect(18,-67,9,7,'#f18b83');
-  if(mood==='sad'||mood==='confused'){rect(-12,-57,8,3,'#050d0b');rect(-4,-60,8,3,'#050d0b');rect(4,-57,8,3,'#050d0b');}
-  else if(mood==='surprised'){rect(-5,-60,10,8,'#050d0b');rect(-3,-58,6,4,'#f18b83');}
-  else{rect(-12,-58,24,3,'#050d0b');rect(-7,-55,14,3,'#050d0b');}
-  if(mood==='excited'||mood==='happy'){rect(-44,-94,7,7,'#ffd64d');rect(38,-94,7,7,'#ffd64d');}
+  // Boca según emoción.
+  if(mood==='sad'||mood==='confused'||mood==='nervous'||mood==='angry'){
+    rect(-12,-55,8,3,'#050d0b');rect(-5,-59,10,4,'#050d0b');rect(4,-55,8,3,'#050d0b');
+  }else if(mood==='surprised'||mood==='sleepy'){
+    rect(-5,-61,10,10,'#050d0b');rect(-2,-58,4,4,'#f18b83');
+  }else if(mood==='happy'||mood==='excited'||mood==='mischievous'){
+    rect(-13,-60,26,5,'#050d0b');rect(-9,-55,18,5,'#050d0b');rect(-5,-55,10,4,'#ef7891');
+    if(mood==='mischievous'){rect(1,-54,10,7,'#ed6e87');rect(6,-55,8,4,'#ffffff');}
+  }else if(mood==='proud'||mood==='love'){
+    rect(-11,-57,22,3,'#050d0b');rect(-7,-54,14,3,'#050d0b');
+  }else{rect(-12,-58,24,3,'#050d0b');}
+  // Accesorios/gestos característicos del sprite sheet.
+  if(mood==='excited'||mood==='happy'){rect(-48,-94,7,7,'#ffd64d');rect(-53,-88,7,3,'#ffd64d');rect(41,-94,7,7,'#ffd64d');rect(46,-88,7,3,'#ffd64d');}
+  if(mood==='love'||mood==='excited'){drawPixelHeart(-47,-103,'#f26d91');drawPixelHeart(42,-108,'#f26d91');}
+  if(mood==='sad'){rect(-23,-79,4,10,'#55bce8');rect(-19,-72,4,7,'#55bce8');rect(22,-78,4,10,'#55bce8');rect(18,-71,4,7,'#55bce8');}
+  if(mood==='angry'){rect(39,-112,5,12,'#ed514d');rect(34,-107,14,4,'#ed514d');rect(41,-116,5,4,'#ed514d');}
+  if(mood==='surprised'){rect(-49,-100,5,12,'#ffd64d');rect(-44,-95,5,5,'#ffd64d');rect(44,-105,5,12,'#ffd64d');}
+  if(mood==='confused'){txt('?',43,-99,17,'#b58be8','center');}
+  if(mood==='sleepy'){txt('Z z',44,-102,11,'#9bc8ef');rect(35,-67,8,5,'#d9f5ff');}
+  if(mood==='nervous'){rect(39,-82,7,11,'#55bce8');rect(41,-78,3,5,'#d9f5ff');rect(-49,-98,5,5,'#55bce8');}
+  if(mood==='proud'){rect(-48,-99,7,7,'#ffd64d');rect(42,-108,7,7,'#ffd64d');rect(45,-111,2,13,'#ffd64d');}
   ctx.restore();
 }
+function drawPixelHeart(x,y,color){
+  rect(x+3,y,6,4,color);rect(x+15,y,6,4,color);rect(x,y+4,24,7,color);rect(x+4,y+11,16,5,color);rect(x+8,y+16,8,4,color);
+}
+function setFrogMood(mood,duration=2.6){
+  frogMood=mood;frogMoodTimer=duration;
+}
 function background(){
-  const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#07162d');g.addColorStop(.62,'#102a49');g.addColorStop(1,'#183650');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
-  for(let i=0;i<95;i++){const x=(i*137+clock*3)%W,y=(i*73)%H;rect(x,y,1+(i%5===0?1:0),1+(i%5===0?1:0),i%4===0?'#9edce8':'#dceef7');}
-  planet(842,138,54,'#6e9ebd');planet(842,138,43,'#94c9d5');
-  rect(0,54,W,300,'#dcebea');for(let x=0;x<=W;x+=120)rect(x,54,3,300,'#b9cfd2');for(let y=56;y<=354;y+=82)rect(0,y,W,3,'#c5dadd');
-  rect(0,0,W,55,'#d9e8e9');for(let x=-35;x<W;x+=145){ctx.strokeStyle='#9fb6c0';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x+82,54);ctx.moveTo(x+82,0);ctx.lineTo(x,54);ctx.stroke();}
-  for(let x=72;x<W;x+=180){rect(x,53,3,16,'#a7bdc2');roundPanel(x-19,68,42,9,'#fff9dc','#d5e2d9',4);}
-  rect(369,83,12,276,'#d9a63e');rect(579,83,12,276,'#d9a63e');rect(369,83,222,12,'#e6b84e');rect(390,95,9,250,'#efc85f');rect(560,95,9,250,'#efc85f');for(let y=128;y<350;y+=56)rect(380,y,190,5,'#e7bd58');
-  rect(0,360,W,180,'#e8f0ed');rect(0,359,W,5,'#9ebfba');for(let x=-80;x<=1040;x+=72){ctx.strokeStyle='#c4d8d4';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(480,364);ctx.lineTo(x,540);ctx.stroke();}for(let y=395;y<540;y+=42)rect(0,y,W,2,'#cbdcd8');
-  rect(0,514,W,8,'#edc85d');for(let x=0;x<W;x+=34)rect(x,514,17,8,'#fff0bd');
+  // Fondo espacial limpio: solo negro, estrellas y destellos sutiles.
+  const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#030817');g.addColorStop(.58,'#080f27');g.addColorStop(1,'#111b36');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  for(let i=0;i<190;i++){
+    const x=(i*191+((clock*(i%4+1)*2)%W))%W,y=(i*79)%H;
+    const twinkle=.55+.45*Math.sin(clock*1.8+i*2.17);
+    const size=i%17===0?3:i%5===0?2:1;
+    ctx.globalAlpha=twinkle;rect(x,y,size,size,i%9===0?'#8ed8ee':i%7===0?'#f7dca0':'#e9f2ff');
+    if(i%31===0){rect(x-4,y,9,1,'#d7ecff');rect(x,y-4,1,9,'#d7ecff');}
+  }
+  ctx.globalAlpha=1;
 }
 function drawRocket(){
   drawRocketProfile(480,350,rocketProfile);
@@ -531,9 +571,9 @@ function updateLanding(dt){
   if(landingAltitude<=0){
     landingAltitude=0;
     if(landingSpeed<=18&&landingFuel>=0){
-      landingStatus='landed';landingMessage='¡Aterrizaje seguro! Has controlado la velocidad y el combustible.';
+      landingStatus='landed';landingMessage='¡Aterrizaje seguro! Has controlado la velocidad y el combustible.';setFrogMood('proud',8);
       awardCampaignVictory();mode='victory';audio.stopMusic();audio.landing();setTimeout(()=>audio.certificate(),220);
-    }else{landingStatus='crashed';landingMessage='GAME OVER · La nave llegó con demasiada velocidad.';audio.bump();}
+    }else{landingStatus='crashed';landingMessage='GAME OVER · La nave llegó con demasiada velocidad.';setFrogMood('sad',8);audio.bump();}
   }
 }
 function landingScene(){
@@ -547,7 +587,7 @@ function landingScene(){
   roundPanel(766,88,152,315,'#fffef8','#b9d8d4',10);txt('VELOCIDAD',842,113,11,'#397d6c','center');txt('km/h',842,130,9,'#6b8587','center');roundPanel(818,149,48,198,'#e5efec','#b7ceca',7);
   const speedH=184*Math.min(1,landingSpeed/120);rect(827,340-speedH,30,speedH,landingSpeed>75?'#d66b55':landingSpeed>35?'#e3b44b':'#4aa879');txt(Math.round(landingSpeed)+'',842,376,20,landingSpeed>75?'#b65343':'#286b76','center');txt('DESCENSO',842,393,8,'#6b8587','center');
   roundPanel(342,82,276,55,'#fffef8','#b9d8d4',9);txt('ALTITUD RESTANTE',480,102,9,'#6b8587','center');txt(Math.max(0,Math.round(landingAltitude))+' m',480,126,17,'#286b76','center');
-  const shipY=165+(460-landingAltitude)*.34;ctx.save();ctx.translate(0,Math.min(150,shipY-165));drawRocketProfile(480,320,rocketProfile);if(landingThrottle){ctx.fillStyle='#f3a34b';ctx.beginPath();ctx.moveTo(468,316);ctx.lineTo(480,355+Math.sin(clock*22)*5);ctx.lineTo(492,316);ctx.closePath();ctx.fill();}ctx.restore();
+  const shipY=165+(460-landingAltitude)*.34;ctx.save();ctx.translate(0,Math.min(150,shipY-165));drawRocketProfile(480,320,rocketProfile);if(landingThrottle){setFrogMood('nervous',.35);ctx.fillStyle='#f3a34b';ctx.beginPath();ctx.moveTo(468,316);ctx.lineTo(480,355+Math.sin(clock*22)*5);ctx.lineTo(492,316);ctx.closePath();ctx.fill();}ctx.restore();
   roundPanel(220,165,180,190,'#fffef8','#b9d8d4',10);txt('CONTROLES',310,190,11,'#397d6c','center');roundPanel(245,220,130,60,'#e4f5ed','#8dc7ae',8);txt('␣  FRENAR',310,256,15,'#286b62','center');txt('Mantén ESPACIO',310,299,9,'#a16a37','center');
   drawFrog(660,405,0.55);
   roundPanel(205,505,550,27,'#fffdf5','#b9d8d4',8);txt(landingStatus==='crashed'?'GAME OVER · PULSA R PARA REINTENTAR':landingMessage,480,523,9,landingStatus==='crashed'?'#a34c43':'#426879','center');
@@ -576,7 +616,7 @@ function victoryScene(){
   for(let x=0;x<W;x+=52){rect(x,515,25,7,'#e9c85f');}
 
   // Flyn celebrates next to the certificate
-  drawFrog(315,430,0.9);
+  setFrogMood('proud',10);drawFrog(315,430,0.9);
   roundPanel(110,455,410,30,'#fffdf5','#c1d9ce',9);
   txt('¡Flyn celebra tu gran aterrizaje!',315,475,11,'#397d65','center');
 
@@ -637,18 +677,18 @@ function draw(){
  else if(mode==='missed'){flybyScene();roundPanel(280,205,400,115,'#fffef5','#c6e3d7',10);txt('¡EL COMETA YA PASÓ!',480,245,20,'#a66d4d','center');txt('Pulsa R para intentarlo otra vez.',480,277,13,'#547a82','center');}
  drawLanguageControl();drawAudioControl();
 }
-function startGame(){if(mode!=='title')return;frogMood='neutral';budgetFailureReason='';mode='hangar';missionIndex=0;missionBudget=INITIAL_MISSION_BUDGET;mdlHints=3;selectedResources={};activeCategory=null;say('¡Hola! Soy Flyn. Esta es nuestra misión de exploración espacial. Completa las tres misiones y administra el presupuesto inicial de 5.000 créditos.');audio.start();audio.playMusic();canvas.focus();}
+function startGame(){if(mode!=='title')return;setFrogMood('neutral',0);budgetFailureReason='';mode='hangar';missionIndex=0;missionBudget=INITIAL_MISSION_BUDGET;mdlHints=3;selectedResources={};activeCategory=null;say('¡Hola! Soy Flyn. Esta es nuestra misión de exploración espacial. Completa las tres misiones y administra el presupuesto inicial de 5.000 créditos.');audio.start();audio.playMusic();canvas.focus();}
 function keyDown(e){
  if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Space'].includes(e.code))e.preventDefault();
  keys[e.code]=true;if(e.repeat)return;
  if(e.code==='KeyM'){audio.toggle();return;}
- if(mode==='budgetFailed'&&e.code==='KeyR'){mode='title';budgetFailureReason='';missionBudget=INITIAL_MISSION_BUDGET;selectedResources={};activeCategory=null;frogMood='neutral';return;}
+ if(mode==='budgetFailed'&&e.code==='KeyR'){mode='title';budgetFailureReason='';missionBudget=INITIAL_MISSION_BUDGET;selectedResources={};activeCategory=null;setFrogMood('neutral',0);return;}
  if(mode==='title'&&(e.code==='Enter'||e.code==='NumpadEnter')){e.preventDefault();startGame();return;}
  if(mode==='botany'){
    if(e.code==='Escape'){botanyActiveInput=null;return;}
    if(e.code==='Backspace'||e.code==='Delete')e.preventDefault();
    const digit=(e.code==='Digit0'||e.code==='Numpad0')?0:(e.code==='Digit1'||e.code==='Numpad1')?1:null;
-   if((digit===0||digit===1)&&botanyActiveInput){botanyFactors[botanyActiveInput]=digit;botanyResult=null;botanyNotice='Valor registrado. Completa las otras casillas y consulta el resultado.';frogMood='happy';audio.data();}
+   if((digit===0||digit===1)&&botanyActiveInput){botanyFactors[botanyActiveInput]=digit;botanyResult=null;botanyNotice='Valor registrado. Completa las otras casillas y consulta el resultado.';setFrogMood('happy');audio.data();}
    else if((e.code==='Backspace'||e.code==='Delete')&&botanyActiveInput){botanyFactors[botanyActiveInput]=null;botanyResult=null;botanyNotice='Casilla vacía. Escribe 0 o 1.';}
    else if(e.code==='Tab'){const order=['water','uv','co2'];botanyActiveInput=order[(order.indexOf(botanyActiveInput)+1)%3];e.preventDefault();}
    return;
@@ -664,8 +704,8 @@ function keyDown(e){
    if(!challengeCorrect&&(e.code==='KeyA'||e.code==='Digit1'||e.code==='KeyB'||e.code==='Digit2')){
      const q=missionChallenges[missionIndex],choice=(e.code==='KeyA'||e.code==='Digit1')?0:1;
      challengeAnswered=true;challengeCorrect=choice===q.correct;challengeFeedback=challengeCorrect?q.why:'No es la mejor decisión. Revisa el objetivo de la misión e inténtalo otra vez.';
-     frogMood=challengeCorrect?'excited':'confused';
-     if(challengeCorrect){audio.win();if(!completedMissions.includes(missionIndex)){earnedStars+=2;completedMissions.push(missionIndex);saveProgress();}}else audio.data();return;
+     setFrogMood(challengeCorrect?'excited':'confused');
+     if(challengeCorrect){setFrogMood('proud',4);audio.win();if(!completedMissions.includes(missionIndex)){earnedStars+=2;completedMissions.push(missionIndex);saveProgress();}}else audio.data();return;
    }
    if(challengeCorrect&&(e.code==='Enter'||e.code==='NumpadEnter')){if(missionIndex===1){beginLandingMission();return;}if(missionIndex===2){mode='title';return;}}
  }
@@ -673,19 +713,19 @@ function keyDown(e){
 function chooseResource(cat,choice,opt){
  const previous=selectedResources[cat.id],projected=totalMass()-(previous?previous.mass:0)+opt[2];
  if(missionBudget+(previous?previous.cost:0)<opt[1]){
-   missionBudget=0;budgetFailureReason='¡Agotaste todo el presupuesto! La misión ha fallado.';frogMood='sad';mode='budgetFailed';audio.bump();return;
+   missionBudget=0;budgetFailureReason='¡Agotaste todo el presupuesto! La misión ha fallado.';setFrogMood('sad',5);mode='budgetFailed';audio.bump();return;
  }
- if(projected>missionBriefs[0].limit){notify('La masa superaría el límite de 12.5 kg. Elige una opción más ligera.');frogMood='confused';return;}
+ if(projected>missionBriefs[0].limit){notify('La masa superaría el límite de 12.5 kg. Elige una opción más ligera.');setFrogMood('nervous');return;}
  if(previous)missionBudget+=previous.cost;
  missionBudget-=opt[1];selectedResources[cat.id]={label:opt[0],cost:opt[1],mass:opt[2]};
  if(cat.id==='aero')rocketProfile=choice;
- activeCategory=null;actionAnimation=1.8;actionLabel='FLYN ESTÁ INSTALANDO: '+cat.name;frogMood='excited';say('¡Recurso instalado!');audio.confirm();
+ activeCategory=null;actionAnimation=1.8;actionLabel='FLYN ESTÁ INSTALANDO: '+cat.name;setFrogMood(cat.id==='aero'?'proud':'happy');say('¡Recurso instalado!');audio.confirm();
 }
 function loop(now){
  const dt=Math.min(.035,(now-last)/1000||0);last=now;clock+=dt;
  if(mode==='launch'){launchTimer+=dt;if(launchTimer>3.2){mode='launchSuccess';launchTimer=0;audio.confirm();}}
  if(mode==='launchSuccess'){launchTimer+=dt;if(launchTimer>2.6){missionIndex=1;mode='botany';botanyFactors={water:null,uv:null,co2:null};botanyActiveInput=null;botanyTested=new Set();botanyResult=null;botanyNotice='Selecciona 0 o 1 en las tres casillas y consulta el resultado.';say('¡Todo en orden! La nave está lista. Podemos avanzar con la misión 2.');}}
- if(dialogueTimer>0)dialogueTimer-=dt;if(messageTimer>0)messageTimer-=dt;if(actionAnimation>0)actionAnimation=Math.max(0,actionAnimation-dt);if(mode==='flyby')updateFlyby(dt);if(mode==='landing')updateLanding(dt);draw();requestAnimationFrame(loop);
+ if(dialogueTimer>0)dialogueTimer-=dt;if(messageTimer>0)messageTimer-=dt;if(actionAnimation>0)actionAnimation=Math.max(0,actionAnimation-dt);if(mode==='flyby')updateFlyby(dt);if(mode==='landing')updateLanding(dt);if(frogMoodTimer>0){frogMoodTimer-=dt;if(frogMoodTimer<=0)frogMood='neutral';}draw();requestAnimationFrame(loop);
 }
 
 
@@ -704,10 +744,10 @@ canvas.addEventListener('click',(e)=>{
    if(utilityPanel){if(x<290||x>670||y<145||y>355)utilityPanel=null;return;}
    if(x>=38&&x<=188&&y>=70&&y<=112){utilityPanel='budget';audio.data();return;}
    if(x>=198&&x<=348&&y>=70&&y<=112){utilityPanel='mass';audio.data();return;}
-   if(x>=810&&x<=932&&y>=70&&y<=118){if(!activeCategory){notify('Abre primero una categoría para recibir una pista.');return;}if(mdlHints<=0){notify('No quedan pistas disponibles.');return;}mdlHints--;const cat=resourceCategories.find(v=>v.id===activeCategory);hintMessage=({fuel:'Compara la autonomía que necesitas con el peso y el presupuesto: no siempre hace falta la opción mayor.',oxygen:'Elige una reserva que cubra la duración de la misión sin cargar oxígeno innecesario.',aero:'El perfil aerodinámico modifica el consumo durante el vuelo. Compara las cuatro formas antes de elegir.',safety:'Piensa en el riesgo principal de esta misión y elige la protección adecuada.',materials:'Lleva los materiales necesarios para cumplir el objetivo, evitando añadir masa sin utilidad.',technology:'Prioriza la tecnología que permita cumplir el objetivo científico y enviar los datos.'})[cat.id];utilityPanel='hint';audio.data();return;}
+   if(x>=810&&x<=932&&y>=70&&y<=118){if(!activeCategory){notify('Abre primero una categoría para recibir una pista.');return;}if(mdlHints<=0){notify('No quedan pistas disponibles.');return;}mdlHints--;setFrogMood('curious');const cat=resourceCategories.find(v=>v.id===activeCategory);hintMessage=({fuel:'Compara la autonomía que necesitas con el peso y el presupuesto: no siempre hace falta la opción mayor.',oxygen:'Elige una reserva que cubra la duración de la misión sin cargar oxígeno innecesario.',aero:'El perfil aerodinámico modifica el consumo durante el vuelo. Compara las cuatro formas antes de elegir.',safety:'Piensa en el riesgo principal de esta misión y elige la protección adecuada.',materials:'Lleva los materiales necesarios para cumplir el objetivo, evitando añadir masa sin utilidad.',technology:'Prioriza la tecnología que permita cumplir el objetivo científico y enviar los datos.'})[cat.id];utilityPanel='hint';audio.data();return;}
    if(chosenAllResources()&&x>=75&&x<=885&&y>=408&&y<=440){mode='launch';launchTimer=0;activeCategory=null;utilityPanel=null;audio.launch();return;}
    if(activeCategory){const cat=resourceCategories.find(v=>v.id===activeCategory),rowH=Math.min(37,190/cat.options.length);if(x>=508&&x<=908&&y>=207&&y<207+cat.options.length*rowH){const choice=Math.max(0,Math.min(cat.options.length-1,Math.floor((y-207)/rowH)));chooseResource(cat,choice,cat.options[choice]);return;}if(x<500||x>920||y<135||y>425)activeCategory=null;return;}
-   const bx=28,by=451,bw=146,gap=7;if(y>=by&&y<=by+66){const i=Math.floor((x-bx)/(bw+gap));if(i>=0&&i<6){activeCategory=resourceCategories[i].id;frogMood='curious';audio.select();return;}}
+   const bx=28,by=451,bw=146,gap=7;if(y>=by&&y<=by+66){const i=Math.floor((x-bx)/(bw+gap));if(i>=0&&i<6){activeCategory=resourceCategories[i].id;setFrogMood('confused');audio.select();return;}}
    return;
  }
  if(mode==='victory'){if(x>=350&&x<=610&&y>=495&&y<=531){mode='title';audio.select();}return;}
@@ -715,9 +755,9 @@ canvas.addEventListener('click',(e)=>{
  if(mode==='botany'){
    if(botanyResult&&x>=755&&x<=915&&y>=478&&y<=513){beginLandingMission();audio.confirm();return;}
    if(y>=255&&y<=325){if(x>=320&&x<=440){botanyActiveInput='water';botanyNotice='Casilla Agua seleccionada. Escribe 0 o 1.';audio.select();return;}if(x>=530&&x<=650){botanyActiveInput='uv';botanyNotice='Casilla Radiación UV seleccionada. Escribe 0 o 1.';audio.select();return;}if(x>=740&&x<=860){botanyActiveInput='co2';botanyNotice='Casilla CO₂ seleccionada. Escribe 0 o 1.';audio.select();return;}}
-   if(x>=480&&x<=706&&y>=378&&y<=407){if(Object.values(botanyFactors).some(v=>v===null)){botanyNotice='Completa las tres casillas: escribe 0 o 1 en cada una.';return;}const key=botanyKey();if(key==='000'){botanyNotice='La combinación 000 no está incluida en el Excel. Prueba otra combinación.';botanyResult=null;return;}const result=botanyExperiments[key];if(!result){botanyNotice='Esta combinación no está incluida en los siete resultados del Excel.';return;}botanyTested.add(key);botanyResult=result;botanyNotice='Experimento ejecutado.';botanyActiveInput=null;frogMood='excited';audio.experiment();return;}
+   if(x>=480&&x<=706&&y>=378&&y<=407){if(Object.values(botanyFactors).some(v=>v===null)){botanyNotice='Completa las tres casillas: escribe 0 o 1 en cada una.';return;}const key=botanyKey();if(key==='000'){botanyNotice='La combinación 000 no está incluida en el Excel. Prueba otra combinación.';botanyResult=null;return;}const result=botanyExperiments[key];if(!result){botanyNotice='Esta combinación no está incluida en los siete resultados del Excel.';return;}botanyTested.add(key);botanyResult=result;botanyNotice='Experimento ejecutado.';botanyActiveInput=null;setFrogMood('surprised');audio.experiment();return;}
    return;
  }
- if(mode==='complete'&&!challengeCorrect){const choice=y>=251&&y<=299?0:y>=310&&y<=358?1:-1;if(choice>=0){const q=missionChallenges[missionIndex];challengeCorrect=choice===q.correct;challengeFeedback=challengeCorrect?q.why:'No es la mejor decisión. Revisa el objetivo e inténtalo otra vez.';frogMood=challengeCorrect?'excited':'confused';if(challengeCorrect){audio.win();if(!completedMissions.includes(missionIndex)){earnedStars+=2;completedMissions.push(missionIndex);saveProgress();}}else audio.data();}}
+ if(mode==='complete'&&!challengeCorrect){const choice=y>=251&&y<=299?0:y>=310&&y<=358?1:-1;if(choice>=0){const q=missionChallenges[missionIndex];challengeCorrect=choice===q.correct;challengeFeedback=challengeCorrect?q.why:'No es la mejor decisión. Revisa el objetivo e inténtalo otra vez.';setFrogMood(challengeCorrect?'excited':'confused');if(challengeCorrect){audio.win();if(!completedMissions.includes(missionIndex)){earnedStars+=2;completedMissions.push(missionIndex);saveProgress();}}else audio.data();}}
 });
 requestAnimationFrame(loop);
