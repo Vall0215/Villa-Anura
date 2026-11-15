@@ -162,7 +162,35 @@ const EN_US_TRANSLATIONS={
   "COMBINACIÓN ": "COMBINATION ",
   "Fuente: ": "Source: ",
   "FLYN": "FLYN",
-  "Selección confirmada": "Selection confirmed"
+  "Selección confirmada": "Selection confirmed",
+
+  "Aún faltan sistemas. Revisa las cuatro consolas.": "Some systems are still missing. Check the four consoles.",
+  "A · ": "A · ",
+  "B · ": "B · ",
+  "GAME OVER": "GAME OVER",
+  "Pulsa R para volver a intentar": "Press R to try again",
+  "MISIÓN 1  ✓     MISIÓN 2  ✓     MISIÓN 3  ✓": "MISSION 1  ✓     MISSION 2  ✓     MISSION 3  ✓",
+  "¡EL COMETA YA PASÓ!": "THE COMET HAS PASSED!",
+  "Pulsa R para intentarlo otra vez.": "Press R to try again.",
+  "La masa supera el límite permitido.": "Spacecraft mass exceeds the allowed limit.",
+  "MASA  ·  ": "MASS  ·  ",
+  "MASA  ": "MASS  ",
+  "SALDO DISPONIBLE": "AVAILABLE BALANCE",
+  "RECURSOS PREPARADOS": "SYSTEMS CONFIGURED",
+  "COMBUSTIBLE": "FUEL",
+  "OXÍGENO": "OXYGEN",
+  "AERODINÁMICA": "AERODYNAMICS",
+  "SEGURIDAD": "SAFETY",
+  "MATERIALES": "MATERIALS",
+  "TECNOLOGÍA": "TECHNOLOGY",
+  "¡BIENVENIDO, EXPLORADOR!": "WELCOME, EXPLORER!",
+  "PRESIONA  ENTER  PARA JUGAR": "PRESS ENTER TO PLAY",
+  "VILLA ANURA  ·  CENTRO DE CONTROL": "VILLA ANURA · MISSION CONTROL",
+  "VILLA ANURA · REGRESO A LA TIERRA": "VILLA ANURA · RETURN TO EARTH",
+  "MISIÓN 3 · DESCENSO Y ATERRIZAJE CONTROLADO": "MISSION 3 · CONTROLLED DESCENT & LANDING",
+  "¡CAMPAÑA COMPLETADA!": "CAMPAIGN COMPLETE!",
+  "MISIÓN CUMPLIDA · REGRESO SEGURO A LA TIERRA": "MISSION ACCOMPLISHED · SAFE RETURN TO EARTH"
+
 };
 const ADDITIONAL_EN_US_TRANSLATIONS={
   "DISEÑO Y PUESTA EN ÓRBITA": "SPACECRAFT DESIGN & LAUNCH",
