@@ -166,7 +166,7 @@ function controlRoom(){
       const yy=215+i*43,canPay=missionBudget>=opt[1];
       roundPanel(280,yy,400,35,canPay?'#edf8f5':'#f2eeee',canPay?'#9acbbd':'#d9c5c5',7);
       txt((i+1)+'. '+opt[0],296,yy+22,11,canPay?'#31596c':'#a18e8e');
-      txt('$ '+opt[1].toLocaleString('es-CO'),661,yy+22,11,canPay?'#397d65':'#a18e8e','right');
+      txt('SELECCIONAR',661,yy+22,9,canPay?'#397d65':'#a18e8e','right');
     });
     txt('Pulsa 1, 2 o 3 · ESC para cerrar',480,361,9,'#66828a','center');
   }
