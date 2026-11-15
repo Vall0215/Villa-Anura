@@ -134,7 +134,7 @@ const EN_US_TRANSLATIONS={
   "La combinación 000 no está incluida en el Excel. Prueba otra combinación.": "Combination 000 is not included in the dataset. Try another combination.",
   "Esta combinación no está incluida en los siete resultados del Excel.": "This combination is not included among the seven dataset results.",
   "Experimento ejecutado.": "Experiment complete.",
-  "Completa las tres misiones y administra el presupuesto inicial de 5.000 créditos.": "Complete all three missions and manage the starting budget of 5,000 credits.",
+  "Completa las tres misiones y administra el presupuesto inicial de 12.000 créditos.": "Complete all three missions and manage the starting budget of 12,000 credits.",
   "Continúa la primera misión administrando el presupuesto de 12.000 créditos.": "Continue the first mission and manage the 12,000-credit budget.",
   "Compara la autonomía que necesitas con el peso y el presupuesto: no siempre hace falta la opción mayor.": "Compare the range you need with the spacecraft's weight and budget. The largest option isn't always necessary.",
   "Elige una reserva que cubra la duración de la misión sin cargar oxígeno innecesario.": "Choose an oxygen reserve that covers the mission without adding unnecessary weight.",
@@ -731,7 +731,7 @@ function draw(){
  else if(mode==='missed'){flybyScene();roundPanel(280,205,400,115,'#fffef5','#c6e3d7',10);txt('¡EL COMETA YA PASÓ!',480,245,20,'#a66d4d','center');txt('Pulsa R para intentarlo otra vez.',480,277,13,'#547a82','center');}
  drawLanguageControl();drawAudioControl();
 }
-function startGame(){if(mode!=='title')return;setFrogMood('neutral',0);budgetFailureReason='';mode='hangar';missionIndex=0;missionBudget=INITIAL_MISSION_BUDGET;mdlHints=3;selectedResources={};activeCategory=null;say('¡Hola! Soy Flyn. Esta es nuestra misión de exploración espacial. Completa las tres misiones y administra el presupuesto inicial de 5.000 créditos.');audio.start();audio.playMusic();canvas.focus();}
+function startGame(){if(mode!=='title')return;setFrogMood('neutral',0);budgetFailureReason='';mode='hangar';missionIndex=0;missionBudget=INITIAL_MISSION_BUDGET;mdlHints=3;selectedResources={};activeCategory=null;say('¡Hola! Soy Flyn. Esta es nuestra misión de exploración espacial. Completa las tres misiones y administra el presupuesto inicial de 12.000 créditos.');audio.start();audio.playMusic();canvas.focus();}
 function keyDown(e){
  idleMoodClock=0;
  if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Space'].includes(e.code))e.preventDefault();
