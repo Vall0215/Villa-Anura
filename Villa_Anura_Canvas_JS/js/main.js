@@ -28,28 +28,90 @@ function say(t){dialogue=t;dialogueTimer=3.8;}
 function notify(t){message=t;messageTimer=2.2;}
 function planet(x,y,r,color){ctx.fillStyle=color;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();ctx.fillStyle='#ffffff45';ctx.beginPath();ctx.ellipse(x-r*.2,y-r*.25,r*.55,r*.17,-.4,0,Math.PI*2);ctx.fill();}
 function stars(){for(let i=0;i<50;i++){const x=(i*191-clock*(i%3+1)*5)%W;const y=(i*79)%300;rect((x+W)%W,y,2+(i%3===0?1:0),2,'#ffffffaa');}}
-function drawFrog(x,y,scale=1){ctx.save();ctx.translate(Math.round(x),Math.round(y));ctx.scale(scale,scale);const bob=Math.sin(clock*8)*1.3;ctx.translate(0,bob);rect(-13,-27,26,23,'#258b50');rect(-17,-37,11,13,'#258b50');rect(6,-37,11,13,'#258b50');rect(-15,-36,9,10,'#f9fff0');rect(7,-36,9,10,'#f9fff0');rect(-12,-34,4,6,'#173d48');rect(9,-34,4,6,'#173d48');rect(-8,-12,16,7,'#b9e878');rect(-12,-4,9,5,'#176b43');rect(4,-4,9,5,'#176b43');rect(-19,-18,7,11,'#258b50');rect(12,-18,7,11,'#258b50');ctx.restore();}
-function background(){const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#d9f0eb');g.addColorStop(.62,'#edf6e9');g.addColorStop(1,'#c6e3d5');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);stars();planet(830,104,48,'#b7dcd6');planet(115,105,25,'#d1e2f2');}
+function drawFrog(x,y,scale=1){
+  ctx.save();ctx.translate(Math.round(x),Math.round(y));ctx.scale(scale,scale);
+  const walking=Math.abs(player.vx)>5,step=walking?Math.sin(player.anim*15)*3:0;
+  const blink=Math.sin(clock*1.7)>0.985;
+  // soft shadow and tiny antenna spark
+  ctx.globalAlpha=.2;ctx.fillStyle='#315b68';ctx.beginPath();ctx.ellipse(0,2,25,5,0,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
+  // backpack
+  rect(-21,-29,8,25,'#24617a');rect(-19,-27,5,19,'#57a9b5');rect(14,-29,8,25,'#24617a');
+  // legs and boots
+  rect(-14,-9+step,11,9,'#167b4c');rect(4,-9-step,11,9,'#167b4c');
+  rect(-17,-4+step,14,6,'#17354f');rect(3,-4-step,14,6,'#17354f');rect(-15,-3+step,9,2,'#83d8c5');rect(5,-3-step,9,2,'#83d8c5');
+  // astronaut body suit
+  rect(-17,-30,34,25,'#183b58');rect(-14,-29,28,22,'#f4fbf7');rect(-11,-27,22,17,'#ffffff');rect(-9,-12,18,3,'#a9dfe0');
+  rect(-5,-24,10,10,'#4a9fae');rect(-3,-22,6,6,'#d6f4e9');rect(-2,-21,4,2,'#f5c65b');
+  // arms, animated slightly while walking
+  rect(-22,-27,7,17,'#1b4761');rect(-20,-25,6,12,'#f5fbf5');rect(-22,-13,8,6,'#54b84c');
+  rect(15,-27,7,17,'#1b4761');rect(15,-25,6,12,'#f5fbf5');rect(14,-13,8,6,'#54b84c');
+  // frog head silhouette with dark pixel outline
+  rect(-19,-52,38,29,'#17274c');rect(-22,-47,5,18,'#17274c');rect(17,-47,5,18,'#17274c');
+  rect(-16,-54,11,7,'#17274c');rect(5,-54,11,7,'#17274c');
+  rect(-17,-50,34,25,'#39a94a');rect(-20,-45,4,14,'#39a94a');rect(16,-45,4,14,'#39a94a');
+  rect(-14,-53,9,5,'#91dc54');rect(5,-53,9,5,'#91dc54');rect(-16,-49,32,21,'#65c83e');rect(-18,-43,4,11,'#65c83e');
+  // forehead shine and eyes
+  rect(-12,-49,7,2,'#c9f47b');rect(6,-49,6,2,'#c9f47b');
+  rect(-12,-45,8,9,'#17274c');rect(5,-45,8,9,'#17274c');
+  if(blink){rect(-10,-41,5,2,'#f8fff8');rect(7,-41,5,2,'#f8fff8');}
+  else{rect(-9,-44,4,6,'#ffffff');rect(7,-44,4,6,'#ffffff');rect(-8,-43,2,4,'#182b50');rect(8,-43,2,4,'#182b50');}
+  // cheeks, nose and smile
+  rect(-16,-35,6,5,'#f27c9a');rect(10,-35,6,5,'#f27c9a');rect(-2,-35,2,2,'#17304b');rect(3,-35,2,2,'#17304b');
+  rect(-5,-30,10,2,'#17304b');rect(-3,-28,6,2,'#17304b');
+  // headset and glass highlights
+  rect(-22,-47,4,9,'#55b8d2');rect(18,-47,4,9,'#55b8d2');rect(-19,-53,7,3,'#2c5068');rect(12,-53,7,3,'#2c5068');
+  rect(-13,-51,4,2,'#ffffff');rect(7,-51,4,2,'#ffffff');
+  ctx.restore();
+}
+function background(){
+  // Bright white assembly hangar with glass roof and exterior light
+  const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#f9fcff');g.addColorStop(.58,'#eaf5f6');g.addColorStop(1,'#dcebee');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  // distant glass panes
+  rect(0,54,W,300,'#e7f4f7');
+  for(let x=0;x<W;x+=120){rect(x,55,4,290,'#c3d7df');rect(x+7,62,100,270,'#f8fdff');}
+  for(let y=70;y<340;y+=82)rect(0,y,W,3,'#c5dbe2');
+  // soft sky and planet visible outside
+  planet(840,142,53,'#a9d7ed');planet(840,142,42,'#bfe7f4');rect(805,137,72,3,'#eafaff');
+  // ceiling trusses
+  rect(0,0,W,54,'#e4edf1');for(let x=0;x<W;x+=80){rect(x,0,5,55,'#aabec9');rect(x,14,80,4,'#c1d1d8');}
+  for(let x=-40;x<W;x+=160){ctx.strokeStyle='#9eb3bf';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x+90,54);ctx.stroke();ctx.beginPath();ctx.moveTo(x+90,0);ctx.lineTo(x,54);ctx.stroke();}
+  // hanging industrial lights
+  for(let x=70;x<W;x+=180){rect(x,49,3,20,'#8ba4b1');roundPanel(x-19,64,42,9,'#fff9df','#d6e1dc',4);rect(x-12,66,28,3,'#fff3b8');}
+  // clean white floor with perspective tiles
+  rect(0,354,W,186,'#e9f1ef');rect(0,354,W,5,'#9dbbb8');
+  for(let x=-100;x<W+100;x+=100){ctx.strokeStyle='#c6d8d5';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(480,354);ctx.lineTo(x,540);ctx.stroke();}
+  for(let y=390;y<540;y+=42)rect(0,y,W,2,'#d1e0dd');
+  // safety markings
+  rect(0,516,W,8,'#f1c75d');for(let x=0;x<W;x+=34){rect(x,516,17,8,'#fff3c4');}
+  // side workbenches and monitor clusters
+  roundPanel(24,230,170,108,'#dce8ec','#9db8c4',8);rect(37,244,144,65,'#174f70');rect(44,251,130,51,'#1b6d91');
+  for(let i=0;i<5;i++){rect(52+i*22,266,12,3,'#7ce2e0');rect(52+i*22,277,8,14,'#65c8cf');}
+  roundPanel(765,235,170,104,'#dce8ec','#9db8c4',8);rect(779,248,142,68,'#164b6c');planet(850,280,20,'#8ad1dc');rect(806,307,85,3,'#6cd5df');
+  // structural rocket gantry in the middle
+  rect(370,112,18,244,'#e4b34b');rect(572,112,18,244,'#e4b34b');rect(370,112,220,13,'#e4b34b');
+  for(let y=132;y<350;y+=48){rect(370,y,220,5,'#f3cf71');rect(370,y,12,42,'#c38b37');rect(578,y,12,42,'#c38b37');}
+  // spacecraft assembly module
+  rect(447,145,67,188,'#d6e3e9');rect(454,143,53,188,'#fbfdff');rect(454,205,53,8,'#4aa6a7');rect(454,278,53,7,'#4aa6a7');
+  rect(465,130,35,18,'#d9e8ed');rect(459,125,47,9,'#9db4c1');rect(442,325,77,13,'#c4d4db');rect(434,337,93,13,'#e2e9ec');
+  // crane above rocket
+  rect(450,76,64,9,'#e8b94d');rect(477,52,10,27,'#d89f37');rect(469,42,27,11,'#e7b64c');rect(481,79,3,49,'#8ba0a9');
+  // potted plants soften the hangar
+  rect(212,325,24,28,'#ffffff');rect(207,317,34,8,'#c9d8d6');for(let i=0;i<4;i++){rect(213+i*5,303-(i%2)*6,5,17,'#66b779');}
+  rect(710,325,24,28,'#ffffff');rect(705,317,34,8,'#c9d8d6');for(let i=0;i<4;i++){rect(711+i*5,303-(i%2)*6,5,17,'#66b779');}
+}
 function controlRoom(){background();
-// distant skyline and observation windows
-rect(0,180,W,258,'#e7f4eb');
-for(let i=0;i<5;i++){const x=i*205-25;roundPanel(x,205,178,178,'#b5d9d3','#9ac9bf',9);roundPanel(x+9,214,160,159,'#dff4ee','#c3e4db',5);rect(x+22,238,130,3,'#b0d6d2');planet(x+120,274,18,['#d0dcef','#b9dfd3','#e8d9b8'][i%3]);rect(x+22,322,65,4,'#8ec4b3');rect(x+22,335,105,4,'#a6d1c7');}
-// overhead control panels
-rect(0,0,W,38,'#a9d3c8');rect(0,38,W,5,'#8bbeb2');
-for(let i=0;i<9;i++){rect(34+i*105,12,48,12,'#d9f3e8');rect(38+i*105,15,12,6,i%3===0?'#e7c46d':'#83bca8');}
-rect(0,435,W,105,'#a9d2c1');rect(0,435,W,8,'#79b99a');
-for(let i=0;i<12;i++){rect(i*82,443,2,97,'#91c3ad');}
- // central holographic mission table
-roundPanel(390,318,210,104,'#8db9ae','#6d9f96',12);rect(408,331,174,67,'#c9e9de');planet(495,361,22,'#a7d2cb');ctx.strokeStyle='#73b6a3';ctx.lineWidth=2;ctx.beginPath();ctx.arc(495,361,42,0,Math.PI*2);ctx.stroke();ctx.beginPath();ctx.moveTo(450,361);ctx.lineTo(540,361);ctx.moveTo(495,321);ctx.lineTo(495,401);ctx.stroke();txt('MAPA ESTELAR',495,414,9,'#f7fff8','center');
-// consoles
-stations.forEach((s,i)=>{const active=installed.has(s.id);roundPanel(s.x-43,385,86,54,active?'#c6e9d4':'#fffdf4',active?'#75b78e':'#b9d9ce',7);txt(s.icon,s.x,410,20,'#36576a','center');txt(active?'OK':s.name,s.x,430,9,active?'#4d9b6d':'#567d78','center');if(Math.abs(player.x-s.x)<62){roundPanel(s.x-74,347,148,30,'#fffef7','#b9dccc',7);txt(active?'INSTALADO':'E · INSTALAR',s.x,367,10,'#4c8668','center');}});
-// frog in foreground on its own ground line
-drawFrog(player.x,player.y);
-hud();
-if(dialogueTimer>0)dialogBox(dialogue);
-if(messageTimer>0){roundPanel(330,458,300,36,'#fffdf5','#d1e6d9',8);txt(message,480,481,11,'#4e806c','center');}
-roundPanel(18,72,300,82,'#fffdf5','#c8e3d8',10);txt('CENTRO DE CONTROL',34,96,12,'#659b7b');txt('Prepara la nave para el sobrevuelo.',34,120,13,'#456879');txt('Muévete, salta y activa cada módulo.',34,141,11,'#7b9a90');
-roundPanel(700,72,240,82,'#fffdf5','#c8e3d8',10);txt('MISIÓN 01 · SOBRE VUELO',716,96,11,'#659b7b');txt('Sistemas '+installed.size+'/4',716,122,15,'#456879');txt('← → mover   ESPACIO saltar',716,142,10,'#7b9a90');
+  // mission banner
+  roundPanel(18,14,250,44,'#ffffff','#d3e4e6',8);txt('VILLA ANURA',32,32,12,'#31825f');txt('HANGAR DE ENSAMBLAJE',32,48,10,'#456879');
+  // interactive consoles placed in the foreground
+  stations.forEach((s)=>{const active=installed.has(s.id);roundPanel(s.x-42,380,84,65,active?'#e4f7e9':'#ffffff',active?'#66b986':'#b8d0d7',8);rect(s.x-31,389,62,34,active?'#d7f2e2':'#e6f2f5');txt(s.icon,s.x,414,20,'#36576a','center');txt(active?'LISTO':s.name,s.x,438,9,active?'#39865c':'#4d7180','center');if(Math.abs(player.x-s.x)<62){roundPanel(s.x-69,346,138,27,'#ffffff','#8fc7b0',7);txt(active?'SISTEMA INSTALADO':'E · INTERACTUAR',s.x,364,9,'#357d5b','center');}});
+  // holographic mission map to the right
+  roundPanel(690,82,244,116,'#fafdff','#b9d4df',10);txt('MAPA DE MISIÓN',708,105,11,'#347b8a');rect(708,119,207,61,'#e5f3f7');planet(812,150,21,'#83c6d7');ctx.strokeStyle='#64a6b8';ctx.lineWidth=2;ctx.beginPath();ctx.arc(812,150,38,0,Math.PI*2);ctx.stroke();ctx.beginPath();ctx.moveTo(755,150);ctx.lineTo(870,150);ctx.moveTo(812,128);ctx.lineTo(812,172);ctx.stroke();
+  // mission guidance panel
+  roundPanel(18,72,300,86,'#ffffff','#c8dfe3',10);txt('CENTRO DE CONTROL',34,97,12,'#34876a');txt('Prepara la nave para el sobrevuelo.',34,122,13,'#456879');txt('← → caminar   ESPACIO saltar',34,144,11,'#6c8b94');
+  roundPanel(700,215,240,72,'#ffffff','#c8dfe3',10);txt('MISIÓN 01 · SOBRE VUELO',716,239,11,'#34876a');txt('Sistemas '+installed.size+'/4',716,264,15,'#456879');
+  drawFrog(player.x,player.y);
+  if(dialogueTimer>0)dialogBox(dialogue);
+  if(messageTimer>0){roundPanel(330,458,300,36,'#ffffff','#b9dccd',8);txt(message,480,481,11,'#3e8066','center');}
 }
 function hud(){roundPanel(18,14,210,43,'#fffdf5','#c8e3d8',8);txt('VILLA ANURA',32,32,11,'#58936d');txt('HANGAR ESPACIAL',32,48,10,'#456879');roundPanel(805,14,137,43,'#fffdf5','#c8e3d8',8);txt('🪰 '+progress.data.flies+'    🎟 '+progress.data.tickets,819,41,13,'#456879');}
 function dialogBox(t){roundPanel(675,390,265,65,'#fffef8','#c9e4d7',9);txt('FLYING',690,411,10,'#65a078');txt(t.length>35?t.slice(0,34)+'…':t,690,435,11,'#456879');}
