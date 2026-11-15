@@ -648,62 +648,64 @@ function drawAudioControl(){
   roundPanel(885,10,58,38,audio.enabled?'#fffdf5':'#e8eded',audio.enabled?'#9fcfc0':'#b8c8c8',10);
   txt(audio.enabled?'♫  ON':'♪  OFF',914,35,10,audio.enabled?'#397d65':'#7b8d8d','center');
 }
-function draw(){ctx.clearRect(0,0,W,H);if(mode==='title')titleScreen();else if(mode==='hangar')controlRoom();else if(mode==='launch')launchScene();else if(mode==='launchSuccess')launchSuccessScene();else if(mode==='launchSuccess')launchSuccessScene();else if(mode==='botany')botanyScene();else if(mode==='landing')landingScene();else if(mode==='victory')victoryScene();else if(mode==='budgetFailed'){background();roundPanel(180,150,600,230,'#fff4ed','#d89b81',14);txt('MISSION FAILED',480,210,25,'#a34c43','center');wrapText(budgetFailureReason,480,260,500,18,'#875e52','center');txt('PRESS R TO RETURN TO THE HOME MENU',480,330,13,'#15516e','center');}else if(mode==='flyby')flybyScene();else if(mode==='complete')completeScene();else if(mode==='missed'){flybyScene();roundPanel(280,205,400,115,'#fffef5','#c6e3d7',10);txt('¡EL COMETA YA PASÓ!',480,245,20,'#a66d4d','center');txt('Pulsa R para intentarlo otra vez.',480,277,13,'#547a82','center');}drawLanguageControl();drawAudioControl();}
+function draw(){
+ ctx.clearRect(0,0,W,H);
+ if(mode==='title')titleScreen();
+ else if(mode==='hangar')controlRoom();
+ else if(mode==='launch')launchScene();
+ else if(mode==='launchSuccess')launchSuccessScene();
+ else if(mode==='botany')botanyScene();
+ else if(mode==='landing')landingScene();
+ else if(mode==='victory')victoryScene();
+ else if(mode==='budgetFailed'){background();roundPanel(180,150,600,230,'#fff4ed','#d89b81',14);txt(tr('MISIÓN FALLIDA'),480,210,25,'#a34c43','center');wrapText(budgetFailureReason,480,260,500,18,'#875e52','center');txt(tr('PULSA R PARA VOLVER AL MENÚ DE INICIO'),480,330,13,'#15516e','center');}
+ else if(mode==='flyby')flybyScene();
+ else if(mode==='complete')completeScene();
+ else if(mode==='missed'){flybyScene();roundPanel(280,205,400,115,'#fffef5','#c6e3d7',10);txt('¡EL COMETA YA PASÓ!',480,245,20,'#a66d4d','center');txt('Pulsa R para intentarlo otra vez.',480,277,13,'#547a82','center');}
+ drawLanguageControl();drawAudioControl();
+}
 function startGame(){if(mode!=='title')return;mode='hangar';missionIndex=0;missionBudget=INITIAL_MISSION_BUDGET;mdlHints=3;selectedResources={};activeCategory=null;say('¡Hola! Soy Flyn. Esta es nuestra misión de exploración espacial. Completa las tres misiones y administra el presupuesto inicial de 5.000 créditos.');audio.start();audio.playMusic();canvas.focus();}
 function keyDown(e){
- if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown',' ','Space'].includes(e.key))e.preventDefault();
+ if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Space'].includes(e.code))e.preventDefault();
  keys[e.code]=true;if(e.repeat)return;
  if(e.code==='KeyM'){audio.toggle();return;}
- if(mode==='budgetFailed'&&e.code==='KeyR'){mode='title';budgetFailureReason='';missionBudget=INITIAL_MISSION_BUDGET;selectedResources={};activeCategory=null;return;}
+ if(mode==='budgetFailed'&&e.code==='KeyR'){mode='title';budgetFailureReason='';missionBudget=INITIAL_MISSION_BUDGET;selectedResources={};activeCategory=null;frogMood='neutral';return;}
  if(mode==='title'&&(e.code==='Enter'||e.code==='NumpadEnter')){e.preventDefault();startGame();return;}
  if(mode==='botany'){
    if(e.code==='Escape'){botanyActiveInput=null;return;}
    if(e.code==='Backspace'||e.code==='Delete')e.preventDefault();
    const digit=(e.code==='Digit0'||e.code==='Numpad0')?0:(e.code==='Digit1'||e.code==='Numpad1')?1:null;
-   if((digit===0||digit===1)&&botanyActiveInput){
-     botanyFactors[botanyActiveInput]=digit;
-     botanyResult=null;
-     botanyNotice='Valor registrado. Completa las otras casillas y consulta el resultado.';
-     audio.data();
-   }else if((e.code==='Backspace'||e.code==='Delete')&&botanyActiveInput){
-     botanyFactors[botanyActiveInput]=null;botanyResult=null;
-     botanyNotice='Casilla vacía. Escribe 0 o 1.';
-   }else if(e.code==='Tab'){
-     const order=['water','uv','co2'];
-     const current=order.indexOf(botanyActiveInput);
-     botanyActiveInput=order[(current+1)%order.length];
-     e.preventDefault();
-   }
+   if((digit===0||digit===1)&&botanyActiveInput){botanyFactors[botanyActiveInput]=digit;botanyResult=null;botanyNotice='Valor registrado. Completa las otras casillas y consulta el resultado.';frogMood='happy';audio.data();}
+   else if((e.code==='Backspace'||e.code==='Delete')&&botanyActiveInput){botanyFactors[botanyActiveInput]=null;botanyResult=null;botanyNotice='Casilla vacía. Escribe 0 o 1.';}
+   else if(e.code==='Tab'){const order=['water','uv','co2'];botanyActiveInput=order[(order.indexOf(botanyActiveInput)+1)%3];e.preventDefault();}
    return;
  }
- if(mode==='budgetFailed'){roundPanel(180,150,600,230,'#fff4ed','#d89b81',14);txt('MISIÓN FALLIDA',480,210,25,'#a34c43','center');wrapText(budgetFailureReason,480,260,500,18,'#875e52','center');txt('PULSA R PARA VOLVER AL MENÚ DE INICIO',480,330,13,'#15516e','center');}
-   if(e.code==='Enter'||e.code==='NumpadEnter'){mode='title';return;}
-   return;
- }
- if(mode==='landing'){
-   if(e.code==='KeyR'&&landingStatus==='crashed'){beginLandingMission();audio.start();return;}
-   return;
- }
+ if(mode==='victory'){if(e.code==='Enter'||e.code==='NumpadEnter')mode='title';return;}
+ if(mode==='landing'){if(e.code==='KeyR'&&landingStatus==='crashed'){beginLandingMission();audio.start();}return;}
  if(mode==='hangar'){
-   if(mode==='hangar'&&budgetFailureReason&&e.code==='KeyR'){mode='title';budgetFailureReason='';missionBudget=INITIAL_MISSION_BUDGET;selectedResources={};activeCategory=null;return;}
    if(chosenAllResources()&&(e.code==='Enter'||e.code==='NumpadEnter')){mode='launch';launchTimer=0;activeCategory=null;utilityPanel=null;audio.launch();return;}
-   if(activeCategory&&/^Digit[1-8]$/.test(e.code)){
-     const cat=resourceCategories.find(v=>v.id===activeCategory),opt=cat.options[Number(e.code.slice(-1))-1];
-     if(opt){const old=selectedResources[cat.id];const mass=totalMass()-(old?old.mass:0)+opt[2];if(missionBudget+(old?old.cost:0)<opt[1]){missionBudget=0;budgetFailureReason='¡Agotaste el presupuesto! La misión ha fallado.';frogMood='sad';mode='budgetFailed';audio.bump();}else if(mass>missionBriefs[missionIndex].limit)notify('La masa supera el límite permitido.');else{if(old)missionBudget+=old.cost;missionBudget-=opt[1];selectedResources[cat.id]={label:opt[0],cost:opt[1],mass:opt[2]};activeCategory=null;actionAnimation=1.8;actionLabel='FLYN INSTALANDO RECURSOS';say('¡Selección confirmada!');audio.confirm();}}
-   }else if(e.code==='Escape'){activeCategory=null;utilityPanel=null;}return;
+   if(activeCategory&&/^Digit[1-8]$/.test(e.code)){const cat=resourceCategories.find(v=>v.id===activeCategory),choice=Number(e.code.slice(-1))-1,opt=cat.options[choice];if(opt)chooseResource(cat,choice,opt);}
+   if(e.code==='Escape'){activeCategory=null;utilityPanel=null;}return;
  }
- if(mode==='missed'&&e.code==='KeyR'){mode='flyby';cometX=1050;observationWindow=0;missionPhase=0;resetPlayer();return;}
  if(mode==='complete'){
    if(!challengeCorrect&&(e.code==='KeyA'||e.code==='Digit1'||e.code==='KeyB'||e.code==='Digit2')){
      const q=missionChallenges[missionIndex],choice=(e.code==='KeyA'||e.code==='Digit1')?0:1;
      challengeAnswered=true;challengeCorrect=choice===q.correct;challengeFeedback=challengeCorrect?q.why:'No es la mejor decisión. Revisa el objetivo de la misión e inténtalo otra vez.';
+     frogMood=challengeCorrect?'excited':'confused';
      if(challengeCorrect){audio.win();if(!completedMissions.includes(missionIndex)){earnedStars+=2;completedMissions.push(missionIndex);saveProgress();}}else audio.data();return;
    }
-   if(challengeCorrect&&(e.code==='Enter'||e.code==='NumpadEnter')){
-     if(missionIndex===1){beginLandingMission();return;}
-     if(missionIndex===2){mode='title';say('¡Campaña completada! Has realizado el experimento botánico y regresado a la Tierra con un aterrizaje seguro.');return;}
-   }
+   if(challengeCorrect&&(e.code==='Enter'||e.code==='NumpadEnter')){if(missionIndex===1){beginLandingMission();return;}if(missionIndex===2){mode='title';return;}}
  }
+}
+function chooseResource(cat,choice,opt){
+ const previous=selectedResources[cat.id],projected=totalMass()-(previous?previous.mass:0)+opt[2];
+ if(missionBudget+(previous?previous.cost:0)<opt[1]){
+   missionBudget=0;budgetFailureReason='¡Agotaste todo el presupuesto! La misión ha fallado.';frogMood='sad';mode='budgetFailed';audio.bump();return;
+ }
+ if(projected>missionBriefs[0].limit){notify('La masa superaría el límite de 12.5 kg. Elige una opción más ligera.');frogMood='confused';return;}
+ if(previous)missionBudget+=previous.cost;
+ missionBudget-=opt[1];selectedResources[cat.id]={label:opt[0],cost:opt[1],mass:opt[2]};
+ if(cat.id==='aero')rocketProfile=choice;
+ activeCategory=null;actionAnimation=1.8;actionLabel='FLYN ESTÁ INSTALANDO: '+cat.name;frogMood='excited';say('¡Recurso instalado!');audio.confirm();
 }
 function loop(now){
  const dt=Math.min(.035,(now-last)/1000||0);last=now;clock+=dt;
@@ -711,3 +713,37 @@ function loop(now){
  if(mode==='launchSuccess'){launchTimer+=dt;if(launchTimer>2.6){missionIndex=1;mode='botany';botanyFactors={water:null,uv:null,co2:null};botanyActiveInput=null;botanyTested=new Set();botanyResult=null;botanyNotice='Selecciona 0 o 1 en las tres casillas y consulta el resultado.';say('¡Todo en orden! La nave está lista. Podemos avanzar con la misión 2.');}}
  if(dialogueTimer>0)dialogueTimer-=dt;if(messageTimer>0)messageTimer-=dt;if(actionAnimation>0)actionAnimation=Math.max(0,actionAnimation-dt);if(mode==='flyby')updateFlyby(dt);if(mode==='landing')updateLanding(dt);draw();requestAnimationFrame(loop);
 }
+
+
+canvas.tabIndex=0;canvas.style.cursor='pointer';
+document.addEventListener('keydown',keyDown);
+document.addEventListener('keyup',e=>keys[e.code]=false);
+window.addEventListener('blur',()=>Object.keys(keys).forEach(k=>keys[k]=false));
+canvas.addEventListener('pointerdown',()=>canvas.focus());
+canvas.addEventListener('click',(e)=>{
+ canvas.focus();const r=canvas.getBoundingClientRect(),x=(e.clientX-r.left)*W/r.width,y=(e.clientY-r.top)*H/r.height;
+ if(x>=790&&x<=874&&y>=10&&y<=48){setGameLanguage(gameLanguage==='en-US'?'es':'en-US');return;}
+ if(x>=885&&x<=943&&y>=10&&y<=48){audio.toggle();return;}
+ if(mode==='title'){startGame();return;}
+ if(mode==='budgetFailed')return;
+ if(mode==='hangar'){
+   if(utilityPanel){if(x<290||x>670||y<145||y>355)utilityPanel=null;return;}
+   if(x>=38&&x<=188&&y>=70&&y<=112){utilityPanel='budget';audio.data();return;}
+   if(x>=198&&x<=348&&y>=70&&y<=112){utilityPanel='mass';audio.data();return;}
+   if(x>=810&&x<=932&&y>=70&&y<=118){if(!activeCategory){notify('Abre primero una categoría para recibir una pista.');return;}if(mdlHints<=0){notify('No quedan pistas disponibles.');return;}mdlHints--;const cat=resourceCategories.find(v=>v.id===activeCategory);hintMessage=({fuel:'Compara la autonomía que necesitas con el peso y el presupuesto: no siempre hace falta la opción mayor.',oxygen:'Elige una reserva que cubra la duración de la misión sin cargar oxígeno innecesario.',aero:'El perfil aerodinámico modifica el consumo durante el vuelo. Compara las cuatro formas antes de elegir.',safety:'Piensa en el riesgo principal de esta misión y elige la protección adecuada.',materials:'Lleva los materiales necesarios para cumplir el objetivo, evitando añadir masa sin utilidad.',technology:'Prioriza la tecnología que permita cumplir el objetivo científico y enviar los datos.'})[cat.id];utilityPanel='hint';audio.data();return;}
+   if(chosenAllResources()&&x>=75&&x<=885&&y>=408&&y<=440){mode='launch';launchTimer=0;activeCategory=null;utilityPanel=null;audio.launch();return;}
+   if(activeCategory){const cat=resourceCategories.find(v=>v.id===activeCategory),rowH=Math.min(37,190/cat.options.length);if(x>=508&&x<=908&&y>=207&&y<207+cat.options.length*rowH){const choice=Math.max(0,Math.min(cat.options.length-1,Math.floor((y-207)/rowH)));chooseResource(cat,choice,cat.options[choice]);return;}if(x<500||x>920||y<135||y>425)activeCategory=null;return;}
+   const bx=28,by=451,bw=146,gap=7;if(y>=by&&y<=by+66){const i=Math.floor((x-bx)/(bw+gap));if(i>=0&&i<6){activeCategory=resourceCategories[i].id;frogMood='curious';audio.select();return;}}
+   return;
+ }
+ if(mode==='victory'){if(x>=350&&x<=610&&y>=495&&y<=531){mode='title';audio.select();}return;}
+ if(mode==='landing'&&landingStatus==='crashed'){beginLandingMission();audio.start();return;}
+ if(mode==='botany'){
+   if(botanyResult&&x>=755&&x<=915&&y>=478&&y<=513){beginLandingMission();audio.confirm();return;}
+   if(y>=255&&y<=325){if(x>=320&&x<=440){botanyActiveInput='water';botanyNotice='Casilla Agua seleccionada. Escribe 0 o 1.';audio.select();return;}if(x>=530&&x<=650){botanyActiveInput='uv';botanyNotice='Casilla Radiación UV seleccionada. Escribe 0 o 1.';audio.select();return;}if(x>=740&&x<=860){botanyActiveInput='co2';botanyNotice='Casilla CO₂ seleccionada. Escribe 0 o 1.';audio.select();return;}}
+   if(x>=480&&x<=706&&y>=378&&y<=407){if(Object.values(botanyFactors).some(v=>v===null)){botanyNotice='Completa las tres casillas: escribe 0 o 1 en cada una.';return;}const key=botanyKey();if(key==='000'){botanyNotice='La combinación 000 no está incluida en el Excel. Prueba otra combinación.';botanyResult=null;return;}const result=botanyExperiments[key];if(!result){botanyNotice='Esta combinación no está incluida en los siete resultados del Excel.';return;}botanyTested.add(key);botanyResult=result;botanyNotice='Experimento ejecutado.';botanyActiveInput=null;frogMood='excited';audio.experiment();return;}
+   return;
+ }
+ if(mode==='complete'&&!challengeCorrect){const choice=y>=251&&y<=299?0:y>=310&&y<=358?1:-1;if(choice>=0){const q=missionChallenges[missionIndex];challengeCorrect=choice===q.correct;challengeFeedback=challengeCorrect?q.why:'No es la mejor decisión. Revisa el objetivo e inténtalo otra vez.';frogMood=challengeCorrect?'excited':'confused';if(challengeCorrect){audio.win();if(!completedMissions.includes(missionIndex)){earnedStars+=2;completedMissions.push(missionIndex);saveProgress();}}else audio.data();}}
+});
+requestAnimationFrame(loop);
