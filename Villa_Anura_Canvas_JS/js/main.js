@@ -13,23 +13,18 @@ let mode = 'title', clock = 0, last = 0, dialogue = '', dialogueTimer = 0;
 let installed = new Set(), missionPhase = 0, cometX = 1030, observationWindow = 0, dataSaved = false, dataSent = false;
 const missionNames = ['SOBREVUELO','ORBITADOR','SONDA ATMOSFÉRICA','ATERRIZADOR','ROVER EXPLORADOR','RETORNO DE MUESTRAS'];
 let missionIndex = 0, challengeAnswered = false, challengeFeedback = '', challengeCorrect = false;
-let missionBudget=5000, mdlHints=3, activeCategory=null, selectedResources={}, actionAnimation=0, actionLabel='', utilityPanel=null, hintMessage='', launchTimer=0;
+let missionBudget=7000, mdlHints=3, activeCategory=null, selectedResources={}, actionAnimation=0, actionLabel='', utilityPanel=null, hintMessage='', launchTimer=0;
 let botanyFactors={water:null,uv:null,co2:null}, botanyActiveInput=null, botanyTested=new Set(), botanyResult=null, botanyNotice='Selecciona 0 o 1 en cada casilla.';
+let landingAltitude=650, landingSpeed=55, landingFuel=100, landingStatus='ready', landingThrottle=false, landingMessage='Usa ↑ para frenar y ↓ para acelerar el descenso.';
 const missionBriefs=[
 {title:'DISEÑO Y PUESTA EN ÓRBITA',objective:'Prepara una nave equilibrada y lista para el lanzamiento.',limit:12.5},
 {title:'BOTÁNICA EN MICROGRAVEDAD',objective:'Investiga cómo se comportan las plantas al combinar agua, radiación UV y CO₂.',limit:11.5},
-{title:'ORBITADOR',objective:'Configura la nave para entrar en órbita y estudiar un planeta.',limit:12},
-{title:'SONDA ATMOSFÉRICA',objective:'Protege la sonda y prepara sus instrumentos para medir la atmósfera.',limit:11},
-{title:'ATERRIZADOR Y ROVER',objective:'Prepara un aterrizaje seguro y la exploración de la superficie.',limit:12},
-{title:'RETORNO DE MUESTRAS',objective:'Prepara la recolección, conservación y retorno de una muestra.',limit:13}
+{title:'REGRESO Y ATERRIZAJE EN LA TIERRA',objective:'Controla la velocidad de descenso y administra el combustible para aterrizar sin daños.',limit:12}
 ];
 const missionChallenges=[
 {q:'¿Qué debes comprobar antes de autorizar el lanzamiento?',a:'Que la nave cumpla los límites de masa y tenga sus sistemas preparados',b:'Que la nave lleve la mayor cantidad posible de recursos',correct:0,why:'¡Correcto! Antes del lanzamiento se verifican la configuración, los sistemas y los límites de masa.'},
 {q:'En microgravedad, ¿qué debes considerar al estudiar el crecimiento de una planta?',a:'Observar cómo cambian germinación y orientación al variar las condiciones',b:'Suponer que todas las plantas crecen igual que en la Tierra',correct:0,why:'¡Correcto! El experimento permite comparar resultados de germinación, orientación y condiciones ambientales.'},
-{q:'La nave se acerca al planeta demasiado rápido. ¿Qué maniobra necesita para entrar en órbita?',a:'Reducir su velocidad mediante propulsión',b:'Acelerar hacia el planeta sin corregir la trayectoria',correct:0,why:'¡Bien pensado! La inserción orbital requiere ajustar la velocidad y la trayectoria.'},
-{q:'La sonda entra en una atmósfera muy caliente. ¿Qué sistema es esencial?',a:'Un panel solar más grande',b:'Un escudo térmico adecuado',correct:1,why:'¡Exacto! El escudo térmico protege la sonda del calentamiento durante la entrada.'},
-{q:'El terreno tiene rocas y pendientes. ¿Dónde conviene aterrizar?',a:'En una zona relativamente plana y despejada',b:'En la pendiente más pronunciada',correct:0,why:'¡Correcto! Una zona plana reduce el riesgo de vuelco y daños en el aterrizador.'},
-{q:'¿Cómo debes conservar una muestra durante el viaje de regreso?',a:'Dejarla expuesta para ahorrar peso',b:'Sellarla en un contenedor que evite contaminación',correct:1,why:'¡Excelente! El sellado protege la muestra y evita que se contamine durante el retorno.'}
+{q:'¿Qué indica que el aterrizaje fue seguro?',a:'Tocar tierra con una velocidad vertical baja y controlada',b:'Llegar a la superficie a la mayor velocidad posible',correct:0,why:'¡Aterrizaje exitoso! Una velocidad vertical baja y controlada reduce el riesgo de daños en la nave.'}
 ];
 let earnedStars=Number(localStorage.getItem('villaAnuraStars')||0);
 let completedMissions=JSON.parse(localStorage.getItem('villaAnuraCompleted')||'[]');
@@ -67,9 +62,9 @@ function botanyScene(){
   txt('Completa las tres casillas escribiendo 0 o 1 en cada una.',480,99,13,'#285d60','center');
   txt('Agua · Radiación UV · CO₂',480,117,10,'#5c7d7b','center');
 
-  // Flying acompaña al jugador desde la consola de la nave
+  // Flyn acompaña al jugador desde la consola de la nave
   roundPanel(48,150,205,265,'#e5f1f0','#9dbfc2',12);
-  txt('FLYING · OPERADORA',150,177,11,'#397d6c','center');
+  txt('FLYN · OPERADORA',150,177,11,'#397d6c','center');
   roundPanel(70,192,161,78,'#164e70','#78b8bf',8);
   txt('SISTEMA',150,212,9,'#9de8df','center');
   txt('BOTÁNICO',150,232,14,'#ffffff','center');
@@ -173,7 +168,7 @@ function background(){
   rect(0,0,W,55,'#d9e8e9');rect(0,0,W,5,'#c0d5d9');
   for(let x=-35;x<W;x+=145){ctx.strokeStyle='#9fb6c0';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x+82,54);ctx.moveTo(x+82,0);ctx.lineTo(x,54);ctx.stroke();}
   for(let x=72;x<W;x+=180){rect(x,53,3,16,'#a7bdc2');roundPanel(x-19,68,42,9,'#fff9dc','#d5e2d9',4);}
-  // gran pórtico amarillo de ensamblaje, visible detrás de Flying
+  // gran pórtico amarillo de ensamblaje, visible detrás de Flyn
   rect(369,83,12,276,'#d9a63e');rect(579,83,12,276,'#d9a63e');rect(369,83,222,12,'#e6b84e');
   rect(390,95,9,250,'#efc85f');rect(560,95,9,250,'#efc85f');
   for(let y=128;y<350;y+=56){rect(380,y,190,5,'#e7bd58');}
@@ -237,7 +232,7 @@ function controlRoom(){
   // consolas laterales
   roundPanel(78,230,145,83,'#dbe8ec','#a6c3ca',7);rect(89,241,123,61,'#124a6c');for(let i=0;i<4;i++){rect(100,253+i*10,55+(i%2)*25,3,'#56d7dc');}
   roundPanel(737,230,145,83,'#dbe8ec','#a6c3ca',7);rect(748,241,123,61,'#124a6c');planet(808,267,17,'#7dcbd5');rect(780,291,57,3,'#62d3d5');
-  // Flying espera junto a su puesto; tras seleccionar recurso se desplaza visualmente al cohete
+  // Flyn espera junto a su puesto; tras seleccionar recurso se desplaza visualmente al cohete
   const frogX=actionAnimation>0?480:270;
   drawFrog(frogX,actionAnimation>0?340:350,0.58);
   if(actionAnimation>0){roundPanel(335,356,290,28,'#fffdf4','#c5ded8',8);txt(actionLabel,480,375,10,'#397c68','center');}
@@ -282,7 +277,7 @@ function controlRoom(){
   if(utilityPanel){
     roundPanel(300,155,360,190,'#fffef8','#62aeb4',13);
     roundPanel(318,169,324,37,'#15516e','#58c9cf',8);
-    txt(utilityPanel==='mass'?'CONTROL DE MASA':utilityPanel==='budget'?'PRESUPUESTO DE MISIÓN':'PISTA DE FLYING',480,193,13,'#ffffff','center');
+    txt(utilityPanel==='mass'?'CONTROL DE MASA':utilityPanel==='budget'?'PRESUPUESTO DE MISIÓN':'PISTA DE FLYN',480,193,13,'#ffffff','center');
     if(utilityPanel==='mass'){
       txt('MASA INSTALADA',480,235,11,'#66828a','center');
       txt(totalMass().toFixed(1)+' kg',480,269,24,'#397d65','center');
@@ -298,7 +293,7 @@ function controlRoom(){
   }
 }
 function hud(){roundPanel(18,14,210,43,'#fffdf5','#c8e3d8',8);txt('VILLA ANURA',32,32,11,'#58936d');txt('HANGAR ESPACIAL',32,48,10,'#456879');roundPanel(805,14,137,43,'#fffdf5','#c8e3d8',8);txt('🪰 '+progress.data.flies+'    🎟 '+progress.data.tickets,819,41,13,'#456879');}
-function dialogBox(t){roundPanel(675,390,265,65,'#fffef8','#c9e4d7',9);txt('FLYING',690,411,10,'#65a078');txt(t.length>35?t.slice(0,34)+'…':t,690,435,11,'#456879');}
+function dialogBox(t){roundPanel(675,390,265,65,'#fffef8','#c9e4d7',9);txt('FLYN',690,411,10,'#65a078');txt(t.length>35?t.slice(0,34)+'…':t,690,435,11,'#456879');}
 function titleScreen(){
   background();
   // composición de portada inspirada en la referencia: hangar completo y marca
@@ -309,10 +304,10 @@ function titleScreen(){
   // consolas decorativas y mapa
   roundPanel(34,264,190,100,'#dfeaf0','#9ebbc7',8);rect(46,276,166,75,'#06436f');planet(92,312,25,'#50b6d0');for(let i=0;i<4;i++)rect(132,292+i*12,62,3,'#59dbe0');
   roundPanel(737,257,190,104,'#dfeaf0','#9ebbc7',8);rect(750,269,164,78,'#06436f');planet(826,307,26,'#64b9c8');for(let i=0;i<4;i++)rect(861,287+i*12,38,3,'#57d7df');
-  // Flying en traje espacial, en el centro
+  // Flyn en traje espacial, en el centro
   drawFrog(480,438,0.82);
   // mensaje de bienvenida
-  roundPanel(620,347,302,91,'#fffdf2','#1b7895',10);txt('¡BIENVENIDO, EXPLORADOR!',638,371,12,'#153d62');txt('Soy Flying. Prepárate para diseñar',638,395,11,'#153d62');txt('y lanzar nuestras misiones espaciales.',638,414,11,'#153d62');
+  roundPanel(620,347,302,91,'#fffdf2','#1b7895',10);txt('¡BIENVENIDO, EXPLORADOR!',638,371,12,'#153d62');txt('Soy Flyn. Prepárate para diseñar',638,395,11,'#153d62');txt('y lanzar nuestras misiones espaciales.',638,414,11,'#153d62');
   // botón principal tipo pixel UI
   roundPanel(264,463,432,60,'#0b7890','#f5ffff',16);roundPanel(273,468,414,47,'#0c5f79','#59d7d0',12);txt('PRESIONA  ENTER  PARA JUGAR',480,499,17,'#ffffff','center');
   txt('VILLA ANURA v1.0',18,532,9,'#26445a');
@@ -336,10 +331,10 @@ function interactFlyby(){if(missionPhase===0){if(cometX<400&&cometX>95){missionP
 function completeScene(){
   background();planet(480,215,112,'#abd9cf');drawFrog(480,365,0.78);
   const q=missionChallenges[missionIndex];
-  txt('¡SECCIÓN '+(missionIndex+1)+' COMPLETADA!',480,57,25,'#4c8668','center');
+  txt('¡MISIÓN '+(missionIndex+1)+' COMPLETADA!',480,57,25,'#4c8668','center');
   roundPanel(185,105,590,330,'#fffef8','#9fcbd1',13);
   roundPanel(205,122,550,46,'#15516e','#58c9cf',9);
-  txt('DESAFÍO DE LA SECCIÓN '+(missionIndex+1)+' / 6',480,151,15,'#ffffff','center');
+  txt('DESAFÍO DE LA MISIÓN '+(missionIndex+1)+' / 3',480,151,15,'#ffffff','center');
   roundPanel(220,184,105,100,'#e7f5f4','#b6d9d5',8);
   if(missionIndex===0){rect(252,213,42,44,'#f7ffff');rect(260,204,26,10,'#e4bd55');rect(264,226,18,18,'#4d9cc1');}
   else if(missionIndex===1){planet(272,231,27,'#9da69c');}
@@ -354,15 +349,123 @@ function completeScene(){
   if(challengeFeedback){roundPanel(220,370,520,43,challengeCorrect?'#e1f5e7':'#fff0df',challengeCorrect?'#83c99a':'#e5b37d',8);wrapText(challengeFeedback,480,388,480,14,challengeCorrect?'#28764d':'#966337','center');}
   if(challengeCorrect){
     txt('★ +2 ESTRELLAS',480,435,14,'#a47727','center');
-    txt(missionIndex===5?'ENTER · FINALIZAR CAMPAÑA':'ENTER · SIGUIENTE MISIÓN',480,478,12,'#ffffff','center');
+    txt(missionIndex===2?'ENTER · FINALIZAR CAMPAÑA':'ENTER · SIGUIENTE MISIÓN',480,478,12,'#ffffff','center');
     roundPanel(330,449,300,48,'#15516e','#65d3cf',10);
   }else{roundPanel(330,449,300,48,'#15516e','#65d3cf',10);txt('PULSA A O B PARA RESPONDER',480,478,11,'#ffffff','center');}
 }
-function launchScene(){background();planet(760,170,62,'#b5dce8');roundPanel(60,55,840,410,'#eaf5f2','#9abdc0',16);for(let x=100;x<880;x+=100)rect(x,80,3,300,'#c0d5d7');for(let y=120;y<390;y+=65)rect(60,y,840,3,'#c5dadd');rect(410,350,140,14,'#e4bd55');rect(425,315,110,35,'#d7e5e7');const lift=Math.min(210,launchTimer*72);ctx.save();ctx.translate(0,-lift);rect(452,175,57,168,'#f8ffff');ctx.fillStyle='#fff';ctx.beginPath();ctx.moveTo(452,177);ctx.lineTo(480,137);ctx.lineTo(509,177);ctx.closePath();ctx.fill();rect(459,206,42,7,'#48b5aa');rect(459,271,42,7,'#48b5aa');ctx.fillStyle='#f3a34b';ctx.beginPath();ctx.moveTo(462,344);ctx.lineTo(480,390+Math.sin(clock*18)*8);ctx.lineTo(498,344);ctx.closePath();ctx.fill();ctx.restore();drawFrog(480,390,0.55);txt('LANZAMIENTO DE MISIÓN',480,95,22,'#397d65','center');txt('¡Todos los sistemas preparados! Flying está despegando.',480,430,12,'#547a82','center');}
-function draw(){ctx.clearRect(0,0,W,H);if(mode==='title')titleScreen();else if(mode==='hangar')controlRoom();else if(mode==='launch')launchScene();else if(mode==='botany')botanyScene();else if(mode==='flyby')flybyScene();else if(mode==='complete')completeScene();else if(mode==='missed'){flybyScene();roundPanel(280,205,400,115,'#fffef5','#c6e3d7',10);txt('¡EL COMETA YA PASÓ!',480,245,20,'#a66d4d','center');txt('Pulsa R para intentarlo otra vez.',480,277,13,'#547a82','center');}}
-function startGame(){if(mode!=='title')return;mode='hangar';missionIndex=0;missionBudget=5000;mdlHints=3;selectedResources={};activeCategory=null;say('¡Hola! Soy Flying. Esta es nuestra misión de exploración espacial. Completa sus seis secciones administrando el presupuesto total.');audio.start();canvas.focus();}
+function launchScene(){background();planet(760,170,62,'#b5dce8');roundPanel(60,55,840,410,'#eaf5f2','#9abdc0',16);for(let x=100;x<880;x+=100)rect(x,80,3,300,'#c0d5d7');for(let y=120;y<390;y+=65)rect(60,y,840,3,'#c5dadd');rect(410,350,140,14,'#e4bd55');rect(425,315,110,35,'#d7e5e7');const lift=Math.min(210,launchTimer*72);ctx.save();ctx.translate(0,-lift);rect(452,175,57,168,'#f8ffff');ctx.fillStyle='#fff';ctx.beginPath();ctx.moveTo(452,177);ctx.lineTo(480,137);ctx.lineTo(509,177);ctx.closePath();ctx.fill();rect(459,206,42,7,'#48b5aa');rect(459,271,42,7,'#48b5aa');ctx.fillStyle='#f3a34b';ctx.beginPath();ctx.moveTo(462,344);ctx.lineTo(480,390+Math.sin(clock*18)*8);ctx.lineTo(498,344);ctx.closePath();ctx.fill();ctx.restore();drawFrog(480,390,0.55);txt('LANZAMIENTO DE MISIÓN',480,95,22,'#397d65','center');txt('¡Todos los sistemas preparados! Flyn está despegando.',480,430,12,'#547a82','center');}
+function beginLandingMission(){
+  missionIndex=2;
+  landingAltitude=650;
+  landingSpeed=55;
+  landingFuel=100;
+  landingStatus='ready';
+  landingThrottle=false;
+  landingMessage='Usa ↑ para frenar y ↓ para acelerar el descenso.';
+  challengeAnswered=false;challengeFeedback='';challengeCorrect=false;
+  mode='landing';
+  say('¡Regresamos a la Tierra! Usa las flechas para controlar el descenso y conserva combustible para frenar antes de tocar el suelo.');
+  audio.start();
+}
+function updateLanding(dt){
+  if(landingStatus!=='ready')return;
+  const brake=!!keys.ArrowUp;
+  const accelerate=!!keys.ArrowDown;
+  landingThrottle=false;
+  // La gravedad acelera el descenso; el propulsor contrarresta la caída.
+  landingSpeed+=3.2*dt;
+  if(brake&&landingFuel>0){
+    landingSpeed-=18*dt;
+    landingFuel=Math.max(0,landingFuel-5.2*dt);
+    landingThrottle=true;
+    landingMessage='Propulsor activo: reduces la velocidad, pero consumes combustible.';
+  }else if(accelerate){
+    landingSpeed+=10*dt;
+    landingMessage='Acelerando el descenso: aumenta la velocidad de impacto.';
+  }else{
+    landingMessage=landingFuel<=0?'Combustible agotado: ya no puedes activar el propulsor.':'Caída por gravedad: decide cuándo frenar.';
+  }
+  landingSpeed=Math.max(0,Math.min(140,landingSpeed));
+  landingAltitude-=landingSpeed/3.6*2*dt;
+  if(landingAltitude<=0){
+    landingAltitude=0;
+    if(landingSpeed<=12){
+      landingStatus='landed';
+      landingMessage='¡Aterrizaje seguro! Has controlado la velocidad y el combustible.';
+      challengeAnswered=false;challengeFeedback='';challengeCorrect=false;
+      mode='complete';audio.win();
+    }else{
+      landingStatus='crashed';
+      landingMessage='GAME OVER · La nave llegó con demasiada velocidad.';
+      audio.data();
+    }
+  }
+}
+function landingScene(){
+  const sky=ctx.createLinearGradient(0,0,0,H);
+  sky.addColorStop(0,'#bfe4f1');sky.addColorStop(.66,'#e8f5f0');sky.addColorStop(1,'#f4f2dc');
+  ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
+  for(let i=0;i<40;i++){const sx=(i*173)%W,sy=(i*67)%290;rect(sx,sy,2,2,'#ffffff');}
+  planet(790,145,58,'#7ebed5');planet(790,145,44,'#a4d7df');
+  rect(0,438,W,102,'#b5d9b6');rect(0,438,W,7,'#8fc39c');
+  for(let x=0;x<W;x+=84){rect(x,453,44,5,'#9fc99f');rect(x+20,468,31,4,'#a3cba0');}
+  roundPanel(365,444,230,30,'#e5edf0','#92adb7',7);rect(385,456,190,7,'#e8c75b');
+  roundPanel(28,12,904,50,'#fffdf5','#b9d8d4',12);
+  txt('VILLA ANURA · REGRESO A LA TIERRA',48,34,14,'#397d6c');
+  txt('MISIÓN 3 · DESCENSO Y ATERRIZAJE CONTROLADO',48,52,10,'#426879');
+
+  // Indicador vertical de combustible, como en la referencia.
+  roundPanel(42,88,152,315,'#fffef8','#b9d8d4',10);
+  txt('COMBUSTIBLE',118,113,11,'#397d6c','center');
+  roundPanel(94,137,48,210,'#e5efec','#b7ceca',7);
+  const fuelH=196*(landingFuel/100);
+  rect(103,340-fuelH,30,fuelH,landingFuel>25?'#4aa879':landingFuel>10?'#e3b44b':'#d66b55');
+  txt(Math.round(landingFuel)+'%',118,376,18,'#906a32','center');
+  txt('RESERVA',118,393,8,'#6b8587','center');
+
+  // Indicador vertical de velocidad en km/h.
+  roundPanel(766,88,152,315,'#fffef8','#b9d8d4',10);
+  txt('VELOCIDAD',842,113,11,'#397d6c','center');txt('km/h',842,130,9,'#6b8587','center');
+  roundPanel(818,149,48,198,'#e5efec','#b7ceca',7);
+  const speedH=184*Math.min(1,landingSpeed/120);
+  rect(827,340-speedH,30,speedH,landingSpeed>70?'#d66b55':landingSpeed>35?'#e3b44b':'#4aa879');
+  txt(Math.round(landingSpeed)+'',842,376,20,landingSpeed>70?'#b65343':'#286b76','center');
+  txt('DESCENSO',842,393,8,'#6b8587','center');
+
+  // Altitud y nave en caída vertical.
+  roundPanel(342,82,276,55,'#fffef8','#b9d8d4',9);
+  txt('ALTITUD RESTANTE',480,102,9,'#6b8587','center');
+  txt(Math.max(0,Math.round(landingAltitude))+' m',480,126,17,'#286b76','center');
+  const shipY=165+(650-landingAltitude)*.34;
+  const cx=480;
+  ctx.save();ctx.translate(0,Math.min(150,shipY-165));
+  rect(cx-25,190,50,125,'#f8ffff');ctx.strokeStyle='#8bb5bf';ctx.lineWidth=2;ctx.strokeRect(cx-25,190,50,125);
+  ctx.fillStyle='#fff';ctx.beginPath();ctx.moveTo(cx-25,191);ctx.lineTo(cx,150);ctx.lineTo(cx+25,191);ctx.closePath();ctx.fill();ctx.stroke();
+  rect(cx-20,220,40,7,'#48b5aa');rect(cx-20,270,40,7,'#48b5aa');
+  roundPanel(cx-10,238,20,20,'#d9edf4','#83aeb9',4);
+  ctx.fillStyle='#d7e5e8';ctx.beginPath();ctx.moveTo(cx-25,292);ctx.lineTo(cx-47,325);ctx.lineTo(cx-25,312);ctx.fill();ctx.beginPath();ctx.moveTo(cx+25,292);ctx.lineTo(cx+47,325);ctx.lineTo(cx+25,312);ctx.fill();
+  if(landingThrottle){ctx.fillStyle='#f3a34b';ctx.beginPath();ctx.moveTo(cx-12,315);ctx.lineTo(cx,355+Math.sin(clock*22)*5);ctx.lineTo(cx+12,315);ctx.closePath();ctx.fill();}
+  ctx.restore();
+
+  roundPanel(220,165,180,190,'#fffef8','#b9d8d4',10);
+  txt('CONTROLES',310,190,11,'#397d6c','center');
+  roundPanel(245,208,130,48,'#e4f5ed','#8dc7ae',8);txt('↑  FRENAR',310,238,15,'#286b62','center');
+  txt('Consume combustible',310,276,9,'#a16a37','center');
+  roundPanel(245,296,130,42,'#e8f0f6','#a8c5d0',8);txt('↓  ACELERAR',310,322,13,'#31596a','center');
+  drawFrog(660,405,0.55);
+  roundPanel(205,505,550,27,'#fffdf5','#b9d8d4',8);
+  txt(landingStatus==='crashed'?'GAME OVER · PULSA R PARA REINTENTAR':landingMessage,480,523,9,landingStatus==='crashed'?'#a34c43':'#426879','center');
+  if(landingStatus==='crashed'){
+    roundPanel(365,365,230,88,'#fff4ed','#d89b81',10);
+    txt('GAME OVER',480,397,19,'#a34c43','center');
+    txt('Pulsa R para volver a intentar',480,426,10,'#875e52','center');
+  }
+}
+
+function draw(){ctx.clearRect(0,0,W,H);if(mode==='title')titleScreen();else if(mode==='hangar')controlRoom();else if(mode==='launch')launchScene();else if(mode==='botany')botanyScene();else if(mode==='landing')landingScene();else if(mode==='flyby')flybyScene();else if(mode==='complete')completeScene();else if(mode==='missed'){flybyScene();roundPanel(280,205,400,115,'#fffef5','#c6e3d7',10);txt('¡EL COMETA YA PASÓ!',480,245,20,'#a66d4d','center');txt('Pulsa R para intentarlo otra vez.',480,277,13,'#547a82','center');}}
+function startGame(){if(mode!=='title')return;mode='hangar';missionIndex=0;missionBudget=7000;mdlHints=3;selectedResources={};activeCategory=null;say('¡Hola! Soy Flyn. Esta es nuestra misión de exploración espacial. Completa las tres misiones y administra el presupuesto inicial de 7.000 créditos.');audio.start();canvas.focus();}
 function keyDown(e){
- if(['ArrowLeft','ArrowRight','ArrowUp',' ','Space'].includes(e.key))e.preventDefault();
+ if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown',' ','Space'].includes(e.key))e.preventDefault();
  keys[e.code]=true;if(e.repeat)return;
  if(mode==='title'&&(e.code==='Enter'||e.code==='NumpadEnter')){e.preventDefault();startGame();return;}
  if(mode==='botany'){
@@ -385,11 +488,15 @@ function keyDown(e){
    }
    return;
  }
+ if(mode==='landing'){
+   if(e.code==='KeyR'&&landingStatus==='crashed'){beginLandingMission();return;}
+   return;
+ }
  if(mode==='hangar'){
    if(chosenAllResources()&&(e.code==='Enter'||e.code==='NumpadEnter')){mode='launch';launchTimer=0;activeCategory=null;utilityPanel=null;audio.start();return;}
    if(activeCategory&&['Digit1','Digit2','Digit3'].includes(e.code)){
      const cat=resourceCategories.find(v=>v.id===activeCategory),opt=cat.options[Number(e.code.slice(-1))-1];
-     if(opt){const old=selectedResources[cat.id];const mass=totalMass()-(old?old.mass:0)+opt[2];if(missionBudget+(old?old.cost:0)<opt[1])notify('Presupuesto insuficiente.');else if(mass>missionBriefs[missionIndex].limit)notify('La masa supera el límite permitido.');else{if(old)missionBudget+=old.cost;missionBudget-=opt[1];selectedResources[cat.id]={label:opt[0],cost:opt[1],mass:opt[2]};activeCategory=null;actionAnimation=1.8;actionLabel='FLYING INSTALANDO RECURSOS';say('¡Selección confirmada!');audio.data();}}
+     if(opt){const old=selectedResources[cat.id];const mass=totalMass()-(old?old.mass:0)+opt[2];if(missionBudget+(old?old.cost:0)<opt[1])notify('Presupuesto insuficiente.');else if(mass>missionBriefs[missionIndex].limit)notify('La masa supera el límite permitido.');else{if(old)missionBudget+=old.cost;missionBudget-=opt[1];selectedResources[cat.id]={label:opt[0],cost:opt[1],mass:opt[2]};activeCategory=null;actionAnimation=1.8;actionLabel='FLYN INSTALANDO RECURSOS';say('¡Selección confirmada!');audio.data();}}
    }else if(e.code==='Escape'){activeCategory=null;utilityPanel=null;}return;
  }
  if(mode==='missed'&&e.code==='KeyR'){mode='flyby';cometX=1050;observationWindow=0;missionPhase=0;resetPlayer();return;}
@@ -400,12 +507,12 @@ function keyDown(e){
      if(challengeCorrect){audio.win();if(!completedMissions.includes(missionIndex)){earnedStars+=2;completedMissions.push(missionIndex);saveProgress();}}else audio.data();return;
    }
    if(challengeCorrect&&(e.code==='Enter'||e.code==='NumpadEnter')){
-     if(missionIndex<5){missionIndex++;selectedResources={};activeCategory=null;utilityPanel=null;challengeAnswered=false;challengeFeedback='';challengeCorrect=false;resetPlayer();if(missionIndex===1){mode='botany';botanyFactors={water:0,uv:0,co2:0};botanyTested=new Set();botanyResult=null;botanyNotice='Configura las variables con 0 o 1 y ejecuta la prueba.';say('¡Bienvenido al laboratorio! Configura agua, radiación UV y CO₂.');}else{mode='hangar';say('Continúa la misión 1: '+missionBriefs[missionIndex].objective);}audio.start();}
-     else{mode='title';say('¡Has completado la misión de exploración espacial y sus seis secciones!');}
+     if(missionIndex===1){beginLandingMission();return;}
+     if(missionIndex===2){mode='title';say('¡Campaña completada! Has realizado el experimento botánico y regresado a la Tierra con un aterrizaje seguro.');return;}
    }
  }
 }
-function loop(now){const dt=Math.min(.035,(now-last)/1000||0);last=now;clock+=dt;if(mode==='launch'){launchTimer+=dt;if(launchTimer>3.2){if(missionIndex===0||missionIndex===1){missionIndex=1;mode='botany';botanyFactors={water:null,uv:null,co2:null};botanyActiveInput=null;botanyTested=new Set();botanyResult=null;botanyNotice='Selecciona 0 o 1 en las tres casillas y consulta el resultado.';say('¡Llegamos al espacio! Vamos a iniciar el experimento botánico.');}else{mode='complete';challengeAnswered=false;challengeFeedback='';challengeCorrect=false;}}}if(dialogueTimer>0)dialogueTimer-=dt;if(messageTimer>0)messageTimer-=dt;if(actionAnimation>0)actionAnimation=Math.max(0,actionAnimation-dt);if(mode==='flyby')updateFlyby(dt);draw();requestAnimationFrame(loop);}
+function loop(now){const dt=Math.min(.035,(now-last)/1000||0);last=now;clock+=dt;if(mode==='launch'){launchTimer+=dt;if(launchTimer>3.2){if(missionIndex===0||missionIndex===1){missionIndex=1;mode='botany';botanyFactors={water:null,uv:null,co2:null};botanyActiveInput=null;botanyTested=new Set();botanyResult=null;botanyNotice='Selecciona 0 o 1 en las tres casillas y consulta el resultado.';say('¡Llegamos al espacio! Vamos a iniciar el experimento botánico.');}else{mode='complete';challengeAnswered=false;challengeFeedback='';challengeCorrect=false;}}}if(dialogueTimer>0)dialogueTimer-=dt;if(messageTimer>0)messageTimer-=dt;if(actionAnimation>0)actionAnimation=Math.max(0,actionAnimation-dt);if(mode==='flyby')updateFlyby(dt);if(mode==='landing')updateLanding(dt);draw();requestAnimationFrame(loop);}
 canvas.tabIndex=0;canvas.style.cursor='pointer';document.addEventListener('keydown',keyDown);document.addEventListener('keyup',e=>keys[e.code]=false);window.addEventListener('blur',()=>Object.keys(keys).forEach(k=>keys[k]=false));canvas.addEventListener('pointerdown',()=>{canvas.focus();if(mode==='title')startGame();else if(mode==='complete')keyDown({key:'Enter',code:'Enter',repeat:false,preventDefault(){}});});canvas.addEventListener('click',(e)=>{
   canvas.focus();
   const r=canvas.getBoundingClientRect(),x=(e.clientX-r.left)*W/r.width,y=(e.clientY-r.top)*H/r.height;
@@ -430,7 +537,7 @@ canvas.tabIndex=0;canvas.style.cursor='pointer';document.addEventListener('keydo
         const previous=selectedResources[cat.id];const projectedMass=totalMass()-(previous?previous.mass:0)+opt[2];if(projectedMass>missionBriefs[missionIndex].limit){notify('La masa superaría el límite de '+missionBriefs[missionIndex].limit+' kg. Elige una opción más ligera.');return;}
         if(selectedResources[cat.id])missionBudget+=selectedResources[cat.id].cost;
         missionBudget-=opt[1];selectedResources[cat.id]={label:opt[0],cost:opt[1],mass:opt[2]};
-        activeCategory=null;actionAnimation=1.8;actionLabel='FLYING ESTÁ INSTALANDO: '+cat.name;
+        activeCategory=null;actionAnimation=1.8;actionLabel='FLYN ESTÁ INSTALANDO: '+cat.name;
         say('¡Recurso instalado!');audio.data();return;
       }
       if(x<245||x>715||y<125||y>377){activeCategory=null;return;}
@@ -441,6 +548,7 @@ canvas.tabIndex=0;canvas.style.cursor='pointer';document.addEventListener('keydo
     return;
   }
 
+  if(mode==='landing'&&landingStatus==='crashed'){beginLandingMission();return;}
   if(mode==='botany'){
     if(botanyTested.size===7&&x>=755&&x<=915&&y>=478&&y<=513){mode='complete';challengeAnswered=false;challengeFeedback='';challengeCorrect=false;return;}
     if(y>=255&&y<=325){
