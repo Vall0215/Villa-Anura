@@ -93,23 +93,83 @@ function background(){
   for(let y=395;y<540;y+=42){rect(0,y,W,2,'#cbdcd8');}
   rect(0,514,W,8,'#edc85d');for(let x=0;x<W;x+=34){rect(x,514,17,8,'#fff0bd');}
 }
-function controlRoom(){background();
-  // mission banner
-  roundPanel(18,14,250,44,'#ffffff','#d3e4e6',8);txt('VILLA ANURA',32,32,12,'#31825f');txt('HANGAR DE ENSAMBLAJE',32,48,10,'#456879');
-  // interactive consoles placed in the foreground
-  stations.forEach((s)=>{const active=installed.has(s.id);roundPanel(s.x-42,380,84,65,active?'#e4f7e9':'#ffffff',active?'#66b986':'#b8d0d7',8);rect(s.x-31,389,62,34,active?'#d7f2e2':'#e6f2f5');txt(s.icon,s.x,414,20,'#36576a','center');txt(active?'LISTO':s.name,s.x,438,9,active?'#39865c':'#4d7180','center');if(Math.abs(player.x-s.x)<62){roundPanel(s.x-69,346,138,27,'#ffffff','#8fc7b0',7);txt(active?'SISTEMA INSTALADO':'E · INTERACTUAR',s.x,364,9,'#357d5b','center');}});
-  // holographic mission map to the right
-  roundPanel(690,82,244,116,'#fafdff','#b9d4df',10);txt('MAPA DE MISIÓN',708,105,11,'#347b8a');rect(708,119,207,61,'#e5f3f7');planet(812,150,21,'#83c6d7');ctx.strokeStyle='#64a6b8';ctx.lineWidth=2;ctx.beginPath();ctx.arc(812,150,38,0,Math.PI*2);ctx.stroke();ctx.beginPath();ctx.moveTo(755,150);ctx.lineTo(870,150);ctx.moveTo(812,128);ctx.lineTo(812,172);ctx.stroke();
-  // mission guidance panel
-  roundPanel(18,72,300,86,'#ffffff','#c8dfe3',10);txt('CENTRO DE CONTROL',34,97,12,'#34876a');txt('Prepara la nave para el sobrevuelo.',34,122,13,'#456879');txt('← → caminar   ESPACIO saltar',34,144,11,'#6c8b94');
-  roundPanel(700,215,240,72,'#ffffff','#c8dfe3',10);txt('MISIÓN 01 · SOBRE VUELO',716,239,11,'#34876a');txt('Sistemas '+installed.size+'/4',716,264,15,'#456879');
-  drawFrog(player.x,player.y);
+function drawRocket(){
+  // nave de lanzamiento central, con detalles pixel-art y plataforma amarilla
+  rect(426,190,108,164,'#9aabb8');rect(438,150,84,200,'#edf5f7');rect(446,140,68,205,'#ffffff');
+  // hombros y punta de la nave
+  ctx.fillStyle='#f9ffff';ctx.beginPath();ctx.moveTo(446,151);ctx.lineTo(480,104);ctx.lineTo(514,151);ctx.closePath();ctx.fill();ctx.strokeStyle='#8ba5b5';ctx.lineWidth=3;ctx.stroke();
+  rect(456,104,48,9,'#e6edf0');rect(452,155,56,7,'#43b8a9');rect(452,238,56,7,'#43b8a9');rect(452,312,56,7,'#43b8a9');
+  // ventanillas e insignias
+  for(const y of [180,215,270]){roundPanel(467,y,26,23,'#d7edf5','#7b9aaa',5);planet(480,y+11,7,'#3f91c4');}
+  rect(439,337,82,15,'#b9cbd3');rect(431,350,98,12,'#839aa8');
+  // patas y soporte inferior
+  rect(438,320,12,40,'#dce6e9');rect(510,320,12,40,'#dce6e9');
+}
+function controlRoom(){
+  background();
+  // pórtico, plataformas y barandillas de la instalación
+  rect(335,118,12,245,'#d99f2d');rect(613,118,12,245,'#d99f2d');rect(335,118,290,10,'#e7b844');
+  for(let y=153;y<345;y+=48){rect(347,y,266,5,'#e8b94f');rect(347,y,7,33,'#c18a32');rect(606,y,7,33,'#c18a32');}
+  // plataforma principal de servicio
+  rect(324,337,312,13,'#e6ae35');rect(343,350,14,15,'#c38a2e');rect(602,350,14,15,'#c38a2e');
+  for(let x=350;x<610;x+=34){rect(x,339,5,9,'#fff0a6');}
+  // escalera lateral
+  ctx.strokeStyle='#d69b31';ctx.lineWidth=6;ctx.beginPath();ctx.moveTo(610,350);ctx.lineTo(657,414);ctx.stroke();
+  for(let i=0;i<5;i++){let x=615+i*8,y=358+i*10;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+18,y+1);ctx.stroke();}
+  drawRocket();
+  // monitor mural izquierda: mapa terrestre y telemetría
+  roundPanel(18,130,218,126,'#dce8ed','#8daab9',8);rect(30,142,194,101,'#073f70');planet(91,190,34,'#51b7d0');planet(91,190,27,'#63c58c');
+  for(let i=0;i<5;i++){rect(139,160+i*14,70,4,'#39cbd5');rect(139,167+i*14,35+(i%3)*10,3,'#83e5db');}
+  // monitor mural derecha: esquema de nave
+  roundPanel(733,125,207,126,'#dce8ed','#8daab9',8);rect(746,138,181,100,'#073d6a');
+  ctx.strokeStyle='#56e1ef';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(786,190);ctx.lineTo(850,163);ctx.lineTo(891,190);ctx.lineTo(850,214);ctx.closePath();ctx.stroke();ctx.beginPath();ctx.moveTo(850,163);ctx.lineTo(850,214);ctx.stroke();
+  for(let i=0;i<4;i++)rect(761,151+i*14,18,3,'#4ed6e2');
+  // side consoles and robotic arm
+  roundPanel(24,274,185,69,'#e6eef0','#a8c0c8',7);rect(37,285,160,42,'#154c70');for(let i=0;i<5;i++){rect(48+i*27,299,16,3,'#56d5dc');rect(48+i*27,308,8,12,'#45aebd');}
+  roundPanel(748,273,188,70,'#e6eef0','#a8c0c8',7);rect(761,285,162,44,'#154c70');planet(838,306,15,'#83d0d8');rect(808,324,62,3,'#55d7dc');
+  // brazo robótico amarillo en el lateral derecho
+  ctx.strokeStyle='#e4a82e';ctx.lineWidth=17;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(827,274);ctx.lineTo(866,236);ctx.lineTo(903,254);ctx.stroke();
+  planet(866,236,10,'#f1c54e');planet(903,254,9,'#e4ad32');rect(900,249,24,8,'#344d60');
+  // plantas decorativas y cajas técnicas
+  roundPanel(226,320,38,34,'#f8ffff','#bdcfca',5);for(let i=0;i<5;i++)rect(235+i*4,297-(i%2)*7,4,25,'#4baf73');
+  roundPanel(697,320,38,34,'#f8ffff','#bdcfca',5);for(let i=0;i<5;i++)rect(706+i*4,297-(i%2)*7,4,25,'#4baf73');
+  // logo mural
+  roundPanel(272,177,160,62,'#f9ffff','#c3d9df',6);planet(303,206,15,'#5ab6c6');txt('VILLA ANURA',326,204,13,'#1d617c');txt('CENTRO ESPACIAL',326,222,8,'#47798a');
+  // encabezado y panel de misión
+  roundPanel(14,12,260,48,'#fafdff','#b8d9df',8);txt('VILLA ANURA',29,33,15,'#177b70');txt('CENTRO DE CONTROL ESPACIAL',29,50,8,'#527e8d');
+  roundPanel(14,75,265,74,'#f9ffff','#9fcbd1',10);txt('MISIÓN 1 / 6 · SOBREVUELO',29,99,11,'#155b79');txt('Prepara la nave para estudiar',29,119,11,'#243d64');txt('un cometa de cerca.',29,135,11,'#243d64');
+  // HUD superior derecha
+  roundPanel(790,12,156,45,'#f9ffff','#b8d9df',8);txt('★  0       🎟  0',807,41,16,'#155b79');
+  // estaciones interactivas: consolas delante del hangar
+  const cards=[{x:150,id:'camera',icon:'▦',label:'COMPONENTES'},{x:420,id:'antenna',icon:'✣',label:'DISEÑO DE NAVE'},{x:650,id:'solar',icon:'▶',label:'SIMULADOR'},{x:835,id:'memory',icon:'🚀',label:'LANZAMIENTO'}];
+  cards.forEach((s)=>{const active=installed.has(s.id);roundPanel(s.x-48,382,96,65,active?'#dff6e9':'#f8ffff',active?'#65bb8a':'#9fc8d1',8);roundPanel(s.x-38,390,76,35,'#e5f7fb','#b7d8df',5);txt(s.icon,s.x,416,22,'#087b9a','center');roundPanel(s.x-52,448,104,22,'#15516e','#e2f8fa',5);txt(active?'LISTO':s.label,s.x,463,8,'#ffffff','center');if(Math.abs(player.x-s.x)<64){roundPanel(s.x-67,350,134,25,'#ffffff','#72c4ae',6);txt(active?'SISTEMA LISTO':'E · INTERACTUAR',s.x,367,9,'#287d66','center');}});
+  // Flying protagonista en primer plano
+  drawFrog(player.x,player.y,1.22);
+  // controles inferiores estilo videojuego
+  roundPanel(292,493,376,34,'#f8ffff','#b9d9e0',16);txt('← → MOVER     ESPACIO SALTAR     E INTERACTUAR',480,515,9,'#164f70','center');
   if(dialogueTimer>0)dialogBox(dialogue);
-  if(messageTimer>0){roundPanel(330,458,300,36,'#ffffff','#b9dccd',8);txt(message,480,481,11,'#3e8066','center');}
+  if(messageTimer>0){roundPanel(332,455,296,30,'#fffef8','#b9dccd',8);txt(message,480,475,10,'#3e8066','center');}
 }
 function hud(){roundPanel(18,14,210,43,'#fffdf5','#c8e3d8',8);txt('VILLA ANURA',32,32,11,'#58936d');txt('HANGAR ESPACIAL',32,48,10,'#456879');roundPanel(805,14,137,43,'#fffdf5','#c8e3d8',8);txt('🪰 '+progress.data.flies+'    🎟 '+progress.data.tickets,819,41,13,'#456879');}
 function dialogBox(t){roundPanel(675,390,265,65,'#fffef8','#c9e4d7',9);txt('FLYING',690,411,10,'#65a078');txt(t.length>35?t.slice(0,34)+'…':t,690,435,11,'#456879');}
-function titleScreen(){background();rect(0,420,W,120,'#b4d9c7');rect(0,420,W,7,'#8dc59e');planet(770,190,105,'#a8d9ce');planet(180,155,42,'#d0e1f2');drawFrog(480,390,2.3);txt('VILLA ANURA',480,88,40,'#478268','center');txt('SPACE MISSION ADVENTURE',480,118,14,'#72988a','center');roundPanel(330,448,300,55,'#fffef6','#c6e3d7',9);txt('PRESIONA ENTER PARA JUGAR',480,482,14,'#4b8965','center');}
+function titleScreen(){
+  background();
+  // composición de portada inspirada en la referencia: hangar completo y marca
+  // logo superior izquierdo
+  roundPanel(30,28,286,100,'#faffff','#18a8a7',15);txt('✦  VILLA',54,67,34,'#087d68');txt('ANURA 🚀',54,105,34,'#087d68');roundPanel(43,112,255,28,'#087b9a','#d6ffff',12);txt('SPACE MISSION ADVENTURE',170,131,11,'#ffffff','center');
+  // cohete protagonista al fondo
+  rect(410,94,12,255,'#dba32e');rect(538,94,12,255,'#dba32e');rect(410,94,140,9,'#e7b844');drawRocket();
+  // consolas decorativas y mapa
+  roundPanel(34,264,190,100,'#dfeaf0','#9ebbc7',8);rect(46,276,166,75,'#06436f');planet(92,312,25,'#50b6d0');for(let i=0;i<4;i++)rect(132,292+i*12,62,3,'#59dbe0');
+  roundPanel(737,257,190,104,'#dfeaf0','#9ebbc7',8);rect(750,269,164,78,'#06436f');planet(826,307,26,'#64b9c8');for(let i=0;i<4;i++)rect(861,287+i*12,38,3,'#57d7df');
+  // Flying en traje espacial, en el centro
+  drawFrog(480,438,2.05);
+  // mensaje de bienvenida
+  roundPanel(620,347,302,91,'#fffdf2','#1b7895',10);txt('¡BIENVENIDO, EXPLORADOR!',638,371,12,'#153d62');txt('Soy Flying. Prepárate para diseñar',638,395,11,'#153d62');txt('y lanzar nuestras misiones espaciales.',638,414,11,'#153d62');
+  // botón principal tipo pixel UI
+  roundPanel(264,463,432,60,'#0b7890','#f5ffff',16);roundPanel(273,468,414,47,'#0c5f79','#59d7d0',12);txt('PRESIONA  ENTER  PARA JUGAR',480,499,17,'#ffffff','center');
+  txt('VILLA ANURA v1.0',18,532,9,'#26445a');
+}
 function resetPlayer(){player.x=115;player.y=420;player.vx=0;player.vy=0;player.grounded=true;}
 function updatePlayer(dt){const left=keys.ArrowLeft||keys.KeyA,right=keys.ArrowRight||keys.KeyD,jump=keys.Space||keys.ArrowUp||keys.KeyW;player.vx=((right?1:0)-(left?1:0))*210;if(player.vx)player.facing=Math.sign(player.vx);if(jump&&!jumpWasDown&&player.grounded){player.vy=-570;player.grounded=false;audio.jump();}jumpWasDown=!!jump;player.vy+=1450*dt;player.x=Math.max(32,Math.min(928,player.x+player.vx*dt));player.y+=player.vy*dt;if(player.y>=420){player.y=420;player.vy=0;player.grounded=true;}player.anim+=dt;}
 function interactHangar(){const station=stations.find(s=>Math.abs(player.x-s.x)<62);if(!station){say('Acércate a una consola para instalar sus sistemas.');return;}if(installed.has(station.id)){say('Ese sistema ya está instalado. ¡Bien hecho!');return;}installed.add(station.id);audio.data();say(station.desc+' instalado.');if(installed.size===4){say('¡Todos los sistemas listos! Pulsa ENTER para despegar.');notify('NAVE PREPARADA');}}
