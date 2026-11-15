@@ -294,73 +294,39 @@ const botanyExperiments = {
 };
 function botanyKey(){return [botanyFactors.water,botanyFactors.uv,botanyFactors.co2].map(v=>v===null?'_':String(v)).join('');}
 function botanyScene(){
-  // Laboratorio orbital: la misión ya está en el espacio.
-  const sky=ctx.createLinearGradient(0,0,0,H);
-  sky.addColorStop(0,'#d8edf5');sky.addColorStop(.55,'#eaf5f3');sky.addColorStop(1,'#d4e8e9');
-  ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
-  for(let i=0;i<68;i++){const sx=(i*137)%W,sy=(i*73)%H;rect(sx,sy,2+(i%4===0?1:0),2,'#ffffff');}
-  planet(845,112,65,'#a9d7e7');planet(845,112,51,'#b9e3e9');
-  ctx.strokeStyle='#9fc6cd';ctx.lineWidth=8;ctx.beginPath();ctx.arc(845,112,77,0,Math.PI*2);ctx.stroke();
-  rect(0,0,W,12,'#b7d2d6');rect(0,12,W,4,'#e7f6f3');
-  roundPanel(28,12,904,50,'#fffdf5','#b9d8d4',12);
-  txt('VILLA ANURA · LABORATORIO ORBITAL',48,34,14,'#397d6c');
-  txt('MISIÓN 2 · EXPERIMENTO DE BOTÁNICA EN AUSENCIA DE GRAVEDAD',48,52,10,'#426879');
-  roundPanel(55,76,850,54,'#e8f5ef','#a9d2c4',10);
-  txt('Completa las tres casillas escribiendo 0 o 1 en cada una.',480,99,13,'#285d60','center');
-  txt('Agua · Radiación UV · CO₂',480,117,10,'#5c7d7b','center');
-
-  // Flyn acompaña al jugador desde la consola de la nave
-  roundPanel(48,150,205,265,'#e5f1f0','#9dbfc2',12);
-  txt('FLYN · OPERADORA',150,177,11,'#397d6c','center');
-  roundPanel(70,192,161,78,'#164e70','#78b8bf',8);
-  txt('SISTEMA',150,212,9,'#9de8df','center');
-  txt('BOTÁNICO',150,232,14,'#ffffff','center');
-  for(let i=0;i<4;i++)rect(94,246+i*5,35+i*10,2,'#6ed8d5');
-  drawFrog(150,382,0.63);
-  txt('Escribe 0 o 1',150,404,9,'#547782','center');
-
-  // Tres campos de entrada vacíos, en una sola fila
-  roundPanel(275,150,637,265,'#fffef8','#c8ded8',12);
-  txt('CONFIGURACIÓN DE VARIABLES',593,185,13,'#397d6c','center');
+  const sky=ctx.createLinearGradient(0,0,0,H);sky.addColorStop(0,'#06152c');sky.addColorStop(.55,'#102a49');sky.addColorStop(1,'#183b55');ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
+  for(let i=0;i<95;i++){const sx=(i*137)%W,sy=(i*73)%H;rect(sx,sy,2+(i%4===0?1:0),2,'#d7efff');}
+  planet(845,112,65,'#5689aa');planet(845,112,51,'#83bdce');ctx.strokeStyle='#7ab0c5';ctx.lineWidth=5;ctx.beginPath();ctx.arc(845,112,77,0,Math.PI*2);ctx.stroke();
+  roundPanel(28,12,904,50,'#fffdf5','#b9d8d4',12);txt('VILLA ANURA · LABORATORIO ORBITAL',48,34,14,'#397d6c');txt('MISIÓN 2 · EXPERIMENTO DE BOTÁNICA EN AUSENCIA DE GRAVEDAD',48,52,10,'#426879');
+  roundPanel(55,76,850,54,'#e8f5ef','#a9d2c4',10);txt('Completa las tres casillas escribiendo 0 o 1 en cada una.',480,99,13,'#285d60','center');txt('Agua · Radiación UV · CO₂',480,117,10,'#5c7d7b','center');
+  roundPanel(48,150,205,265,'#e5f1f0','#9dbfc2',12);txt('FLYN · OPERADORA',150,177,11,'#397d6c','center');
+  roundPanel(70,192,161,78,'#164e70','#78b8bf',8);txt('SISTEMA',150,212,9,'#9de8df','center');txt('BOTÁNICO',150,232,14,'#ffffff','center');for(let i=0;i<4;i++)rect(94,246+i*5,35+i*10,2,'#6ed8d5');
+  drawPlantPreview(150,335);
+  drawFrog(150,405,0.52);
+  roundPanel(275,150,637,265,'#fffef8','#c8ded8',12);txt('CONFIGURACIÓN DE VARIABLES',593,185,13,'#397d6c','center');
   const fields=[['water','AGUA',380,320],['uv','RADIACIÓN UV',590,530],['co2','CO₂',800,740]];
-  fields.forEach(([id,label,center,left])=>{
-    txt(label,center,235,label==='RADIACIÓN UV'?11:13,'#31596a','center');
-    const active=botanyActiveInput===id;
-    roundPanel(left,255,120,70,active?'#f0fbf7':'#ffffff',active?'#299b82':'#9abfc0',8);
-    txt(botanyFactors[id]===null?'':String(botanyFactors[id]),center,301,28,'#267f61','center');
-    if(botanyFactors[id]===null)txt('0 o 1',center,301,12,'#a5b8b8','center');
-    if(active)roundPanel(left+4,259,112,62,'#00000000','#55bda7',6);
-  });
-  txt('Haz clic en una casilla y escribe 0 o 1.',593,348,10,'#66828a','center');
-  txt('Usa Retroceso para borrar el valor de la casilla seleccionada.',593,365,9,'#82999a','center');
-  roundPanel(480,378,226,29,'#15516e','#58c9cf',8);
-  txt('CONSULTAR RESULTADO ▶',593,398,10,'#ffffff','center');
-
-  // Resultado y referencia del Excel
-  roundPanel(48,430,864,98,'#fffef8','#c8ded8',9);
-  txt('RESULTADO DEL EXPERIMENTO',68,451,9,'#397d6c');
-  if(botanyResult){
-    txt('COMBINACIÓN '+botanyKey(),68,468,9,'#397d6c');
-    wrapText(botanyResult.result,68,484,650,12,'#35596a','left');
-    txt('Fuente: '+botanyResult.source,68,518,8,'#718b8c','left');
-  }else{
-    wrapText(botanyNotice,68,480,650,13,'#547782','left');
-  }
+  fields.forEach(([id,label,center,left])=>{txt(label,center,235,label==='RADIACIÓN UV'?11:13,'#31596a','center');const active=botanyActiveInput===id;roundPanel(left,255,120,70,active?'#f0fbf7':'#ffffff',active?'#299b82':'#9abfc0',8);txt(botanyFactors[id]===null?'':String(botanyFactors[id]),center,301,28,'#267f61','center');if(botanyFactors[id]===null)txt('0 o 1',center,301,12,'#a5b8b8','center');if(active)roundPanel(left+4,259,112,62,'#00000000','#55bda7',6);const value=botanyFactors[id];roundPanel(left+16,337,88,23,value===1?'#dff4e6':value===0?'#f5e8dc':'#eef3f1',value===1?'#72bc91':value===0?'#d7b28d':'#c8d8d5',6);txt(value===null?'SIN CONFIGURAR':value===1?'ACTIVADO':'DESACTIVADO',center,353,7,'#52717a','center');});
+  txt('Haz clic en una casilla y escribe 0 o 1.',593,380,10,'#66828a','center');txt('Usa Retroceso para borrar el valor de la casilla seleccionada.',593,395,9,'#82999a','center');
+  roundPanel(480,378,226,29,'#15516e','#58c9cf',8);txt('CONSULTAR RESULTADO ▶',593,398,10,'#ffffff','center');
+  roundPanel(48,430,864,98,'#fffef8','#c8ded8',9);txt('RESULTADO DEL EXPERIMENTO',68,451,9,'#397d6c');
+  if(botanyResult){txt('COMBINACIÓN '+botanyKey(),68,468,9,'#397d6c');wrapText(botanyResult.result,68,484,650,12,'#35596a','left');txt('Fuente: '+botanyResult.source,68,518,8,'#718b8c','left');}
+  else wrapText(botanyNotice,68,480,650,13,'#547782','left');
   txt('PRUEBAS: '+botanyTested.size+'/7',842,451,9,'#397d6c','center');
-  if(botanyResult){
-    roundPanel(755,478,160,35,'#ffd13e','#e4b52e',8);
-    txt('CONTINUAR ▶',835,501,10,'#754c24','center');
-  }
+  if(botanyResult){roundPanel(755,478,160,35,'#ffd13e','#e4b52e',8);txt('CONTINUAR ▶',835,501,10,'#754c24','center');}
 }
-
-
-const stations = [
-  { id: 'camera', x: 170, icon: '📷', name: 'CÁMARA', desc: 'Captura imágenes científicas' },
-  { id: 'antenna', x: 340, icon: '📡', name: 'ANTENA', desc: 'Envía información a la Tierra' },
-  { id: 'solar', x: 620, icon: '☀', name: 'ENERGÍA', desc: 'Alimenta los sistemas de la nave' },
-  { id: 'memory', x: 790, icon: '💾', name: 'MEMORIA', desc: 'Guarda las imágenes capturadas' }
-];
-
+function drawPlantPreview(x,y){
+  const ready=Object.values(botanyFactors).every(v=>v!==null),water=botanyFactors.water,uv=botanyFactors.uv,co2=botanyFactors.co2;
+  const height=ready?18+(water?24:5)+(co2?16:0)-(uv?5:0):8;
+  // Roots, growing medium and stem update live as the three switches are entered.
+  ctx.strokeStyle='#9b754c';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(x,y+3);ctx.lineTo(x-8,y+20);ctx.moveTo(x,y+3);ctx.lineTo(x+7,y+19);ctx.moveTo(x,y+5);ctx.lineTo(x,y+25);ctx.stroke();
+  rect(x-20,y,40,5,'#8c6a45');rect(x-17,y+5,34,8,'#d9b17a');
+  ctx.strokeStyle=ready?'#39965b':'#78a68a';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x,y-height);ctx.stroke();
+  if(height>12){ctx.fillStyle=water===0?'#86aa80':'#4aa56b';ctx.beginPath();ctx.ellipse(x-9,y-height+9,10,5,-.5,0,Math.PI*2);ctx.ellipse(x+9,y-height+17,10,5,.5,0,Math.PI*2);ctx.fill();}
+  if(height>28){ctx.fillStyle=co2===1?'#43a56a':'#80ad77';ctx.beginPath();ctx.ellipse(x-7,y-height+24,8,4,-.5,0,Math.PI*2);ctx.ellipse(x+8,y-height+30,8,4,.5,0,Math.PI*2);ctx.fill();}
+  if(ready&&uv===1){ctx.fillStyle='#e6bd55';ctx.beginPath();ctx.arc(x+26,y-height-1,5,0,Math.PI*2);ctx.fill();}
+  if(!ready){ctx.fillStyle='#597a79';ctx.font='bold 8px system-ui';ctx.textAlign='center';ctx.fillText('VISTA PREVIA DE CRECIMIENTO',x,y+39);ctx.textAlign='left';}
+  else{ctx.fillStyle='#397d65';ctx.font='bold 8px system-ui';ctx.textAlign='center';ctx.fillText('PLANTA CONFIGURADA',x,y+39);ctx.textAlign='left';}
+}
 function rect(x,y,w,h,color){ctx.fillStyle=color;ctx.fillRect(Math.round(x),Math.round(y),Math.round(w),Math.round(h));}
 function txt(value,x,y,size=14,color='#36576a',align='left'){ctx.fillStyle=color;ctx.font='bold '+size+'px system-ui';ctx.textAlign=align;ctx.fillText(tr(value),x,y);ctx.textAlign='left';}
 function panel(x,y,w,h,fill='#fffdf5',stroke='#cfe4d8'){rect(x,y,w,h,fill);rect(x,y,w,3,stroke);rect(x,y+h-3,w,3,stroke);rect(x,y,3,h,stroke);rect(x+w-3,y,3,h,stroke);}
@@ -548,12 +514,12 @@ function updateLanding(dt){
   landingThrottle=false;
   landingSpeed+=4.6*dt;
   if(brake&&landingFuel>0){
-    landingSpeed-=22*dt;landingFuel=Math.max(0,landingFuel-8.2*dt);landingThrottle=true;
+    landingSpeed-=20*dt;landingFuel=Math.max(0,landingFuel-5*dt);landingThrottle=true;
     if(landingAudioCooldown<=0){audio.brake();landingAudioCooldown=.32;}
     landingMessage='Frenado activo: mantén el control y vigila la reserva de combustible.';
   }else landingMessage=landingFuel<=0?'Combustible agotado: ya no puedes frenar.':'Caída por gravedad: pulsa ESPACIO para frenar.';
   landingSpeed=Math.max(0,Math.min(155,landingSpeed));
-  landingAltitude-=landingSpeed/3.6*2.65*dt;
+  landingAltitude-=landingSpeed/3.6*1.2*dt;
   if(landingAltitude<=0){
     landingAltitude=0;
     if(landingSpeed<=18&&landingFuel>=0){
@@ -663,7 +629,7 @@ function draw(){
  else if(mode==='missed'){flybyScene();roundPanel(280,205,400,115,'#fffef5','#c6e3d7',10);txt('¡EL COMETA YA PASÓ!',480,245,20,'#a66d4d','center');txt('Pulsa R para intentarlo otra vez.',480,277,13,'#547a82','center');}
  drawLanguageControl();drawAudioControl();
 }
-function startGame(){if(mode!=='title')return;mode='hangar';missionIndex=0;missionBudget=INITIAL_MISSION_BUDGET;mdlHints=3;selectedResources={};activeCategory=null;say('¡Hola! Soy Flyn. Esta es nuestra misión de exploración espacial. Completa las tres misiones y administra el presupuesto inicial de 5.000 créditos.');audio.start();audio.playMusic();canvas.focus();}
+function startGame(){if(mode!=='title')return;frogMood='neutral';budgetFailureReason='';mode='hangar';missionIndex=0;missionBudget=INITIAL_MISSION_BUDGET;mdlHints=3;selectedResources={};activeCategory=null;say('¡Hola! Soy Flyn. Esta es nuestra misión de exploración espacial. Completa las tres misiones y administra el presupuesto inicial de 5.000 créditos.');audio.start();audio.playMusic();canvas.focus();}
 function keyDown(e){
  if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Space'].includes(e.code))e.preventDefault();
  keys[e.code]=true;if(e.repeat)return;
