@@ -1,21 +1,24 @@
 # Villa Anura
-Videojuego educativo 2D con JavaScript ES Modules y Canvas 2D.
+Videojuego educativo 2D de exploración espacial, desarrollado con JavaScript ES Modules y Canvas 2D.
 
-## Dirección visual y jugabilidad
-- Perspectiva lateral (side-scrolling).
-- Pixel art HD con un centro de control espacial luminoso.
-- Flying con estados de animación: idle, run, jump, fall y land.
-- Tickets recogidos durante la exploración.
-- Moscas como recompensa por completar misiones.
-- Efectos de sonido y progreso guardado localmente.
+## Experiencia actual (prototipo jugable)
+- Centro de control con interfaz clara y luminosa.
+- Seis misiones en progresión: Sobrevuelo, Orbitador, Sonda atmosférica, Aterrizador, Rover y Retorno de muestras.
+- Desbloqueo secuencial: cada misión se habilita al completar la anterior.
+- Cada recorrido incluye tres objetos de objetivo, tickets coleccionables y obstáculos cuya cantidad aumenta según la misión.
+- Recompensa por primera finalización: una mosca y tickets adicionales.
+- Tienda local de atuendos comprables con tickets; selección de apariencia de Flying.
+- Flying con paleta de colores intercambiable, parpadeo y pequeños saltos al moverse.
+- Efectos de sonido sintetizados para salto, datos, tickets, obstáculos, bonus y victoria.
+- Progreso guardado en localStorage del navegador.
 
-## Ejecutar
-Abre esta carpeta en VS Code y usa Live Server. Alternativamente, ejecuta `python -m http.server 8000` y visita http://localhost:8000.
+## Ejecutar localmente
+Abre esta carpeta en Visual Studio Code y ejecuta `index.html` con Live Server. También puedes ejecutar `python -m http.server 8000` desde esta carpeta y abrir `http://localhost:8000`.
 
 ## Controles
-Flechas o A/D para moverse; Espacio, W o flecha arriba para saltar.
+- Mover: flechas izquierda/derecha o A/D.
+- Saltar: Espacio, W o flecha arriba.
+- Sonido: botón de nota musical en la interfaz.
 
-## Módulos
-`main.js` coordina el juego; `player.js` controla Flying y sus físicas; `scene.js` dibuja el escenario; `collectibles.js` gestiona tickets; `progress.js` guarda recompensas; `audio.js` produce efectos; `input.js` gestiona teclado; `config.js` contiene parámetros.
-
-Esta es la base lateral. Las seis misiones educativas, la tienda y los atuendos se integrarán progresivamente conservando sus objetivos originales.
+## Alcance pendiente
+Esta versión implementa un ciclo de juego común y progresión para las seis misiones. Los objetivos, objetos visuales y obstáculos son una primera representación jugable; todavía falta desarrollar mecánicas científicas específicas por arquitectura (inserción orbital, perfiles atmosféricos, selección de zona de aterrizaje, análisis de muestras, etc.), arte final/spritesheets, pruebas de balance y pruebas completas en distintos navegadores.
