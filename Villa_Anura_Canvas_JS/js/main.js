@@ -121,7 +121,7 @@ const EN_US_TRANSLATIONS={
   "¡Selección confirmada!": "Selection confirmed!",
   "FLYN ESTÁ INSTALANDO: ": "FLYN IS INSTALLING: ",
   "¡Recurso instalado!": "System installed!",
-  "¡Hola! Soy Flyn. Esta es nuestra misión de exploración espacial. Completa las tres misiones y administra el presupuesto inicial de 5.000 créditos.": "Hi! I'm Flyn. Welcome to our space exploration mission. Complete all three missions and manage your starting budget of 5,000 credits.",
+  "¡Hola! Soy Flyn. Esta es nuestra misión de exploración espacial. Completa las tres misiones y administra el presupuesto inicial de 12.000 créditos.": "Hi! I'm Flyn. Welcome to our space exploration mission. Complete all three missions and manage your starting budget of 12,000 credits.",
   "¡Llegamos al espacio! Vamos a iniciar el experimento botánico.": "We've reached space! Let's begin the botany experiment.",
   "Selecciona 0 o 1 en las tres casillas y consulta el resultado.": "Choose 0 or 1 in all three boxes, then view the result.",
   "Selecciona 0 o 1 en cada casilla.": "Select 0 or 1 in each box.",
@@ -135,7 +135,7 @@ const EN_US_TRANSLATIONS={
   "Esta combinación no está incluida en los siete resultados del Excel.": "This combination is not included among the seven dataset results.",
   "Experimento ejecutado.": "Experiment complete.",
   "Completa las tres misiones y administra el presupuesto inicial de 5.000 créditos.": "Complete all three missions and manage the starting budget of 5,000 credits.",
-  "Continúa la primera misión administrando el presupuesto de 5.000 créditos.": "Continue the first mission and manage the 5,000-credit budget.",
+  "Continúa la primera misión administrando el presupuesto de 12.000 créditos.": "Continue the first mission and manage the 12,000-credit budget.",
   "Compara la autonomía que necesitas con el peso y el presupuesto: no siempre hace falta la opción mayor.": "Compare the range you need with the spacecraft's weight and budget. The largest option isn't always necessary.",
   "Elige una reserva que cubra la duración de la misión sin cargar oxígeno innecesario.": "Choose an oxygen reserve that covers the mission without adding unnecessary weight.",
   "El perfil aerodinámico modifica el consumo durante el vuelo. Según el catálogo, la cónica es la referencia; compara las unidades por segundo antes de elegir.": "The aerodynamic profile affects fuel use during flight. The catalog lists the conical profile as a reference; compare the units per second before choosing.",
@@ -249,7 +249,7 @@ let mode = 'title', clock = 0, last = 0, dialogue = '', dialogueTimer = 0;
 let installed = new Set(), missionPhase = 0, cometX = 1030, observationWindow = 0, dataSaved = false, dataSent = false;
 const missionNames = ['SOBREVUELO','ORBITADOR','SONDA ATMOSFÉRICA','ATERRIZADOR','ROVER EXPLORADOR','RETORNO DE MUESTRAS'];
 let missionIndex = 0, challengeAnswered = false, challengeFeedback = '', challengeCorrect = false;
-const INITIAL_MISSION_BUDGET=5000;
+const INITIAL_MISSION_BUDGET=12000;
 let missionBudget=INITIAL_MISSION_BUDGET, mdlHints=3, activeCategory=null, selectedResources={}, actionAnimation=0, actionLabel='', utilityPanel=null, hintMessage='', launchTimer=0;
 let botanyFactors={water:null,uv:null,co2:null}, botanyActiveInput=null, botanyTested=new Set(), botanyResult=null, botanyNotice='Selecciona 0 o 1 en cada casilla.';
 let landingAltitude=460, landingSpeed=88, landingFuel=34, landingStatus='ready', landingThrottle=false, landingMessage='Mantén ESPACIO para frenar. Administra el combustible hasta tocar la plataforma.';
