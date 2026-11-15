@@ -416,7 +416,7 @@ function updateLanding(dt){
       landingStatus='landed';
       landingMessage='¡Aterrizaje seguro! Has controlado la velocidad y el combustible.';
       awardCampaignVictory();
-      mode='victory';audio.stopMusic();audio.win();
+      mode='victory';audio.stopMusic();audio.certificate();
     }else{
       landingStatus='crashed';
       landingMessage='GAME OVER · La nave llegó con demasiada velocidad.';
