@@ -14,9 +14,10 @@ let installed = new Set(), missionPhase = 0, cometX = 1030, observationWindow = 
 const missionNames = ['SOBREVUELO','ORBITADOR','SONDA ATMOSFÉRICA','ATERRIZADOR','ROVER EXPLORADOR','RETORNO DE MUESTRAS'];
 let missionIndex = 0, challengeAnswered = false, challengeFeedback = '', challengeCorrect = false;
 let missionBudget=5000, mdlHints=3, activeCategory=null, selectedResources={}, actionAnimation=0, actionLabel='', utilityPanel=null, hintMessage='', launchTimer=0;
+let botanyFactors={water:0,uv:0,co2:0}, botanyTested=new Set(), botanyResult=null, botanyNotice='Activa uno o más factores y ejecuta el experimento.';
 const missionBriefs=[
 {title:'DISEÑO Y PUESTA EN ÓRBITA',objective:'Prepara una nave equilibrada y lista para el lanzamiento.',limit:12.5},
-{title:'SOBREVUELO',objective:'Prepara instrumentos para observar un cometa durante un único encuentro.',limit:11.5},
+{title:'BOTÁNICA EN MICROGRAVEDAD',objective:'Investiga cómo se comportan las plantas al combinar agua, radiación UV y CO₂.',limit:11.5},
 {title:'ORBITADOR',objective:'Configura la nave para entrar en órbita y estudiar un planeta.',limit:12},
 {title:'SONDA ATMOSFÉRICA',objective:'Protege la sonda y prepara sus instrumentos para medir la atmósfera.',limit:11},
 {title:'ATERRIZADOR Y ROVER',objective:'Prepara un aterrizaje seguro y la exploración de la superficie.',limit:12},
@@ -24,7 +25,7 @@ const missionBriefs=[
 ];
 const missionChallenges=[
 {q:'¿Qué debes comprobar antes de autorizar el lanzamiento?',a:'Que la nave cumpla los límites de masa y tenga sus sistemas preparados',b:'Que la nave lleve la mayor cantidad posible de recursos',correct:0,why:'¡Correcto! Antes del lanzamiento se verifican la configuración, los sistemas y los límites de masa.'},
-{q:'El cometa pasa muy rápido. ¿Qué instrumento permite obtener imágenes científicas?',a:'Una cámara científica',b:'Una antena de comunicación',correct:0,why:'¡Correcto! La cámara captura imágenes; la antena transmite los datos a la Tierra.'},
+{q:'En microgravedad, ¿qué debes considerar al estudiar el crecimiento de una planta?',a:'Observar cómo cambian germinación y orientación al variar las condiciones',b:'Suponer que todas las plantas crecen igual que en la Tierra',correct:0,why:'¡Correcto! El experimento permite comparar resultados de germinación, orientación y condiciones ambientales.'},
 {q:'La nave se acerca al planeta demasiado rápido. ¿Qué maniobra necesita para entrar en órbita?',a:'Reducir su velocidad mediante propulsión',b:'Acelerar hacia el planeta sin corregir la trayectoria',correct:0,why:'¡Bien pensado! La inserción orbital requiere ajustar la velocidad y la trayectoria.'},
 {q:'La sonda entra en una atmósfera muy caliente. ¿Qué sistema es esencial?',a:'Un panel solar más grande',b:'Un escudo térmico adecuado',correct:1,why:'¡Exacto! El escudo térmico protege la sonda del calentamiento durante la entrada.'},
 {q:'El terreno tiene rocas y pendientes. ¿Dónde conviene aterrizar?',a:'En una zona relativamente plana y despejada',b:'En la pendiente más pronunciada',correct:0,why:'¡Correcto! Una zona plana reduce el riesgo de vuelco y daños en el aterrizador.'},
@@ -39,6 +40,64 @@ let particles = [], pulse = 0, message = '', messageTimer = 0, jumpWasDown = fal
 function totalMass(){return Object.values(selectedResources).reduce((sum,item)=>sum+(item.mass||0),0);}
 function wrapText(value,x,y,maxWidth,lineHeight,color='#426879',align='center'){const words=String(value).split(' '),lines=[];let line='';ctx.font='bold 11px system-ui';for(const word of words){const test=line?line+' '+word:word;if(ctx.measureText(test).width>maxWidth&&line){lines.push(line);line=word;}else line=test;}if(line)lines.push(line);ctx.fillStyle=color;ctx.textAlign=align;lines.slice(0,3).forEach((row,i)=>ctx.fillText(row,x,y+i*lineHeight));ctx.textAlign='left';}
 function chosenAllResources(){return Object.keys(selectedResources).length===6;}
+
+const botanyExperiments = {
+  '100': {result:'Se obtuvo un 100 % de germinación, pero las raíces y los brotes presentaron orientaciones anormales y aleatorias.',source:'NASA – OS-26: Zea mays seeds in microgravity.'},
+  '010': {result:'Se identificaron daños en el desarrollo de los cloroplastos. La exposición espacial incluía diferentes factores, por lo que no puede atribuirse el daño exclusivamente a la radiación UV.',source:'Richards et al. (2025) – Simulated deep space exposure on seeds.'},
+  '001': {result:'En algunas especies de plantas similares al maíz se proporcionó una gran carga evaporativa que puso a prueba el control de la humedad de la zona radicular y la recuperación del agua transpirada por condensación.',source:'NASA – Advanced Plant Habitat: validation study.'},
+  '110': {result:'Los estudios de maíz en microgravedad documentan la importancia de la hidratación para la germinación, mientras que los estudios de exposición espacial muestran posibles daños por radiación.',source:'NASA – OS-26 · Richards et al. (2025).'},
+  '101': {result:'Permitió controlar la humedad de la zona radicular y la concentración de CO₂. En experimentos con trigo y Arabidopsis se validó el control de estas condiciones y el seguimiento del crecimiento en órbita.',source:'Advanced Plant Habitat – Hardware Validation.'},
+  '011': {result:'La exposición a la radiación espacial en los niveles probados no tuvo un impacto significativo en la tasa de germinación de Arabidopsis y las semillas de múltiples plantas de cultivo.',source:'NASA (2024) – Impact of Space Radiation with Other Combined Space Environmental Factors.'},
+  '111': {result:'La exposición a la radiación espacial en los niveles probados no tuvo un impacto significativo en la tasa de germinación y las semillas de múltiples plantas de cultivo.',source:'NASA (2024) – Radiation and Combined Environmental Factors · Advanced Plant Habitat.'}
+};
+function botanyKey(){return String(botanyFactors.water)+String(botanyFactors.uv)+String(botanyFactors.co2);}
+function botanyScene(){
+  background();
+  roundPanel(28,12,904,50,'#fffdf5','#b9d8d4',12);
+  txt('VILLA ANURA · LABORATORIO DE BOTÁNICA',48,34,14,'#397d6c');
+  txt('MISIÓN 2 · EXPERIMENTO EN MICROGRAVEDAD',48,52,10,'#426879');
+  roundPanel(60,76,840,58,'#e8f5ef','#a9d2c4',10);
+  txt('¿Cómo influyen el agua, la radiación UV y el CO₂ en las plantas?',480,100,14,'#285d60','center');
+  txt('Prueba las siete combinaciones disponibles y compara los resultados.',480,119,10,'#5c7d7b','center');
+  // laboratorio y planta
+  roundPanel(75,150,300,250,'#f5fbf7','#b9d8ce',12);
+  txt('CÁMARA DE CULTIVO',225,176,12,'#397d6c','center');
+  rect(166,220,118,125,'#c7e8e4');rect(177,231,96,104,'#e8f5e8');
+  rect(222,283,8,47,'#3c9c54');rect(198,262,27,9,'#55b96c');rect(229,246,29,9,'#55b96c');
+  rect(198,253,9,17,'#55b96c');rect(251,237,9,18,'#55b96c');
+  rect(185,330,78,8,'#9c7950');rect(185,338,78,7,'#8d6847');
+  txt('AGUA',225,365,9,'#548477','center');
+  // controles de factores
+  roundPanel(400,150,485,250,'#fffef8','#c8ded8',12);
+  txt('CONFIGURA LAS CONDICIONES',642,176,13,'#397d6c','center');
+  const factors=[['water','AGUA',0],['uv','RADIACIÓN UV',1],['co2','CO₂',2]];
+  factors.forEach((f,i)=>{
+    const yy=195+i*54,active=botanyFactors[f[0]]===1;
+    roundPanel(430,yy,425,43,active?'#e3f5e8':'#edf2f1',active?'#6fbd8c':'#c6d8d4',8);
+    txt(f[1],450,yy+26,12,'#31596a');
+    roundPanel(760,yy+6,76,30,active?'#3a9a67':'#8da4a5',active?'#2c8155':'#809798',8);
+    txt(active?'ACTIVO':'INACTIVO',798,yy+26,9,'#ffffff','center');
+  });
+  roundPanel(520,365,245,34,'#15516e','#58c9cf',9);
+  txt('EJECUTAR EXPERIMENTO ▶',642,387,11,'#ffffff','center');
+  // resultados
+  roundPanel(75,414,810,92,'#fffef8','#c8ded8',10);
+  if(botanyResult){
+    txt('COMBINACIÓN '+botanyKey()+' · RESULTADO',95,436,10,'#397d6c');
+    wrapText(botanyResult.result,95,456,760,14,'#35596a','left');
+    txt('Fuente: '+botanyResult.source,95,492,8,'#718b8c','left');
+  }else{
+    txt('RESULTADO DEL EXPERIMENTO',95,439,10,'#397d6c');
+    wrapText(botanyNotice,480,467,740,15,'#547782','center');
+  }
+  txt('COMBINACIONES PROBADAS: '+botanyTested.size+'/7',480,526,11,'#397d6c','center');
+  if(botanyTested.size===7){
+    roundPanel(760,510,145,25,'#ffd13e','#e4b52e',8);
+    txt('CONTINUAR ▶',832,527,9,'#754c24','center');
+  }
+  drawFrog(905,390,0.42);
+}
+
 
 const stations = [
   { id: 'camera', x: 170, icon: '📷', name: 'CÁMARA', desc: 'Captura imágenes científicas' },
@@ -287,12 +346,16 @@ function completeScene(){
   }else{roundPanel(330,449,300,48,'#15516e','#65d3cf',10);txt('PULSA A O B PARA RESPONDER',480,478,11,'#ffffff','center');}
 }
 function launchScene(){background();planet(760,170,62,'#b5dce8');roundPanel(60,55,840,410,'#eaf5f2','#9abdc0',16);for(let x=100;x<880;x+=100)rect(x,80,3,300,'#c0d5d7');for(let y=120;y<390;y+=65)rect(60,y,840,3,'#c5dadd');rect(410,350,140,14,'#e4bd55');rect(425,315,110,35,'#d7e5e7');const lift=Math.min(210,launchTimer*72);ctx.save();ctx.translate(0,-lift);rect(452,175,57,168,'#f8ffff');ctx.fillStyle='#fff';ctx.beginPath();ctx.moveTo(452,177);ctx.lineTo(480,137);ctx.lineTo(509,177);ctx.closePath();ctx.fill();rect(459,206,42,7,'#48b5aa');rect(459,271,42,7,'#48b5aa');ctx.fillStyle='#f3a34b';ctx.beginPath();ctx.moveTo(462,344);ctx.lineTo(480,390+Math.sin(clock*18)*8);ctx.lineTo(498,344);ctx.closePath();ctx.fill();ctx.restore();drawFrog(480,390,0.55);txt('LANZAMIENTO DE MISIÓN',480,95,22,'#397d65','center');txt('¡Todos los sistemas preparados! Flying está despegando.',480,430,12,'#547a82','center');}
-function draw(){ctx.clearRect(0,0,W,H);if(mode==='title')titleScreen();else if(mode==='hangar')controlRoom();else if(mode==='launch')launchScene();else if(mode==='flyby')flybyScene();else if(mode==='complete')completeScene();else if(mode==='missed'){flybyScene();roundPanel(280,205,400,115,'#fffef5','#c6e3d7',10);txt('¡EL COMETA YA PASÓ!',480,245,20,'#a66d4d','center');txt('Pulsa R para intentarlo otra vez.',480,277,13,'#547a82','center');}}
+function draw(){ctx.clearRect(0,0,W,H);if(mode==='title')titleScreen();else if(mode==='hangar')controlRoom();else if(mode==='launch')launchScene();else if(mode==='botany')botanyScene();else if(mode==='flyby')flybyScene();else if(mode==='complete')completeScene();else if(mode==='missed'){flybyScene();roundPanel(280,205,400,115,'#fffef5','#c6e3d7',10);txt('¡EL COMETA YA PASÓ!',480,245,20,'#a66d4d','center');txt('Pulsa R para intentarlo otra vez.',480,277,13,'#547a82','center');}}
 function startGame(){if(mode!=='title')return;mode='hangar';missionIndex=0;missionBudget=5000;mdlHints=3;selectedResources={};activeCategory=null;say('¡Hola! Soy Flying. Esta es nuestra misión de exploración espacial. Completa sus seis secciones administrando el presupuesto total.');audio.start();canvas.focus();}
 function keyDown(e){
  if(['ArrowLeft','ArrowRight','ArrowUp',' ','Space'].includes(e.key))e.preventDefault();
  keys[e.code]=true;if(e.repeat)return;
  if(mode==='title'&&(e.code==='Enter'||e.code==='NumpadEnter')){e.preventDefault();startGame();return;}
+ if(mode==='botany'){
+   if(e.code==='Escape'){mode='hangar';return;}
+   return;
+ }
  if(mode==='hangar'){
    if(chosenAllResources()&&(e.code==='Enter'||e.code==='NumpadEnter')){mode='launch';launchTimer=0;activeCategory=null;utilityPanel=null;audio.start();return;}
    if(activeCategory&&['Digit1','Digit2','Digit3'].includes(e.code)){
@@ -313,7 +376,7 @@ function keyDown(e){
    }
  }
 }
-function loop(now){const dt=Math.min(.035,(now-last)/1000||0);last=now;clock+=dt;if(mode==='launch'){launchTimer+=dt;if(launchTimer>3.2){mode='complete';challengeAnswered=false;challengeFeedback='';challengeCorrect=false;}}if(dialogueTimer>0)dialogueTimer-=dt;if(messageTimer>0)messageTimer-=dt;if(actionAnimation>0)actionAnimation=Math.max(0,actionAnimation-dt);if(mode==='flyby')updateFlyby(dt);draw();requestAnimationFrame(loop);}
+function loop(now){const dt=Math.min(.035,(now-last)/1000||0);last=now;clock+=dt;if(mode==='launch'){launchTimer+=dt;if(launchTimer>3.2){if(missionIndex===1){mode='botany';botanyFactors={water:0,uv:0,co2:0};botanyTested=new Set();botanyResult=null;botanyNotice='Activa uno o más factores y ejecuta el experimento.';}else{mode='complete';challengeAnswered=false;challengeFeedback='';challengeCorrect=false;}}}if(dialogueTimer>0)dialogueTimer-=dt;if(messageTimer>0)messageTimer-=dt;if(actionAnimation>0)actionAnimation=Math.max(0,actionAnimation-dt);if(mode==='flyby')updateFlyby(dt);draw();requestAnimationFrame(loop);}
 canvas.tabIndex=0;canvas.style.cursor='pointer';document.addEventListener('keydown',keyDown);document.addEventListener('keyup',e=>keys[e.code]=false);window.addEventListener('blur',()=>Object.keys(keys).forEach(k=>keys[k]=false));canvas.addEventListener('pointerdown',()=>{canvas.focus();if(mode==='title')startGame();else if(mode==='complete')keyDown({key:'Enter',code:'Enter',repeat:false,preventDefault(){}});});canvas.addEventListener('click',(e)=>{
   canvas.focus();
   const r=canvas.getBoundingClientRect(),x=(e.clientX-r.left)*W/r.width,y=(e.clientY-r.top)*H/r.height;
@@ -346,6 +409,20 @@ canvas.tabIndex=0;canvas.style.cursor='pointer';document.addEventListener('keydo
     }
     const bx=58,by=451,bw=134,gap=8;
     if(y>=by&&y<=by+66){const i=Math.floor((x-bx)/(bw+gap));if(i>=0&&i<6){activeCategory=resourceCategories[i].id;audio.data();return;}}
+    return;
+  }
+
+  if(mode==='botany'){
+    if(botanyTested.size===7&&x>=760&&x<=905&&y>=510&&y<=540){mode='complete';challengeAnswered=false;challengeFeedback='';challengeCorrect=false;return;}
+    const factorRows=[['water',195],['uv',249],['co2',303]];
+    for(const [id,yy] of factorRows){if(x>=430&&x<=855&&y>=yy&&y<=yy+43){botanyFactors[id]=botanyFactors[id]===1?0:1;botanyResult=null;return;}}
+    if(x>=520&&x<=765&&y>=365&&y<=399){
+      const key=botanyKey();
+      if(key==='000'){botanyNotice='Activa al menos uno de los tres factores. El Excel contiene siete combinaciones, sin una prueba 000.';return;}
+      const result=botanyExperiments[key];
+      if(!result){botanyNotice='Esta combinación no está incluida en los datos del experimento.';return;}
+      botanyTested.add(key);botanyResult=result;botanyNotice='Experimento ejecutado.';audio.data();return;
+    }
     return;
   }
   if(mode==='complete'&&!challengeCorrect){
