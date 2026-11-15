@@ -307,7 +307,7 @@ function botanyScene(){
   roundPanel(275,150,637,265,'#fffef8','#c8ded8',12);txt('CONFIGURACIÓN DE VARIABLES',593,185,13,'#397d6c','center');
   const fields=[['water','AGUA',380,320],['uv','RADIACIÓN UV',590,530],['co2','CO₂',800,740]];
   fields.forEach(([id,label,center,left])=>{txt(label,center,235,label==='RADIACIÓN UV'?11:13,'#31596a','center');const active=botanyActiveInput===id;roundPanel(left,255,120,70,active?'#f0fbf7':'#ffffff',active?'#299b82':'#9abfc0',8);txt(botanyFactors[id]===null?'':String(botanyFactors[id]),center,301,28,'#267f61','center');if(botanyFactors[id]===null)txt('0 o 1',center,301,12,'#a5b8b8','center');if(active)roundPanel(left+4,259,112,62,'#00000000','#55bda7',6);const value=botanyFactors[id];roundPanel(left+16,337,88,23,value===1?'#dff4e6':value===0?'#f5e8dc':'#eef3f1',value===1?'#72bc91':value===0?'#d7b28d':'#c8d8d5',6);txt(value===null?'SIN CONFIGURAR':value===1?'ACTIVADO':'DESACTIVADO',center,353,7,'#52717a','center');});
-  txt('Haz clic en una casilla y escribe 0 o 1.',593,380,10,'#66828a','center');txt('Usa Retroceso para borrar el valor de la casilla seleccionada.',593,395,9,'#82999a','center');
+  txt('Selecciona cada variable y escribe 0 o 1.',593,371,9,'#66828a','center');
   roundPanel(480,378,226,29,'#15516e','#58c9cf',8);txt('CONSULTAR RESULTADO ▶',593,398,10,'#ffffff','center');
   roundPanel(48,430,864,98,'#fffef8','#c8ded8',9);txt('RESULTADO DEL EXPERIMENTO',68,451,9,'#397d6c');
   if(botanyResult){txt('COMBINACIÓN '+botanyKey(),68,468,9,'#397d6c');wrapText(botanyResult.result,68,484,650,12,'#35596a','left');txt('Fuente: '+botanyResult.source,68,518,8,'#718b8c','left');}
@@ -522,7 +522,7 @@ function updateLanding(dt){
   landingThrottle=false;
   landingSpeed+=4.6*dt;
   if(brake&&landingFuel>0){
-    landingSpeed-=20*dt;landingFuel=Math.max(0,landingFuel-5*dt);landingThrottle=true;
+    landingSpeed-=30*dt;landingFuel=Math.max(0,landingFuel-4*dt);landingThrottle=true;
     if(landingAudioCooldown<=0){audio.brake();landingAudioCooldown=.32;}
     landingMessage='Frenado activo: mantén el control y vigila la reserva de combustible.';
   }else landingMessage=landingFuel<=0?'Combustible agotado: ya no puedes frenar.':'Caída por gravedad: pulsa ESPACIO para frenar.';
