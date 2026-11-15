@@ -1,1 +1,356 @@
-{"version":"1.0","campaign":"Misión 1 – Exploración espacial","note":"Catálogo trasladado del Excel fuente; conserva unidades y rangos textuales, sin inventar datos.","items":[]}
+{
+  "version": "1.0",
+  "campaign": "Misión 1 – Exploración espacial",
+  "note": "Traslado fiel desde el Excel fuente. Costos y masas permanecen como texto original; convertir antes de validar presupuesto/masa.",
+  "items": [
+    {
+      "id": "material-1",
+      "button": "materials",
+      "sourceSheet": "MATERIAL",
+      "option": "1. Económica",
+      "description": "Acero en el armazón y las uniones; aluminio en paneles secundarios.",
+      "mass": "100 kg",
+      "cost": "1.000 créditos",
+      "parameter": "",
+      "benefit": "Máximo ahorro: deja 2.000 créditos para otros objetivos de la misión.",
+      "status": "original"
+    },
+    {
+      "id": "material-2",
+      "button": "materials",
+      "sourceSheet": "MATERIAL",
+      "option": "2. Ligera",
+      "description": "Aluminio en la estructura principal y paneles; acero en fijaciones y puntos de unión seleccionados.",
+      "mass": "70 kg",
+      "cost": "1.600 créditos",
+      "parameter": "",
+      "benefit": "Más carga: libera 30 kg respecto a la económica.",
+      "status": "original"
+    },
+    {
+      "id": "material-3",
+      "button": "materials",
+      "sourceSheet": "MATERIAL",
+      "option": "3. Compuesta",
+      "description": "Fibra de carbono con resina en paneles estructurales y refuerzos; aluminio en anillos de conexión, con aislamiento entre materiales.",
+      "mass": "45 kg",
+      "cost": "2.300 créditos",
+      "parameter": "",
+      "benefit": "Mayor capacidad de carga: libera otros 25 kg respecto a la ligera.",
+      "status": "original"
+    },
+    {
+      "id": "material-4",
+      "button": "materials",
+      "sourceSheet": "MATERIAL",
+      "option": "4. Carga especializada",
+      "description": "Compuesto de carbono en la estructura; titanio en herrajes y soportes diseñados para concentraciones elevadas de esfuerzo; aluminio en piezas secundarias.",
+      "mass": "45 kg",
+      "cost": "3.000 créditos",
+      "parameter": "",
+      "benefit": "Soportes reforzados: permite transportar un instrumento pesado que exige anclajes especiales, sin aumentar la masa total del módulo en este modelo.",
+      "status": "original"
+    },
+    {
+      "id": "aero-1",
+      "button": "aerodynamics",
+      "sourceSheet": "AERODINAMICA",
+      "option": "Elíptica",
+      "mass": "",
+      "cost": "100 créditos",
+      "parameter": "10 % más rápido — multiplicador 1,10",
+      "benefit": "11 unidades/s si el consumo base es 10 unidades/segundo.",
+      "status": "original"
+    },
+    {
+      "id": "aero-2",
+      "button": "aerodynamics",
+      "sourceSheet": "AERODINAMICA",
+      "option": "Cónica",
+      "mass": "",
+      "cost": "250 créditos",
+      "parameter": "Consumo de referencia — multiplicador 1,00",
+      "benefit": "10 unidades/s si el consumo base es 10 unidades/segundo.",
+      "status": "original"
+    },
+    {
+      "id": "aero-3",
+      "button": "aerodynamics",
+      "sourceSheet": "AERODINAMICA",
+      "option": "Ojival",
+      "mass": "",
+      "cost": "500 créditos",
+      "parameter": "5 % más lento — multiplicador 0,95",
+      "benefit": "9,5 unidades/s si el consumo base es 10 unidades/segundo.",
+      "status": "original"
+    },
+    {
+      "id": "aero-4",
+      "button": "aerodynamics",
+      "sourceSheet": "AERODINAMICA",
+      "option": "Von Kármán",
+      "mass": "",
+      "cost": "900 créditos",
+      "parameter": "10 % más lento — multiplicador 0,90",
+      "benefit": "9 unidades/s si el consumo base es 10 unidades/segundo.",
+      "status": "original"
+    },
+    {
+      "id": "tech-4",
+      "button": "technology",
+      "sourceSheet": "TECH",
+      "option": "Comunicaciones",
+      "description": "Comunicaciones",
+      "mass": "2–8 kg",
+      "cost": "$20.000–$150.000",
+      "status": "original"
+    },
+    {
+      "id": "tech-5",
+      "button": "technology",
+      "sourceSheet": "TECH",
+      "option": "Sistema de propulsión",
+      "description": "Sistema de propulsión",
+      "mass": "10–30 kg",
+      "cost": "$100.000–$500.000",
+      "status": "original"
+    },
+    {
+      "id": "tech-6",
+      "button": "technology",
+      "sourceSheet": "TECH",
+      "option": "Software de vuelo",
+      "description": "Software de vuelo",
+      "mass": "0,5–3 kg*",
+      "cost": "$30.000–$200.000",
+      "status": "original"
+    },
+    {
+      "id": "tech-7",
+      "button": "technology",
+      "sourceSheet": "TECH",
+      "option": "Sistemas mecánicos",
+      "description": "Sistemas mecánicos y estructura",
+      "mass": "10–25 kg",
+      "cost": "$30.000–$150.000",
+      "status": "original"
+    },
+    {
+      "id": "tech-8",
+      "button": "energy",
+      "sourceSheet": "TECH",
+      "option": "Sistemas de energía",
+      "description": "Sistemas de energía",
+      "mass": "15–30 kg",
+      "cost": "$50.000–$250.000",
+      "status": "original"
+    },
+    {
+      "id": "tech-9",
+      "button": "technology",
+      "sourceSheet": "TECH",
+      "option": "Aislante Térmico",
+      "description": "Aislante y control térmico",
+      "mass": "5–15 kg",
+      "cost": "$20.000–$100.000",
+      "status": "original"
+    },
+    {
+      "id": "tech-12",
+      "button": "technology",
+      "sourceSheet": "TECH",
+      "option": "Blindaje contra radiación",
+      "description": "Blindaje contra radiación",
+      "mass": "2–10 kg",
+      "cost": "$5.000–$50.000",
+      "status": "original"
+    },
+    {
+      "id": "tech-13",
+      "button": "technology",
+      "sourceSheet": "TECH",
+      "option": "Autonomía inteligente",
+      "description": "Autonomía inteligente",
+      "mass": "0,5–3 kg*",
+      "cost": "$50.000–$300.000",
+      "status": "original"
+    },
+    {
+      "id": "tech-14",
+      "button": "technology",
+      "sourceSheet": "TECH",
+      "option": "Instrumentos científicos",
+      "description": "Instrumentos científicos",
+      "mass": "10–40 kg",
+      "cost": "$100.000–$1.000.000",
+      "status": "original"
+    },
+    {
+      "id": "tech-15",
+      "button": "technology",
+      "sourceSheet": "TECH",
+      "option": "Sensores Avanzados",
+      "description": "Sensores avanzados",
+      "mass": "2–8 kg",
+      "cost": "$20.000–$150.000",
+      "status": "original"
+    },
+    {
+      "id": "security-1",
+      "button": "safety",
+      "sourceSheet": "SEGURIDAD",
+      "option": "Escape en el Lanzamiento",
+      "mass": "~7.710 kg",
+      "cost": "$50 a $100 por unidad",
+      "status": "original"
+    },
+    {
+      "id": "security-2",
+      "button": "safety",
+      "sourceSheet": "SEGURIDAD",
+      "option": "Protección Térmica",
+      "mass": "~1.450 kg",
+      "cost": "$25 a $50 por nave",
+      "status": "original"
+    },
+    {
+      "id": "security-3",
+      "button": "safety",
+      "sourceSheet": "SEGURIDAD",
+      "option": "Soporte Vital y Control Ambiental",
+      "mass": "1.200 – 1.500 kg",
+      "cost": "$20 a $40 millones por módulo operativo",
+      "status": "original"
+    },
+    {
+      "id": "security-4",
+      "button": "safety",
+      "sourceSheet": "SEGURIDAD",
+      "option": "Blindaje contra Micrometeoritos (Escudos Whipple)",
+      "mass": "1.500 – 3.000 kg",
+      "cost": "5 a 10 por nave",
+      "status": "original"
+    },
+    {
+      "id": "security-5",
+      "button": "safety",
+      "sourceSheet": "SEGURIDAD",
+      "option": "Sistema de Paracaídas y Aterrizaje",
+      "mass": "~550 kg",
+      "cost": "5 a 10 por nave",
+      "status": "original"
+    },
+    {
+      "id": "security-6",
+      "button": "safety",
+      "sourceSheet": "SEGURIDAD",
+      "option": "Trajes Espaciales (IVA)",
+      "mass": "13 – 15 kg",
+      "cost": "1 a 3 por unidad",
+      "status": "original"
+    },
+    {
+      "id": "security-7",
+      "button": "safety",
+      "sourceSheet": "SEGURIDAD",
+      "option": "Sistemas de Supresión de Incendios",
+      "mass": "25 – 60 kg",
+      "cost": "50 a 70 por unidad",
+      "status": "original"
+    },
+    {
+      "id": "security-8",
+      "button": "safety",
+      "sourceSheet": "SEGURIDAD",
+      "option": "Equipos de Supervivencia y Botiquines",
+      "mass": "35 – 70 kg",
+      "cost": "10 a 30 por equipo",
+      "status": "original"
+    },
+    {
+      "id": "fuel-1",
+      "button": "fuel",
+      "sourceSheet": "COMBUSTIBLES",
+      "option": "Criogénico",
+      "description": "Hidrógeno líquido (LH2) + LOX",
+      "parameter": "Etapa central del cohete SLS, Transbordador Espacial.",
+      "status": "original"
+    },
+    {
+      "id": "fuel-2",
+      "button": "fuel",
+      "sourceSheet": "COMBUSTIBLES",
+      "option": "Hidrocarburo",
+      "description": "Queroseno refinado (RP-1) + LOX",
+      "parameter": "Saturno V (1ra etapa), cohetes Falcon 9 (misiones comerciales).",
+      "status": "original"
+    },
+    {
+      "id": "fuel-3",
+      "button": "fuel",
+      "sourceSheet": "COMBUSTIBLES",
+      "option": "Hipergólico",
+      "description": "Monometilhidracina + Tetróxido de nitrógeno",
+      "parameter": "Cápsula Orión, maniobras orbitales, módulos de aterrizaje.",
+      "status": "original"
+    },
+    {
+      "id": "fuel-4",
+      "button": "fuel",
+      "sourceSheet": "COMBUSTIBLES",
+      "option": "Sólido",
+      "description": "Aluminio en polvo + Perclorato de amonio",
+      "parameter": "Aceleradores laterales (boosters) del SLS y Transbordador.",
+      "status": "original"
+    },
+    {
+      "id": "fuel-5",
+      "button": "fuel",
+      "sourceSheet": "COMBUSTIBLES",
+      "option": "Eléctrico / Iónico",
+      "description": "Gas Xenón / Kriptón",
+      "parameter": "Sondas de espacio profundo (Dawn, Psyche) y estación Gateway.",
+      "status": "original"
+    },
+    {
+      "id": "oxygen-1",
+      "button": "oxygen",
+      "sourceSheet": "OXIGENO",
+      "option": "Holgada",
+      "description": "Reserva amplia",
+      "mass": "100 kg",
+      "cost": "US$ 5.000",
+      "status": "original"
+    },
+    {
+      "id": "oxygen-2",
+      "button": "oxygen",
+      "sourceSheet": "OXIGENO",
+      "option": "Estándar",
+      "description": "Recomendado",
+      "mass": "70 kg",
+      "cost": "US$ 3.500",
+      "status": "original"
+    },
+    {
+      "id": "oxygen-3",
+      "button": "oxygen",
+      "sourceSheet": "OXIGENO",
+      "option": "Moderada",
+      "description": "Crítico",
+      "mass": "40 kg",
+      "cost": "US$ 2.000",
+      "status": "original"
+    },
+    {
+      "id": "oxygen-4",
+      "button": "oxygen",
+      "sourceSheet": "OXIGENO",
+      "option": "Muy limitada",
+      "description": "Alto riesgo",
+      "mass": "15 kg",
+      "cost": "US$ 750",
+      "status": "original"
+    }
+  ]
+}
