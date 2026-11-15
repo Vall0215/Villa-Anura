@@ -121,7 +121,7 @@ const EN_US_TRANSLATIONS={
   "¡Selección confirmada!": "Selection confirmed!",
   "FLYN ESTÁ INSTALANDO: ": "FLYN IS INSTALLING: ",
   "¡Recurso instalado!": "System installed!",
-  "¡Hola! Soy Flyn. Esta es nuestra misión de exploración espacial. Completa las tres misiones y administra el presupuesto inicial de 7.000 créditos.": "Hi! I'm Flyn. Welcome to our space exploration mission. Complete all three missions and manage your starting budget of 7,000 credits.",
+  "¡Hola! Soy Flyn. Esta es nuestra misión de exploración espacial. Completa las tres misiones y administra el presupuesto inicial de 5.000 créditos.": "Hi! I'm Flyn. Welcome to our space exploration mission. Complete all three missions and manage your starting budget of 5,000 credits.",
   "¡Llegamos al espacio! Vamos a iniciar el experimento botánico.": "We've reached space! Let's begin the botany experiment.",
   "Selecciona 0 o 1 en las tres casillas y consulta el resultado.": "Choose 0 or 1 in all three boxes, then view the result.",
   "Selecciona 0 o 1 en cada casilla.": "Select 0 or 1 in each box.",
@@ -134,8 +134,8 @@ const EN_US_TRANSLATIONS={
   "La combinación 000 no está incluida en el Excel. Prueba otra combinación.": "Combination 000 is not included in the dataset. Try another combination.",
   "Esta combinación no está incluida en los siete resultados del Excel.": "This combination is not included among the seven dataset results.",
   "Experimento ejecutado.": "Experiment complete.",
-  "Completa las tres misiones y administra el presupuesto inicial de 7.000 créditos.": "Complete all three missions and manage the starting budget of 7,000 credits.",
-  "Continúa la primera misión administrando el presupuesto de 7.000 créditos.": "Continue the first mission and manage the 7,000-credit budget.",
+  "Completa las tres misiones y administra el presupuesto inicial de 5.000 créditos.": "Complete all three missions and manage the starting budget of 5,000 credits.",
+  "Continúa la primera misión administrando el presupuesto de 5.000 créditos.": "Continue the first mission and manage the 5,000-credit budget.",
   "Compara la autonomía que necesitas con el peso y el presupuesto: no siempre hace falta la opción mayor.": "Compare the range you need with the spacecraft's weight and budget. The largest option isn't always necessary.",
   "Elige una reserva que cubra la duración de la misión sin cargar oxígeno innecesario.": "Choose an oxygen reserve that covers the mission without adding unnecessary weight.",
   "El perfil aerodinámico modifica el consumo durante el vuelo. Según el catálogo, la cónica es la referencia; compara las unidades por segundo antes de elegir.": "The aerodynamic profile affects fuel use during flight. The catalog lists the conical profile as a reference; compare the units per second before choosing.",
@@ -194,267 +194,20 @@ const EN_US_TRANSLATIONS={
 
 };
 const ADDITIONAL_EN_US_TRANSLATIONS={
-  "DISEÑO Y PUESTA EN ÓRBITA": "SPACECRAFT DESIGN & LAUNCH",
-  "Prepara una nave equilibrada y lista para el lanzamiento.": "Build a balanced spacecraft and get it ready for launch.",
-  "BOTÁNICA EN MICROGRAVEDAD": "BOTANY IN MICROGRAVITY",
-  "Investiga cómo se comportan las plantas al combinar agua, radiación UV y CO₂.": "Study how plants respond to different combinations of water, UV radiation, and CO₂.",
-  "REGRESO Y ATERRIZAJE EN LA TIERRA": "RETURN TO EARTH & LANDING",
-  "Controla la velocidad de descenso y administra el combustible para aterrizar sin daños.": "Control your descent speed and manage fuel to land safely.",
-  "¿Qué debes comprobar antes de autorizar el lanzamiento?": "What should you check before authorizing launch?",
-  "Que la nave cumpla los límites de masa y tenga sus sistemas preparados": "The spacecraft meets the mass limit and all systems are ready",
-  "Que la nave lleve la mayor cantidad posible de recursos": "The spacecraft carries as many resources as possible",
-  "¡Correcto! Antes del lanzamiento se verifican la configuración, los sistemas y los límites de masa.": "Correct! Before launch, check the configuration, systems, and mass limits.",
-  "En microgravedad, ¿qué debes considerar al estudiar el crecimiento de una planta?": "What should you consider when studying plant growth in microgravity?",
-  "Observar cómo cambian germinación y orientación al variar las condiciones": "Observe how germination and orientation change as conditions vary",
-  "Suponer que todas las plantas crecen igual que en la Tierra": "Assume all plants grow just as they do on Earth",
-  "¡Correcto! El experimento permite comparar resultados de germinación, orientación y condiciones ambientales.": "Correct! The experiment lets you compare germination, orientation, and environmental conditions.",
-  "¿Qué indica que el aterrizaje fue seguro?": "What indicates a safe landing?",
-  "Tocar tierra con una velocidad vertical baja y controlada": "Touch down with a low, controlled vertical speed",
-  "Llegar a la superficie a la mayor velocidad posible": "Reach the surface at the highest possible speed",
-  "¡Aterrizaje exitoso! Una velocidad vertical baja y controlada reduce el riesgo de daños en la nave.": "Successful landing! A low, controlled vertical speed reduces the risk of spacecraft damage.",
-  "COMBUSTIBLE": "FUEL",
-  "OXÍGENO": "OXYGEN",
-  "AERODINÁMICA": "AERODYNAMICS",
-  "SEGURIDAD": "SAFETY",
-  "MATERIALES": "MATERIALS",
-  "TECNOLOGÍA": "TECHNOLOGY",
-  "Elíptica": "Elliptical",
-  "Cónica": "Conical",
-  "Ojival": "Ogive",
-  "Von Kármán": "Von Kármán",
-  "Holgada": "Generous",
-  "Estándar": "Standard",
-  "Moderada": "Moderate",
-  "Muy limitada": "Very Limited",
-  "Escape en el Lanzamiento": "Launch Escape System",
-  "Protección Térmica": "Thermal Protection",
-  "Soporte Vital y Control Ambiental": "Life Support & Environmental Control",
-  "Blindaje contra Micrometeoritos": "Micrometeoroid Shielding",
-  "Sistema de Paracaídas y Aterrizaje": "Parachute & Landing System",
-  "Trajes Espaciales": "Space Suits",
-  "Sistemas de Supresión de Incendios": "Fire Suppression Systems",
-  "Equipos de Supervivencia y Botiquines": "Survival Gear & First-Aid Kits",
-  "Económica": "Economical",
-  "Ligera": "Lightweight",
-  "Compuesta": "Composite",
-  "Carga especializada": "Specialized Payload",
-  "Criogénico": "Cryogenic",
-  "Hidrocarburo": "Hydrocarbon",
-  "Hipergólico": "Hypergolic",
-  "Sólido": "Solid",
-  "Eléctrico / Iónico": "Electric / Ion",
-  "Sistema de propulsión": "Propulsion System",
-  "Software de vuelo": "Flight Software",
-  "Sistemas mecánicos": "Mechanical Systems",
-  "Sistemas de energía": "Power Systems",
-  "Aislante Térmico": "Thermal Insulation",
-  "Selecciona una opción para configurar este sistema.": "Choose an option to configure this system.",
-  "El costo se descuenta del presupuesto total de esta misión.": "The cost is deducted from your mission budget.",
-  "Presupuesto insuficiente.": "Insufficient budget.",
-  "Elige una opción más ligera.": "Choose a lighter option.",
-  "¡Selección confirmada!": "Selection confirmed!",
-  "¡Recurso instalado!": "System installed!",
-  "¡Bienvenido al laboratorio! Configura agua, radiación UV y CO₂.": "Welcome to the lab! Configure water, UV radiation, and CO₂.",
-  "Se obtuvo un 100 % de germinación, pero las raíces y los brotes presentaron orientaciones anormales y aleatorias.": "Germination reached 100%, but the roots and shoots showed abnormal and random orientations.",
-  "Se identificaron daños en el desarrollo de los cloroplastos. La exposición espacial incluía diferentes factores, por lo que no puede atribuirse el daño exclusivamente a la radiación UV.": "Damage to chloroplast development was identified. The space exposure involved multiple factors, so the damage cannot be attributed to UV radiation alone.",
-  "En algunas especies de plantas similares al maíz se proporcionó una gran carga evaporativa que puso a prueba el control de la humedad de la zona radicular y la recuperación del agua transpirada por condensación.": "In some maize-like plant species, a high evaporative load tested root-zone moisture control and the recovery of transpired water through condensation.",
-  "Los estudios de maíz en microgravedad documentan la importancia de la hidratación para la germinación, mientras que los estudios de exposición espacial muestran posibles daños por radiación.": "Microgravity studies of maize document the importance of hydration for germination, while space-exposure studies show possible radiation damage.",
-  "Permitió controlar la humedad de la zona radicular y la concentración de CO₂. En experimentos con trigo y Arabidopsis se validó el control de estas condiciones y el seguimiento del crecimiento en órbita.": "It enabled control of root-zone moisture and CO₂ concentration. Experiments with wheat and Arabidopsis validated control of these conditions and growth monitoring in orbit.",
-  "La exposición a la radiación espacial en los niveles probados no tuvo un impacto significativo en la tasa de germinación de Arabidopsis y las semillas de múltiples plantas de cultivo.": "At the tested levels, space radiation did not significantly affect the germination rate of Arabidopsis or seeds from several crop plants.",
-  "La exposición a la radiación espacial en los niveles probados no tuvo un impacto significativo en la tasa de germinación y las semillas de múltiples plantas de cultivo.": "At the tested levels, space radiation did not significantly affect germination rates across seeds from several crop plants.",
-  "NASA – OS-26: Zea mays seeds in microgravity.": "NASA — OS-26: Zea mays seeds in microgravity.",
-  "Richards et al. (2025) – Simulated deep space exposure on seeds.": "Richards et al. (2025) — Simulated deep-space exposure on seeds.",
-  "NASA – Advanced Plant Habitat: validation study.": "NASA — Advanced Plant Habitat: validation study.",
-  "NASA – OS-26 · Richards et al. (2025).": "NASA — OS-26 · Richards et al. (2025).",
-  "Advanced Plant Habitat – Hardware Validation.": "Advanced Plant Habitat — Hardware Validation.",
-  "NASA (2024) – Impact of Space Radiation with Other Combined Space Environmental Factors.": "NASA (2024) — Impact of Space Radiation with Other Combined Space Environmental Factors.",
-  "NASA (2024) – Radiation and Combined Environmental Factors · Advanced Plant Habitat.": "NASA (2024) — Radiation and Combined Environmental Factors · Advanced Plant Habitat.",
-  "Propulsor activo: reduces la velocidad, pero consumes combustible.": "Thruster active: you're slowing down, but using fuel.",
-  "Acelerando el descenso: aumenta la velocidad de impacto.": "Accelerating descent: impact speed is increasing.",
-  "Combustible agotado: no puedes activar el propulsor.": "Out of fuel: the thruster can no longer fire.",
-  "Caída por gravedad: decide cuándo frenar.": "Gravity is increasing your descent speed. Decide when to brake.",
-  "¡Aterrizaje seguro! Has controlado la velocidad y el combustible.": "Safe landing! You controlled your speed and fuel.",
-  "GAME OVER · La nave llegó con demasiada velocidad.": "GAME OVER · The spacecraft hit the ground too fast.",
-  "¡Llegamos al espacio! Vamos a iniciar el experimento botánico.": "We've reached space! Let's begin the botany experiment.",
-  "Selecciona 0 o 1 en las tres casillas y consulta el resultado.": "Choose 0 or 1 in all three boxes, then view the result.",
-  "Completa las tres casillas: escribe 0 o 1 en cada una.": "Complete all three boxes: enter 0 or 1 in each one.",
-  "La combinación 000 no está incluida en el Excel. Prueba otra combinación.": "Combination 000 is not included in the experiment data. Try another combination.",
-  "Esta combinación no está incluida en los siete resultados del Excel.": "This combination is not included among the seven experiment results.",
-  "Experimento ejecutado.": "Experiment complete.",
-  "Selecciona una alternativa para configurar este sistema.": "Select an option to configure this system.",
-  "¡Los seis sistemas están listos!": "All six systems are ready!",
-  "Los seis sistemas están listos": "All six systems are ready",
-  "El cometa se aproxima por la derecha.": "The comet is approaching from the right.",
-  "Espera a que el cometa entre en el campo de visión.": "Wait until the comet enters the field of view.",
-  "Acércate a una consola para instalar sus sistemas.": "Move closer to a console to install its systems.",
-  "Ese sistema ya está instalado. ¡Bien hecho!": "That system is already installed. Well done!",
-  "¡Todos los sistemas listos! Pulsa ENTER para despegar.": "All systems are ready! Press ENTER to launch.",
-  "¡Despegue! El cometa se aproxima por la derecha.": "Liftoff! The comet is approaching from the right.",
-  "Datos guardados. Pulsa E para transmitir.": "Data saved. Press E to transmit.",
-  "¡La Tierra recibió los datos! Misión completada.": "Earth received the data! Mission complete.",
-  "¡Imagen capturada! Ahora guarda los datos en la memoria.": "Image captured! Now save the data to memory.",
-  "Datos almacenados. Orienta la antena para transmitir.": "Data stored. Aim the antenna to transmit.",
-  "El cometa pasó. Pulsa R para repetir el sobrevuelo.": "The comet passed. Press R to retry the flyby.",
-  "¡El cometa está en el campo de visión! Pulsa E ahora.": "The comet is in view! Press E now.",
-  "Elige una reserva que cubra la duración de la misión sin cargar oxígeno innecesario.": "Choose an oxygen reserve that covers the mission without adding unnecessary weight.",
-  "Compara la autonomía que necesitas con el peso y el presupuesto: no siempre hace falta la opción mayor.": "Compare the range you need with the spacecraft's mass and budget. The largest option isn't always necessary.",
-  "El perfil aerodinámico modifica el consumo durante el vuelo. Según el catálogo, la cónica es la referencia; compara las unidades por segundo antes de elegir.": "The aerodynamic profile affects fuel use during flight. The catalog lists the conical profile as a reference; compare the units per second before choosing.",
-  "Piensa en el riesgo principal de esta misión y elige la protección adecuada.": "Consider the mission's main risk and choose the right protection.",
-  "Lleva los materiales necesarios para cumplir el objetivo, evitando añadir masa sin utilidad.": "Choose the materials needed for the objective without adding unnecessary mass.",
-  "Prioriza la tecnología que permita cumplir el objetivo científico y enviar los datos.": "Prioritize technology that supports the science objective and data transmission.",
-  "Pulsa ESC o haz clic fuera para cerrar": "Press ESC or click outside to close",
-  "Presupuesto restante para esta misión": "Remaining budget for this mission",
-  "Presupuesto insuficiente. Elige otra opción.": "Insufficient budget. Choose another option.",
-  "La masa superaría el límite de ": "The spacecraft mass would exceed the limit of ",
-  " kg. Elige una opción más ligera.": " kg. Choose a lighter option.",
-  "Abre primero una categoría para recibir una pista.": "Open a system category before requesting a hint.",
-  "No quedan pistas disponibles.": "No hints remaining.",
-  "¡Todos los sistemas preparados! Flyn está despegando.": "All systems are ready! Flyn is launching.",
-  "Volver al inicio": "Back to Home",
-  "BOTÁNICO": "BOTANY",
-  "CONFIGURACIÓN DE VARIABLES": "VARIABLE SETUP",
-  "Agua · Radiación UV · CO₂": "Water · UV Radiation · CO₂",
-  "MISIÓN 1 / 3  ·  DISEÑO Y PREPARACIÓN": "MISSION 1 / 3 · SPACECRAFT DESIGN & PREPARATION",
-  "¡LOS SEIS SISTEMAS ESTÁN LISTOS!": "ALL SIX SYSTEMS ARE READY!",
-  "LANZAR MISIÓN  ▶": "LAUNCH MISSION ▶",
-  "Pulsa el número correspondiente · ESC para cerrar": "Press the matching number · ESC to close",
-  "Presupuesto restante para esta misión": "Remaining mission budget",
-  "¡BIENVENIDO, EXPLORADOR!": "WELCOME, EXPLORER!",
-  "Soy Flyn. Prepárate para diseñar": "I'm Flyn. Get ready to design",
-  "Acércate a una consola para instalar sus sistemas.": "Move closer to a console to install its systems.",
-  "Ese sistema ya está instalado. ¡Bien hecho!": "That system is already installed. Well done!",
-  "¡Todos los sistemas listos! Pulsa ENTER para despegar.": "All systems ready! Press ENTER for liftoff.",
-  "Aún faltan sistemas. Revisa las cuatro consolas.": "Some systems are still missing. Check all four consoles.",
-  "¡Despegue! El cometa se aproxima por la derecha.": "Liftoff! The comet is approaching from the right.",
-  "VENTANA DE OBSERVACIÓN": "OBSERVATION WINDOW",
-  "¡El cometa está en el campo de visión! Pulsa E ahora.": "The comet is in view! Press E now.",
-  "El cometa pasó. Pulsa R para repetir el sobrevuelo.": "The comet has passed. Press R to retry the flyby.",
-  "¡Imagen capturada! Ahora guarda los datos en la memoria.": "Image captured! Now save the data to memory.",
-  "Espera a que el cometa entre en el campo de visión.": "Wait until the comet enters the observation window.",
-  "¡La Tierra recibió los datos! Misión completada.": "Earth received the data! Mission complete.",
-  "LANZAMIENTO DE MISIÓN": "MISSION LAUNCH",
-  "¡Todos los sistemas preparados! Flyn está despegando.": "All systems are ready! Flyn is launching.",
-  "¡Regresamos a la Tierra! Usa las flechas para controlar el descenso y conserva combustible para frenar antes de tocar el suelo.": "We're returning to Earth! Use the arrow keys to control your descent and save enough fuel to brake before touchdown.",
-  "MISIÓN 3 · DESCENSO Y ATERRIZAJE CONTROLADO": "MISSION 3 · CONTROLLED DESCENT & LANDING",
-  "¡CAMPAÑA COMPLETADA!": "CAMPAIGN COMPLETE!",
-  "MISIÓN CUMPLIDA · REGRESO SEGURO A LA TIERRA": "MISSION ACCOMPLISHED · SAFE RETURN TO EARTH",
-  "¡Flyn celebra tu gran aterrizaje!": "Flyn celebrates your successful landing!",
-  "DISEÑAR · EXPERIMENTAR · ATERRIZAR": "DESIGN · EXPERIMENT · LAND",
-  "MISIÓN 1  ✓     MISIÓN 2  ✓     MISIÓN 3  ✓": "MISSION 1  ✓     MISSION 2  ✓     MISSION 3  ✓",
-  "VILLA ANURA · ACADEMIA DE EXPLORACIÓN": "VILLA ANURA · EXPLORER ACADEMY",
-  "¡EL COMETA YA PASÓ!": "THE COMET HAS PASSED!",
-  "¡Hola! Soy Flyn. Esta es nuestra misión de exploración espacial. Completa las tres misiones y administra el presupuesto inicial de 7.000 créditos.": "Hi! I'm Flyn. Welcome to our space exploration mission. Complete all three missions and manage your starting budget of 7,000 credits.",
-  "La masa supera el límite permitido.": "Spacecraft mass exceeds the allowed limit.",
-  "¡Selección confirmada!": "Selection confirmed!",
-  "¡Campaña completada! Has realizado el experimento botánico y regresado a la Tierra con un aterrizaje seguro.": "Campaign complete! You completed the botany experiment and returned safely to Earth.",
-  "¡Llegamos al espacio! Vamos a iniciar el experimento botánico.": "We've reached space! Let's begin the botany experiment.",
-  "Abre primero una categoría para recibir una pista.": "Open a system category before requesting a hint.",
-  "Presupuesto insuficiente. Elige otra opción.": "Insufficient budget. Choose another option.",
-  "La masa superaría el límite de ": "Spacecraft mass would exceed the limit of ",
-  "¡Recurso instalado!": "System installed!",
-  "¡Despegue!": "Liftoff!",
-  "¡Aterrizaje seguro! Has controlado la velocidad y el combustible.": "Safe landing! You controlled your speed and fuel.",
-  "Propulsor activo: reduces la velocidad, pero consumes combustible.": "Thruster engaged: your speed is decreasing, but fuel is being consumed.",
-  "Acelerando el descenso: aumenta la velocidad de impacto.": "Accelerating descent: impact speed is increasing.",
-  "Combustible agotado: no puedes activar el propulsor.": "Out of fuel: the thruster can no longer fire.",
-  "Caída por gravedad: decide cuándo frenar.": "Gravity is pulling you down. Decide when to brake.",
-  "GAME OVER · La nave llegó con demasiada velocidad.": "GAME OVER · The spacecraft hit the ground too fast.",
-  "Pulsa R para volver a intentar": "Press R to try again",
-  "Pulsa R para intentarlo otra vez.": "Press R to try again.",
-  "Volver al inicio": "Back to Home",
-  "COMBUSTIBLE": "FUEL",
-  "OXÍGENO": "OXYGEN",
-  "AERODINÁMICA": "AERODYNAMICS",
-  "SEGURIDAD": "SAFETY",
-  "MATERIALES": "MATERIALS",
-  "TECNOLOGÍA": "TECHNOLOGY",
-  "Holgada": "Generous",
-  "Estándar": "Standard",
-  "Moderada": "Moderate",
-  "Muy limitada": "Very limited",
-  "Elíptica": "Elliptical",
-  "Cónica": "Conical",
-  "Ojival": "Ogive",
-  "Von Kármán": "Von Kármán",
-  "Escape en el Lanzamiento": "Launch Escape System",
-  "Protección Térmica": "Thermal Protection",
-  "Soporte Vital y Control Ambiental": "Life Support & Environmental Control",
-  "Blindaje contra Micrometeoritos": "Micrometeoroid Shielding",
-  "Sistema de Paracaídas y Aterrizaje": "Parachute & Landing System",
-  "Trajes Espaciales": "Space Suits",
-  "Sistemas de Supresión de Incendios": "Fire Suppression Systems",
-  "Equipos de Supervivencia y Botiquines": "Survival Kits & First-Aid Supplies",
-  "Económica": "Economical",
-  "Ligera": "Lightweight",
-  "Compuesta": "Composite",
-  "Carga especializada": "Specialized Payload",
-  "Criogénico": "Cryogenic",
-  "Hidrocarburo": "Hydrocarbon",
-  "Hipergólico": "Hypergolic",
-  "Sólido": "Solid",
-  "Eléctrico / Iónico": "Electric / Ion",
-  "Sistema de propulsión": "Propulsion System",
-  "Software de vuelo": "Flight Software",
-  "Sistemas mecánicos": "Mechanical Systems",
-  "Sistemas de energía": "Power Systems",
-  "Aislante Térmico": "Thermal Insulation",
-  "Se obtuvo un 100 % de germinación, pero las raíces y los brotes presentaron orientaciones anormales y aleatorias.": "A 100% germination rate was achieved, but the roots and shoots showed abnormal and random orientations.",
-  "Se identificaron daños en el desarrollo de los cloroplastos. La exposición espacial incluía diferentes factores, por lo que no puede atribuirse el daño exclusivamente a la radiación UV.": "Damage to chloroplast development was identified. The space exposure involved multiple factors, so the damage cannot be attributed to UV radiation alone.",
-  "En algunas especies de plantas similares al maíz se proporcionó una gran carga evaporativa que puso a prueba el control de la humedad de la zona radicular y la recuperación del agua transpirada por condensación.": "In some corn-like plant species, a high evaporative load tested root-zone humidity control and the recovery of transpired water through condensation.",
-  "Los estudios de maíz en microgravedad documentan la importancia de la hidratación para la germinación, mientras que los estudios de exposición espacial muestran posibles daños por radiación.": "Microgravity corn studies document the importance of hydration for germination, while space-exposure studies show possible radiation-related damage.",
-  "Permitió controlar la humedad de la zona radicular y la concentración de CO₂. En experimentos con trigo y Arabidopsis se validó el control de estas condiciones y el seguimiento del crecimiento en órbita.": "This combination allowed control of root-zone humidity and CO₂ concentration. Experiments with wheat and Arabidopsis validated control of these conditions and growth monitoring in orbit.",
-  "La exposición a la radiación espacial en los niveles probados no tuvo un impacto significativo en la tasa de germinación de Arabidopsis y las semillas de múltiples plantas de cultivo.": "At the tested levels, exposure to space radiation did not significantly affect the germination rate of Arabidopsis or seeds from multiple crop plants.",
-  "La exposición a la radiación espacial en los niveles probados no tuvo un impacto significativo en la tasa de germinación y las semillas de múltiples plantas de cultivo.": "At the tested levels, exposure to space radiation did not significantly affect germination rates across seeds from multiple crop plants.",
-  "¿Qué debes comprobar antes de autorizar el lanzamiento?": "What should you check before authorizing launch?",
-  "Que la nave cumpla los límites de masa y tenga sus sistemas preparados": "The spacecraft meets the mass limit and all systems are ready",
-  "Que la nave lleve la mayor cantidad posible de recursos": "The spacecraft carries as many resources as possible",
-  "¡Correcto! Antes del lanzamiento se verifican la configuración, los sistemas y los límites de masa.": "Correct! Before launch, verify the spacecraft configuration, systems, and mass limits.",
-  "En microgravedad, ¿qué debes considerar al estudiar el crecimiento de una planta?": "In microgravity, what should you consider when studying plant growth?",
-  "Observar cómo cambian germinación y orientación al variar las condiciones": "Observe how germination and orientation change under different conditions",
-  "Suponer que todas las plantas crecen igual que en la Tierra": "Assume all plants grow just as they do on Earth",
-  "¡Correcto! El experimento permite comparar resultados de germinación, orientación y condiciones ambientales.": "Correct! The experiment lets you compare germination, orientation, and environmental conditions.",
-  "¿Qué indica que el aterrizaje fue seguro?": "What indicates a safe landing?",
-  "Tocar tierra con una velocidad vertical baja y controlada": "Touch down at a low, controlled vertical speed",
-  "Llegar a la superficie a la mayor velocidad posible": "Reach the surface at the highest possible speed",
-  "¡Aterrizaje exitoso! Una velocidad vertical baja y controlada reduce el riesgo de daños en la nave.": "Successful landing! A low, controlled vertical speed reduces the risk of spacecraft damage.",
-  "Se reconoce tu habilidad para:": "This certificate recognizes your ability to:",
-  "Completa las tres casillas escribiendo 0 o 1 en cada una.": "Fill in all three boxes with 0 or 1.",
-  "Haz clic en una casilla y escribe 0 o 1.": "Click a box and enter 0 or 1.",
-  "Usa Retroceso para borrar el valor de la casilla seleccionada.": "Press Backspace to clear the selected box.",
-  "Completa las tres casillas: escribe 0 o 1 en cada una.": "Complete all three boxes: enter 0 or 1 in each one.",
-  "La combinación 000 no está incluida en el Excel. Prueba otra combinación.": "Combination 000 is not included in the dataset. Try another combination.",
-  "Esta combinación no está incluida en los siete resultados del Excel.": "This combination is not included among the seven dataset results.",
-  "Experimento ejecutado.": "Experiment complete.",
-  "Escribe 0 o 1": "Enter 0 or 1",
-  "Casilla Agua seleccionada. Escribe 0 o 1.": "Water field selected. Enter 0 or 1.",
-  "Casilla Radiación UV seleccionada. Escribe 0 o 1.": "UV Radiation field selected. Enter 0 or 1.",
-  "Casilla CO₂ seleccionada. Escribe 0 o 1.": "CO₂ field selected. Enter 0 or 1.",
-  "Valor registrado. Completa las otras casillas y consulta el resultado.": "Value recorded. Complete the other fields and view the result.",
-  "Casilla vacía. Escribe 0 o 1.": "Empty field. Enter 0 or 1.",
-  "Fuente: ": "Source: ",
-  "COMBINACIÓN ": "COMBINATION ",
-  "PRUEBAS: ": "TRIALS: ",
-  "ESTRELLAS": "STARS",
-  "RECURSOS PREPARADOS  ": "SYSTEMS CONFIGURED  ",
-  "SALDO DISPONIBLE  $ ": "AVAILABLE BALANCE  $ ",
-  "MASA  ·  ": "MASS  ·  ",
-  "MASA  ": "MASS  ",
-  "RESERVA": "FUEL",
-  "DESCENSO": "DESCENT",
-  "ALTITUD RESTANTE": "ALTITUDE REMAINING",
-  "CONTROLES": "CONTROLS",
-  "↑  FRENAR": "↑  BRAKE",
-  "↓  ACELERAR": "↓  ACCELERATE",
-  "Consume combustible": "Uses fuel",
-  "VILLA ANURA  ·  CENTRO DE CONTROL": "VILLA ANURA · MISSION CONTROL",
-  "VILLA ANURA · LABORATORIO ORBITAL": "VILLA ANURA · ORBITAL LAB",
-  "RESULTADO DEL EXPERIMENTO": "EXPERIMENT RESULT",
-  "CONSULTAR RESULTADO ▶": "VIEW RESULT ▶",
-  "CONTINUAR ▶": "CONTINUE ▶",
-  "RECOMPENSAS": "REWARDS",
-  "★  +3 ESTRELLAS": "★  +3 STARS",
-  "★  MEDALLA DE ORO": "★  GOLD MEDAL",
-  "VOLVER AL INICIO": "BACK TO HOME"
+  "¡CONFIGURACIÓN COMPLETADA! PRESIONA ENTER PARA LANZAR":"CONFIGURATION COMPLETE! PRESS ENTER TO LAUNCH",
+  "¡Todo en orden! La nave está lista. Podemos avanzar con la misión 2.":"Everything is in order! The spacecraft is ready. We can proceed to Mission 2.",
+  "MISIÓN FALLIDA":"MISSION FAILED",
+  "¡Agotaste el presupuesto! La misión ha fallado.":"You have run out of budget. Mission failed.",
+  "PULSA R PARA VOLVER AL MENÚ DE INICIO":"PRESS R TO RETURN TO THE HOME MENU",
+  "Mantén ESPACIO para frenar. Administra el combustible hasta tocar la plataforma.":"Hold SPACE to brake. Manage your fuel until touchdown.",
+  "Frenado activo: mantén el control y vigila la reserva de combustible.":"Braking engaged: stay in control and watch your remaining fuel.",
+  "Caída por gravedad: pulsa ESPACIO para frenar.":"Gravity is pulling you down. Press SPACE to brake.",
+  "␣  FRENAR":"␣  BRAKE",
+  "Mantén ESPACIO":"Hold SPACE",
+  "FLYN TE ACOMPAÑA":"FLYN IS HERE TO HELP",
+  "CONFIGURACIÓN DE LA NAVE":"SPACECRAFT CONFIGURATION",
+  "Cada perfil tiene un diseño de cohete diferente.":"Each aerodynamic profile has a different rocket design.",
+  "¡Todo en orden! La nave está lista. Podemos avanzar con la misión 2.":"All systems are in order! The spacecraft is ready. We can proceed to Mission 2."
 };
 let gameLanguage='en-US';
 try{gameLanguage=localStorage.getItem('villaAnuraLanguage')||'en-US';}catch{}
@@ -496,10 +249,11 @@ let mode = 'title', clock = 0, last = 0, dialogue = '', dialogueTimer = 0;
 let installed = new Set(), missionPhase = 0, cometX = 1030, observationWindow = 0, dataSaved = false, dataSent = false;
 const missionNames = ['SOBREVUELO','ORBITADOR','SONDA ATMOSFÉRICA','ATERRIZADOR','ROVER EXPLORADOR','RETORNO DE MUESTRAS'];
 let missionIndex = 0, challengeAnswered = false, challengeFeedback = '', challengeCorrect = false;
-const INITIAL_MISSION_BUDGET=7000;
+const INITIAL_MISSION_BUDGET=5000;
 let missionBudget=INITIAL_MISSION_BUDGET, mdlHints=3, activeCategory=null, selectedResources={}, actionAnimation=0, actionLabel='', utilityPanel=null, hintMessage='', launchTimer=0;
 let botanyFactors={water:null,uv:null,co2:null}, botanyActiveInput=null, botanyTested=new Set(), botanyResult=null, botanyNotice='Selecciona 0 o 1 en cada casilla.';
-let landingAltitude=650, landingSpeed=55, landingFuel=100, landingStatus='ready', landingThrottle=false, landingMessage='Usa ↑ para frenar y ↓ para acelerar el descenso.';
+let landingAltitude=460, landingSpeed=88, landingFuel=34, landingStatus='ready', landingThrottle=false, landingMessage='Mantén ESPACIO para frenar. Administra el combustible hasta tocar la plataforma.';
+let frogMood='neutral', rocketProfile=0, budgetFailureReason='';
 let landingAudioCooldown=0;
 const missionBriefs=[
 {title:'DISEÑO Y PUESTA EN ÓRBITA',objective:'Prepara una nave equilibrada y lista para el lanzamiento.',limit:12.5},
@@ -593,7 +347,7 @@ function botanyScene(){
     wrapText(botanyNotice,68,480,650,13,'#547782','left');
   }
   txt('PRUEBAS: '+botanyTested.size+'/7',842,451,9,'#397d6c','center');
-  if(botanyTested.size===7){
+  if(botanyResult){
     roundPanel(755,478,160,35,'#ffd13e','#e4b52e',8);
     txt('CONTINUAR ▶',835,501,10,'#754c24','center');
   }
@@ -617,198 +371,103 @@ function planet(x,y,r,color){ctx.fillStyle=color;ctx.beginPath();ctx.arc(x,y,r,0
 function stars(){for(let i=0;i<50;i++){const x=(i*191-clock*(i%3+1)*5)%W;const y=(i*79)%300;rect((x+W)%W,y,2+(i%3===0?1:0),2,'#ffffffaa');}}
 function drawFrog(x,y,scale=1){
   ctx.save();ctx.translate(Math.round(x),Math.round(y));ctx.scale(scale,scale);
-  const airborne=!player.grounded,hop=airborne?Math.min(5,Math.abs(player.vy)*.008):Math.sin(player.anim*4)*1.2,step=airborne?-hop:0;
-  const blink=Math.sin(clock*1.7)>0.985;
-  // sombra
-  ctx.globalAlpha=.18;ctx.fillStyle='#173b38';ctx.beginPath();ctx.ellipse(0,1,airborne?31:39,airborne?5:8,0,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
-  // patas traseras anchas
-  rect(-36,-18+step,18,13,'#087d32');rect(-43,-13+step,18,9,'#39b923');rect(20,-18-step,18,13,'#087d32');rect(26,-13-step,18,9,'#39b923');
-  rect(-39,-8+step,23,7,'#050d0b');rect(19,-8-step,23,7,'#050d0b');
-  // cuerpo verde y vientre crema, sin ropa ni accesorios
-  rect(-25,-48,50,37,'#050d0b');rect(-22,-46,44,34,'#168b26');rect(-18,-42,36,27,'#43bd27');
-  rect(-16,-29,32,18,'#050d0b');rect(-13,-28,26,16,'#f0df8a');rect(-10,-24,20,11,'#f7e9a4');
-  // brazos/patitas delanteras
-  rect(-31,-42,13,31,'#050d0b');rect(-28,-40,12,27,'#15932b');rect(-25,-35,9,22,'#55c92c');
-  rect(18,-42,13,31,'#050d0b');rect(16,-40,12,27,'#15932b');rect(16,-35,9,22,'#55c92c');
-  // cabeza ancha con contorno pixelado
-  rect(-35,-91,70,55,'#050d0b');rect(-39,-81,8,31,'#050d0b');rect(31,-81,8,31,'#050d0b');
-  rect(-32,-88,64,49,'#15962b');rect(-35,-78,70,30,'#15962b');rect(-30,-84,60,42,'#4bc52b');
-  // ojos elevados y grandes
-  rect(-31,-105,26,28,'#050d0b');rect(5,-105,26,28,'#050d0b');
-  rect(-28,-102,22,24,'#42c52b');rect(7,-102,22,24,'#42c52b');
+  const blink=Math.sin(clock*1.7)>0.985, mood=frogMood;
+  ctx.globalAlpha=.18;ctx.fillStyle='#173b38';ctx.beginPath();ctx.ellipse(0,1,31,7,0,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
+  rect(-36,-18,18,13,'#087d32');rect(-43,-13,18,9,'#39b923');rect(20,-18,18,13,'#087d32');rect(26,-13,18,9,'#39b923');rect(-39,-8,23,7,'#050d0b');rect(19,-8,23,7,'#050d0b');
+  rect(-25,-48,50,37,'#050d0b');rect(-22,-46,44,34,'#168b26');rect(-18,-42,36,27,'#43bd27');rect(-16,-29,32,18,'#050d0b');rect(-13,-28,26,16,'#f0df8a');rect(-10,-24,20,11,'#f7e9a4');
+  rect(-31,-42,13,31,'#050d0b');rect(-28,-40,12,27,'#15932b');rect(18,-42,13,31,'#050d0b');rect(16,-40,12,27,'#15932b');
+  rect(-35,-91,70,55,'#050d0b');rect(-39,-81,8,31,'#050d0b');rect(31,-81,8,31,'#050d0b');rect(-32,-88,64,49,'#15962b');rect(-35,-78,70,30,'#15962b');rect(-30,-84,60,42,'#4bc52b');
+  rect(-31,-105,26,28,'#050d0b');rect(5,-105,26,28,'#050d0b');rect(-28,-102,22,24,'#42c52b');rect(7,-102,22,24,'#42c52b');
   rect(-25,-98,17,18,'#f2d96e');rect(8,-98,17,18,'#f2d96e');
-  rect(-20,-94,12,13,'#050d0b');rect(11,-94,12,13,'#050d0b');
-  if(blink){rect(-19,-87,10,3,'#ffffff');rect(12,-87,10,3,'#ffffff');}
-  else{rect(-18,-96,8,9,'#ffffff');rect(13,-96,8,9,'#ffffff');rect(-15,-93,5,7,'#050d0b');rect(16,-93,5,7,'#050d0b');}
-  // hocico, mejillas y sonrisa
-  rect(-9,-76,5,4,'#147d24');rect(5,-76,5,4,'#147d24');
+  if(mood==='surprised'){rect(-20,-97,12,16,'#050d0b');rect(11,-97,12,16,'#050d0b');}else if(mood==='confused'){rect(-19,-95,10,12,'#050d0b');rect(12,-94,10,12,'#050d0b');}else{rect(-20,-94,12,13,'#050d0b');rect(11,-94,12,13,'#050d0b');}
+  if(blink){rect(-19,-87,10,3,'#ffffff');rect(12,-87,10,3,'#ffffff');}else{rect(-18,-96,8,9,'#ffffff');rect(13,-96,8,9,'#ffffff');rect(-15,-93,5,7,'#050d0b');rect(16,-93,5,7,'#050d0b');}
   rect(-27,-67,9,7,'#f18b83');rect(18,-67,9,7,'#f18b83');
-  rect(-12,-58,24,3,'#050d0b');rect(-7,-55,14,3,'#050d0b');
-  // pequeños brillos y motas
-  rect(-28,-82,5,5,'#9be94d');rect(23,-82,5,5,'#9be94d');rect(-18,-48,4,4,'#83e44b');rect(13,-45,4,4,'#83e44b');
+  if(mood==='sad'||mood==='confused'){rect(-12,-57,8,3,'#050d0b');rect(-4,-60,8,3,'#050d0b');rect(4,-57,8,3,'#050d0b');}
+  else if(mood==='surprised'){rect(-5,-60,10,8,'#050d0b');rect(-3,-58,6,4,'#f18b83');}
+  else{rect(-12,-58,24,3,'#050d0b');rect(-7,-55,14,3,'#050d0b');}
+  if(mood==='excited'||mood==='happy'){rect(-44,-94,7,7,'#ffd64d');rect(38,-94,7,7,'#ffd64d');}
   ctx.restore();
 }
 function background(){
-  // Villa Anura: hangar pastel, luminoso y limpio, basado en la referencia aprobada
-  const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#dff2ee');g.addColorStop(.64,'#f4f8ef');g.addColorStop(1,'#d7e9e4');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
-  // ventanales panorámicos: exterior claro y estructura geométrica
-  rect(0,54,W,300,'#f8fcfa');
-  for(let x=0;x<=W;x+=120){rect(x,54,4,300,'#b9cfd2');}
-  for(let y=56;y<=354;y+=82){rect(0,y,W,4,'#c5dadd');}
-  // cielo suave y planeta a través del ventanal
-  planet(842,138,54,'#a9d7e9');planet(842,138,43,'#b9e2ed');
-  // cerchas superiores azul grisáceo
-  rect(0,0,W,55,'#d9e8e9');rect(0,0,W,5,'#c0d5d9');
-  for(let x=-35;x<W;x+=145){ctx.strokeStyle='#9fb6c0';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x+82,54);ctx.moveTo(x+82,0);ctx.lineTo(x,54);ctx.stroke();}
+  const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#07162d');g.addColorStop(.62,'#102a49');g.addColorStop(1,'#183650');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  for(let i=0;i<95;i++){const x=(i*137+clock*3)%W,y=(i*73)%H;rect(x,y,1+(i%5===0?1:0),1+(i%5===0?1:0),i%4===0?'#9edce8':'#dceef7');}
+  planet(842,138,54,'#6e9ebd');planet(842,138,43,'#94c9d5');
+  rect(0,54,W,300,'#dcebea');for(let x=0;x<=W;x+=120)rect(x,54,3,300,'#b9cfd2');for(let y=56;y<=354;y+=82)rect(0,y,W,3,'#c5dadd');
+  rect(0,0,W,55,'#d9e8e9');for(let x=-35;x<W;x+=145){ctx.strokeStyle='#9fb6c0';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x+82,54);ctx.moveTo(x+82,0);ctx.lineTo(x,54);ctx.stroke();}
   for(let x=72;x<W;x+=180){rect(x,53,3,16,'#a7bdc2');roundPanel(x-19,68,42,9,'#fff9dc','#d5e2d9',4);}
-  // gran pórtico amarillo de ensamblaje, visible detrás de Flyn
-  rect(369,83,12,276,'#d9a63e');rect(579,83,12,276,'#d9a63e');rect(369,83,222,12,'#e6b84e');
-  rect(390,95,9,250,'#efc85f');rect(560,95,9,250,'#efc85f');
-  for(let y=128;y<350;y+=56){rect(380,y,190,5,'#e7bd58');}
-  rect(470,69,28,11,'#e7b94b');rect(482,80,4,25,'#d39a36');
-  // pantallas laterales de telemetría
-  roundPanel(20,245,160,101,'#dce8eb','#a9c5cb',8);rect(37,258,130,61,'#164e70');
-  for(let i=0;i<5;i++){rect(47+i*22,278,13,3,'#7ddbd7');rect(47+i*22,288,7,14,'#52b7bb');}
-  roundPanel(766,250,150,96,'#dce8eb','#a9c5cb',8);rect(782,261,118,64,'#174d6c');planet(850,289,18,'#83cbd4');rect(818,315,64,3,'#79d4d5');
-  // pequeños indicadores verdes en los extremos
-  for(const x of [218,710]){rect(x,311,5,18,'#65b87e');rect(x+7,306,5,23,'#65b87e');rect(x+14,313,5,16,'#65b87e');}
-  // suelo claro con perspectiva, líneas finas y franja de seguridad
-  rect(0,360,W,180,'#e8f0ed');rect(0,359,W,5,'#9ebfba');
-  for(let x=-80;x<=1040;x+=72){ctx.strokeStyle='#c4d8d4';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(480,364);ctx.lineTo(x,540);ctx.stroke();}
-  for(let y=395;y<540;y+=42){rect(0,y,W,2,'#cbdcd8');}
-  rect(0,514,W,8,'#edc85d');for(let x=0;x<W;x+=34){rect(x,514,17,8,'#fff0bd');}
+  rect(369,83,12,276,'#d9a63e');rect(579,83,12,276,'#d9a63e');rect(369,83,222,12,'#e6b84e');rect(390,95,9,250,'#efc85f');rect(560,95,9,250,'#efc85f');for(let y=128;y<350;y+=56)rect(380,y,190,5,'#e7bd58');
+  rect(0,360,W,180,'#e8f0ed');rect(0,359,W,5,'#9ebfba');for(let x=-80;x<=1040;x+=72){ctx.strokeStyle='#c4d8d4';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(480,364);ctx.lineTo(x,540);ctx.stroke();}for(let y=395;y<540;y+=42)rect(0,y,W,2,'#cbdcd8');
+  rect(0,514,W,8,'#edc85d');for(let x=0;x<W;x+=34)rect(x,514,17,8,'#fff0bd');
 }
 function drawRocket(){
-  // nave de lanzamiento central, con detalles pixel-art y plataforma amarilla
-  rect(426,190,108,164,'#9aabb8');rect(438,150,84,200,'#edf5f7');rect(446,140,68,205,'#ffffff');
-  // hombros y punta de la nave
-  ctx.fillStyle='#f9ffff';ctx.beginPath();ctx.moveTo(446,151);ctx.lineTo(480,104);ctx.lineTo(514,151);ctx.closePath();ctx.fill();ctx.strokeStyle='#8ba5b5';ctx.lineWidth=3;ctx.stroke();
-  rect(456,104,48,9,'#e6edf0');rect(452,155,56,7,'#43b8a9');rect(452,238,56,7,'#43b8a9');rect(452,312,56,7,'#43b8a9');
-  // ventanillas e insignias
-  for(const y of [180,215,270]){roundPanel(467,y,26,23,'#d7edf5','#7b9aaa',5);planet(480,y+11,7,'#3f91c4');}
-  rect(439,337,82,15,'#b9cbd3');rect(431,350,98,12,'#839aa8');
-  // patas y soporte inferior
-  rect(438,320,12,40,'#dce6e9');rect(510,320,12,40,'#dce6e9');
+  drawRocketProfile(480,350,rocketProfile);
+}
+function drawRocketProfile(cx,baseY,profile=0){
+  const colors=[['#eaf5ff','#2879b9','#f5ca5d'],['#f3e8ff','#8d58b6','#d8b3ee'],['#fff0ee','#c34f5d','#f1b0a6'],['#e8fff5','#399b82','#9bdac8']];
+  const [body,accent,detail]=colors[profile%4],w=profile===1?60:profile===2?54:profile===3?66:58,top=baseY-205;
+  // silueta distinta para cada perfil aerodinámico
+  ctx.fillStyle=body;ctx.strokeStyle=accent;ctx.lineWidth=3;ctx.beginPath();
+  if(profile===0){ctx.moveTo(cx-w/2,top+34);ctx.quadraticCurveTo(cx,top-8,cx+w/2,top+34);ctx.lineTo(cx+w/2,baseY-12);ctx.lineTo(cx-w/2,baseY-12);ctx.closePath();}
+  else if(profile===1){ctx.moveTo(cx-w/2,top+42);ctx.lineTo(cx,top-2);ctx.lineTo(cx+w/2,top+42);ctx.lineTo(cx+w/2-4,baseY-12);ctx.lineTo(cx-w/2+4,baseY-12);ctx.closePath();}
+  else if(profile===2){ctx.moveTo(cx-w/2,top+22);ctx.quadraticCurveTo(cx,top-16,cx+w/2,top+22);ctx.lineTo(cx+w/2,baseY-12);ctx.lineTo(cx-w/2,baseY-12);ctx.closePath();}
+  else{ctx.moveTo(cx-w/2,top+50);ctx.lineTo(cx-w/2+8,top+20);ctx.quadraticCurveTo(cx,top-12,cx+w/2-8,top+20);ctx.lineTo(cx+w/2,top+50);ctx.lineTo(cx+w/2,baseY-12);ctx.lineTo(cx-w/2,baseY-12);ctx.closePath();}
+  ctx.fill();ctx.stroke();rect(cx-w/2-7,baseY-60,7,45,accent);rect(cx+w/2,baseY-60,7,45,accent);
+  rect(cx-w/2+5,top+65,w-10,6,accent);rect(cx-w/2+5,baseY-75,w-10,6,accent);
+  roundPanel(cx-12,top+82,24,25,'#cdeaf2',accent,5);planet(cx,top+94,7,'#4d9cc1');
+  rect(cx-8,baseY-17,16,6,detail);rect(cx-16,baseY-10,32,7,'#8ca6b0');
 }
 function controlRoom(){
   background();
-  // Escenario principal: hangar y cohete, enmarcados como una pantalla de misión
   roundPanel(28,12,904,50,'#fffdf5','#b9d8d4',12);
-  txt('VILLA ANURA  ·  CENTRO DE CONTROL',48,33,13,'#397d6c');
-  txt('★ '+earnedStars+'  ESTRELLAS',690,42,11,'#a47727','right');
-  txt('MISIÓN 1 / 3  ·  DISEÑO Y PREPARACIÓN',48,51,10,'#426879');
-  txt('SEIS SISTEMAS PARA CONFIGURAR LA NAVE',48,64,9,'#66828a');
-  // Presupuesto y masa como controles visibles en la esquina izquierda
-  roundPanel(38,70,150,42,'#fff0bd','#e4bd55',10);
-  txt('$ '+missionBudget.toLocaleString(gameLanguage==='en-US'?'en-US':'es-CO'),113,97,18,'#8b5b23','center');
-  roundPanel(38,119,150,38,'#ffd13e','#e4b52e',10);
-  txt('MASA  ·  '+totalMass().toFixed(1)+' kg',113,143,12,'#8b315f','center');
-  // MDL es el botón de pistas
-  roundPanel(810,70,122,48,'#ffd13e','#e4b52e',20);
-  txt('MDL  '+mdlHints,871,100,17,'#8b315f','center');
-  // Escena central contenida como pantalla de simulación
-  roundPanel(54,75,852,326,'#f7fcfa','#9abdc0',14);
-  ctx.save();ctx.beginPath();ctx.roundRect(60,81,840,314,10);ctx.clip();
-  // fondo hangar y cohete a escala de escenario
-  rect(60,81,840,314,'#e9f4f1');
-  rect(60,81,840,36,'#d8e8e9');
-  for(let x=60;x<900;x+=105)rect(x,117,3,235,'#c0d5d7');
-  for(let y=117;y<360;y+=61)rect(60,y,840,3,'#c5dadd');
-  // ventanal y planeta
-  planet(795,167,43,'#b5dce8');
-  // pórtico de ensamblaje
-  rect(392,128,11,224,'#dba63c');rect(557,128,11,224,'#dba63c');rect(392,128,176,10,'#e8bd50');
-  for(let y=164;y<335;y+=43)rect(403,y,154,5,'#e8bd50');
-  // cohete principal
-  rect(452,175,57,168,'#f8ffff');ctx.fillStyle='#ffffff';ctx.beginPath();ctx.moveTo(452,177);ctx.lineTo(480,137);ctx.lineTo(509,177);ctx.closePath();ctx.fill();rect(446,334,69,9,'#9fb4bb');rect(459,206,42,7,'#48b5aa');rect(459,271,42,7,'#48b5aa');
-  roundPanel(469,222,22,22,'#d9edf4','#83aeb9',4);planet(480,233,6,'#4d9cc1');
-  // consolas laterales
-  roundPanel(78,230,145,83,'#dbe8ec','#a6c3ca',7);rect(89,241,123,61,'#124a6c');for(let i=0;i<4;i++){rect(100,253+i*10,55+(i%2)*25,3,'#56d7dc');}
-  roundPanel(737,230,145,83,'#dbe8ec','#a6c3ca',7);rect(748,241,123,61,'#124a6c');planet(808,267,17,'#7dcbd5');rect(780,291,57,3,'#62d3d5');
-  // Flyn espera junto a su puesto; tras seleccionar recurso se desplaza visualmente al cohete
-  const frogX=actionAnimation>0?480:270;
-  drawFrog(frogX,actionAnimation>0?340:350,0.58);
-  if(actionAnimation>0){roundPanel(335,356,290,28,'#fffdf4','#c5ded8',8);txt(actionLabel,480,375,10,'#397c68','center');}
+  txt('VILLA ANURA  ·  CENTRO DE CONTROL',48,33,13,'#397d6c');txt('★ '+earnedStars+'  ESTRELLAS',690,42,11,'#a47727','right');
+  txt('MISIÓN 1 / 3  ·  DISEÑO Y PREPARACIÓN',48,51,10,'#426879');txt('SEIS SISTEMAS PARA CONFIGURAR LA NAVE',48,64,9,'#66828a');
+  roundPanel(38,70,150,42,'#fff0bd','#e4bd55',10);txt('$ '+missionBudget.toLocaleString(gameLanguage==='en-US'?'en-US':'es-CO'),113,97,18,'#8b5b23','center');
+  roundPanel(198,70,150,42,'#ffd13e','#e4b52e',10);txt('MASA '+totalMass().toFixed(1)+' / 12.5 kg',273,97,11,'#8b315f','center');
+  roundPanel(810,70,122,48,'#ffd13e','#e4b52e',20);txt('MDL  '+mdlHints,871,100,17,'#8b315f','center');
+  // Mitad izquierda: hangar y nave; sin las dos pantallas azules laterales.
+  roundPanel(28,125,440,306,'#eaf5f2','#9abdc0',14);ctx.save();ctx.beginPath();ctx.roundRect(34,131,428,294,10);ctx.clip();
+  rect(34,131,428,294,'#dcebea');for(let x=34;x<462;x+=72)rect(x,131,2,294,'#bfd4d5');for(let y=131;y<425;y+=58)rect(34,y,428,2,'#bfd4d5');
+  rect(192,160,10,235,'#d9a63e');rect(292,160,10,235,'#d9a63e');rect(192,160,110,9,'#e6b84e');for(let y=192;y<380;y+=45)rect(202,y,90,5,'#e7bd58');
+  drawRocketProfile(247,360,rocketProfile);
+  drawFrog(actionAnimation>0?247:100,390,0.56);
+  if(actionAnimation>0){roundPanel(132,392,230,23,'#fffdf4','#c5ded8',7);txt(actionLabel,247,408,8,'#397c68','center');}
   ctx.restore();
-  // Controles superiores al frente de la pantalla: presupuesto, masa y pistas
-  roundPanel(72,82,150,38,'#fff0bd','#e4bd55',10);txt('$ '+missionBudget.toLocaleString(gameLanguage==='en-US'?'en-US':'es-CO'),147,107,16,'#8b5b23','center');
-  roundPanel(230,82,150,38,'#ffd13e','#e4b52e',10);txt('MASA  '+totalMass().toFixed(1)+' / '+missionBriefs[missionIndex].limit+' kg',305,107,11,'#8b315f','center');
-  roundPanel(780,82,122,42,'#ffd13e','#e4b52e',20);txt('MDL  '+mdlHints,841,109,16,'#8b315f','center');
-  // Objetivo de la misión siempre visible en el escenario
-  roundPanel(265,115,450,42,'#fffdf4','#c5ded8',8);
-  txt(missionBriefs[missionIndex].objective,490,141,10,'#426879','center');
-  // Estado de recursos y una instrucción clara cuando la nave está lista.
+  // Mitad derecha: selector de respuestas, manteniendo los catálogos actuales.
+  roundPanel(484,125,448,306,'#fffef8','#a9d0c7',14);
+  if(activeCategory){
+    const cat=resourceCategories.find(v=>v.id===activeCategory);
+    roundPanel(502,141,412,36,'#15516e','#58c9cf',8);txt(cat.name+' · ELIGE UNA OPCIÓN',708,164,12,'#ffffff','center');
+    txt('Selecciona una alternativa para configurar este sistema.',708,193,9,'#547782','center');
+    cat.options.forEach((opt,i)=>{const yy=207+i*Math.min(37,190/cat.options.length),hh=Math.min(31,190/cat.options.length-4),canPay=missionBudget>=opt[1];roundPanel(508,yy,400,hh,canPay?'#edf8f5':'#f2eeee',canPay?'#9acbbd':'#d9c5c5',6);txt((i+1)+'. '+opt[0],520,yy+hh*.68,opt[0].length>31?8:10,canPay?'#31596c':'#a18e8e');txt('ELEGIR',895,yy+hh*.68,8,canPay?'#397d65':'#a18e8e','right');});
+    if(activeCategory==='aero'){const selected=selectedResources.aero;txt(selected?'Perfil instalado: '+selected.label:'Cada perfil tiene un diseño de cohete diferente.',708,408,9,'#547782','center');}
+  }else{
+    txt('CONFIGURACIÓN DE LA NAVE',708,174,14,'#397d6c','center');txt('Selecciona uno de los seis sistemas.',708,201,10,'#547782','center');
+    roundPanel(540,225,336,92,'#eaf5f1','#b8d8ce',9);txt('FLYN TE ACOMPAÑA',708,252,12,'#397d6c','center');wrapText('Elige cada sistema. Observa cómo cambia la nave y mantén el presupuesto bajo control.',708,278,285,15,'#426879','center');
+    txt('PRESUPUESTO DISPONIBLE  $ '+missionBudget.toLocaleString(gameLanguage==='en-US'?'en-US':'es-CO'),708,350,10,'#8b672e','center');
+  }
+  // Indicador de misión y acción inferior.
   const chosen=Object.keys(selectedResources).length;
   if(chosen===6){
     roundPanel(75,408,810,32,'#e2f5e9','#72bc91',9);
-    txt('¡LOS 6 SISTEMAS ESTÁN LISTOS! PRESIONA ENTER PARA LANZAR',480,429,12,'#28764f','center');
+    txt('¡CONFIGURACIÓN COMPLETADA! PRESIONA ENTER PARA LANZAR',480,429,12,'#28764f','center');
   }else{
     roundPanel(75,408,810,32,'#fffdf5','#c8ded8',9);
-    txt('RECURSOS PREPARADOS  '+chosen+'/6',94,429,11,'#477b6c');
-    txt('SALDO DISPONIBLE  $ '+missionBudget.toLocaleString(gameLanguage==='en-US'?'en-US':'es-CO'),866,429,11,'#8b672e','right');
+    txt('RECURSOS PREPARADOS  '+chosen+'/6',94,429,11,'#477b6c');txt('SALDO DISPONIBLE  $ '+missionBudget.toLocaleString(gameLanguage==='en-US'?'en-US':'es-CO'),866,429,11,'#8b672e','right');
   }
-  // seis botones inferiores
-  const startX=58, gap=8, bw=134, by=451;
-  resourceCategories.forEach((cat,i)=>{
-    const x=startX+i*(bw+gap),active=activeCategory===cat.id,done=!!selectedResources[cat.id];
-    roundPanel(x,by,bw,66,done?'#dff4e6':active?'#dff3f4':'#e7ebee',done?'#69b78a':active?'#4faeb2':'#bdcbd0',10);
-    txt(cat.icon,x+17,by+27,19,done?'#34885e':'#35647a');
-    txt(cat.name,x+42,by+27,9,'#31566a');
-    txt(done?'✓ SELECCIONADO':'VER OPCIONES',x+bw/2,by+49,8,done?'#36875e':'#65818a','center');
-  });
-  // panel desplegable de opciones integrado en la misma pantalla
-  if(activeCategory){
-    const cat=resourceCategories.find(v=>v.id===activeCategory);
-    roundPanel(225,105,510,350,'#fffef8','#6daeb4',13);
-    roundPanel(243,117,474,34,'#15516e','#58c9cf',8);
-    txt(cat.name+' · ELIGE UNA OPCIÓN',480,140,12,'#ffffff','center');
-    txt('Selecciona una alternativa para configurar este sistema.',480,160,9,'#547782','center');
-    cat.options.forEach((opt,i)=>{
-      const yy=174+i*33,canPay=missionBudget>=opt[1];
-      roundPanel(250,yy,460,28,canPay?'#edf8f5':'#f2eeee',canPay?'#9acbbd':'#d9c5c5',6);
-      txt((i+1)+'. '+opt[0],264,yy+19,opt[0].length>31?9:10,canPay?'#31596c':'#a18e8e');
-      txt('ELEGIR',694,yy+19,8,canPay?'#397d65':'#a18e8e','right');
-    });
-    txt('Pulsa el número correspondiente · ESC para cerrar',480,445,8,'#66828a','center');
-  }
+  const startX=28,gap=7,bw=146,by=451;
+  resourceCategories.forEach((cat,i)=>{const x=startX+i*(bw+gap),active=activeCategory===cat.id,done=!!selectedResources[cat.id];roundPanel(x,by,bw,66,done?'#dff4e6':active?'#fff0bd':'#f5e6a8',done?'#69b78a':active?'#dcae35':'#d4ad43',10);txt(cat.name,x+bw/2,by+27,10,'#244f62','center');txt(done?'✓ SELECCIONADO':'VER OPCIONES',x+bw/2,by+49,8,done?'#36875e':'#65818a','center');});
   if(messageTimer>0){roundPanel(330,388,300,26,'#fffef5','#c6e0d7',8);txt(message,480,406,10,'#3e8066','center');}
-  if(utilityPanel){
-    roundPanel(300,155,360,190,'#fffef8','#62aeb4',13);
-    roundPanel(318,169,324,37,'#15516e','#58c9cf',8);
-    txt(utilityPanel==='mass'?'CONTROL DE MASA':utilityPanel==='budget'?'PRESUPUESTO DE MISIÓN':'PISTA DE FLYN',480,193,13,'#ffffff','center');
-    if(utilityPanel==='mass'){
-      txt('MASA INSTALADA',480,235,11,'#66828a','center');
-      txt(totalMass().toFixed(1)+' kg',480,269,24,'#397d65','center');
-      txt('Suma de los recursos seleccionados',480,296,10,'#66828a','center');
-    }else if(utilityPanel==='budget'){
-      txt('SALDO DISPONIBLE',480,235,11,'#66828a','center');txt('$ '+missionBudget.toLocaleString(gameLanguage==='en-US'?'en-US':'es-CO'),480,269,24,'#397d65','center');txt('Presupuesto restante para esta misión',480,296,10,'#66828a','center');
-    }else{
-      const hint=hintMessage||'Abre una categoría inferior y solicita una pista para recibir ayuda.';
-      wrapText(hint,480,237,290,15,'#426879','center');
-      txt('Pistas restantes: '+mdlHints,480,320,10,'#66828a','center');
-    }
-    txt('Pulsa ESC o haz clic fuera para cerrar',480,333,9,'#66828a','center');
-  }
+  if(utilityPanel){roundPanel(300,155,360,190,'#fffef8','#62aeb4',13);roundPanel(318,169,324,37,'#15516e','#58c9cf',8);txt(utilityPanel==='mass'?'CONTROL DE MASA':utilityPanel==='budget'?'PRESUPUESTO DE MISIÓN':'PISTA DE FLYN',480,193,13,'#ffffff','center');if(utilityPanel==='mass'){txt('MASA INSTALADA',480,235,11,'#66828a','center');txt(totalMass().toFixed(1)+' kg',480,269,24,'#397d65','center');}else if(utilityPanel==='budget'){txt('SALDO DISPONIBLE',480,235,11,'#66828a','center');txt('$ '+missionBudget.toLocaleString(gameLanguage==='en-US'?'en-US':'es-CO'),480,269,24,'#397d65','center');}else{wrapText(hintMessage||'Abre una categoría inferior y solicita una pista para recibir ayuda.',480,237,290,15,'#426879','center');txt('Pistas restantes: '+mdlHints,480,320,10,'#66828a','center');}txt('Pulsa ESC o haz clic fuera para cerrar',480,333,9,'#66828a','center');}
 }
 function hud(){roundPanel(18,14,210,43,'#fffdf5','#c8e3d8',8);txt('VILLA ANURA',32,32,11,'#58936d');txt('HANGAR ESPACIAL',32,48,10,'#456879');roundPanel(805,14,137,43,'#fffdf5','#c8e3d8',8);txt('🪰 '+progress.data.flies+'    🎟 '+progress.data.tickets,819,41,13,'#456879');}
 function dialogBox(t){roundPanel(675,390,265,65,'#fffef8','#c9e4d7',9);txt('FLYN',690,411,10,'#65a078');txt(t.length>35?t.slice(0,34)+'…':t,690,435,11,'#456879');}
 function titleScreen(){
   background();
-  // composición de portada inspirada en la referencia: hangar completo y marca
-  // logo superior izquierdo
   roundPanel(30,28,286,100,'#faffff','#18a8a7',15);txt('✦  VILLA',54,67,34,'#087d68');txt('ANURA 🚀',54,105,34,'#087d68');roundPanel(43,112,255,28,'#087b9a','#d6ffff',12);txt('SPACE MISSION ADVENTURE',170,131,11,'#ffffff','center');
-  // cohete protagonista al fondo
   rect(410,94,12,255,'#dba32e');rect(538,94,12,255,'#dba32e');rect(410,94,140,9,'#e7b844');drawRocket();
-  // consolas decorativas y mapa
-  roundPanel(34,264,190,100,'#dfeaf0','#9ebbc7',8);rect(46,276,166,75,'#06436f');planet(92,312,25,'#50b6d0');for(let i=0;i<4;i++)rect(132,292+i*12,62,3,'#59dbe0');
-  roundPanel(737,257,190,104,'#dfeaf0','#9ebbc7',8);rect(750,269,164,78,'#06436f');planet(826,307,26,'#64b9c8');for(let i=0;i<4;i++)rect(861,287+i*12,38,3,'#57d7df');
-  // Flyn en traje espacial, en el centro
   drawFrog(480,438,0.82);
-  // mensaje de bienvenida
   roundPanel(620,347,302,91,'#fffdf2','#1b7895',10);txt('¡BIENVENIDO, EXPLORADOR!',638,371,12,'#153d62');txt('Soy Flyn. Prepárate para diseñar',638,395,11,'#153d62');txt('y lanzar nuestras misiones espaciales.',638,414,11,'#153d62');
-  // botón principal tipo pixel UI
-  roundPanel(264,463,432,60,'#0b7890','#f5ffff',16);roundPanel(273,468,414,47,'#0c5f79','#59d7d0',12);txt('PRESIONA  ENTER  PARA JUGAR',480,499,17,'#ffffff','center');
-  txt('VILLA ANURA v1.0',18,532,9,'#26445a');
+  roundPanel(244,458,472,68,'#ffd13e','#fff0a6',17);roundPanel(253,464,454,55,'#087b91','#baf6ed',13);txt('PRESIONA  ENTER  PARA JUGAR',480,499,17,'#ffffff','center');txt('VILLA ANURA v1.0',18,532,9,'#26445a');
 }
 function resetPlayer(){player.x=115;player.y=420;player.vx=0;player.vy=0;player.grounded=true;}
 function updatePlayer(dt){const left=keys.ArrowLeft||keys.KeyA,right=keys.ArrowRight||keys.KeyD,jump=keys.Space||keys.ArrowUp||keys.KeyW;const moving=left||right;player.vx=((right?1:0)-(left?1:0))*185;if(player.vx)player.facing=Math.sign(player.vx);if(player.grounded&&((jump&&!jumpWasDown)||moving)){player.vy=jump?-570:-455;player.grounded=false;audio.jump();}jumpWasDown=!!jump;player.vy+=1450*dt;player.x=Math.max(32,Math.min(928,player.x+player.vx*dt));player.y+=player.vy*dt;if(player.y>=420){player.y=420;player.vy=0;player.grounded=true;}player.anim+=dt;}
@@ -851,15 +510,21 @@ function completeScene(){
     roundPanel(330,449,300,48,'#15516e','#65d3cf',10);
   }else{roundPanel(330,449,300,48,'#15516e','#65d3cf',10);txt('PULSA A O B PARA RESPONDER',480,478,11,'#ffffff','center');}
 }
-function launchScene(){background();planet(760,170,62,'#b5dce8');roundPanel(60,55,840,410,'#eaf5f2','#9abdc0',16);for(let x=100;x<880;x+=100)rect(x,80,3,300,'#c0d5d7');for(let y=120;y<390;y+=65)rect(60,y,840,3,'#c5dadd');rect(410,350,140,14,'#e4bd55');rect(425,315,110,35,'#d7e5e7');const lift=Math.min(210,launchTimer*72);ctx.save();ctx.translate(0,-lift);rect(452,175,57,168,'#f8ffff');ctx.fillStyle='#fff';ctx.beginPath();ctx.moveTo(452,177);ctx.lineTo(480,137);ctx.lineTo(509,177);ctx.closePath();ctx.fill();rect(459,206,42,7,'#48b5aa');rect(459,271,42,7,'#48b5aa');ctx.fillStyle='#f3a34b';ctx.beginPath();ctx.moveTo(462,344);ctx.lineTo(480,390+Math.sin(clock*18)*8);ctx.lineTo(498,344);ctx.closePath();ctx.fill();ctx.restore();drawFrog(480,390,0.55);txt('LANZAMIENTO DE MISIÓN',480,95,22,'#397d65','center');txt('¡Todos los sistemas preparados! Flyn está despegando.',480,430,12,'#547a82','center');}
+function launchScene(){
+  background();planet(760,170,62,'#b5dce8');roundPanel(60,55,840,410,'#eaf5f2','#9abdc0',16);
+  for(let x=100;x<880;x+=100)rect(x,80,3,300,'#c0d5d7');for(let y=120;y<390;y+=65)rect(60,y,840,3,'#c5dadd');rect(410,350,140,14,'#e4bd55');rect(425,315,110,35,'#d7e5e7');
+  const lift=Math.min(210,launchTimer*72);ctx.save();ctx.translate(0,-lift);drawRocketProfile(480,350,rocketProfile);ctx.fillStyle='#f3a34b';ctx.beginPath();ctx.moveTo(468,344);ctx.lineTo(480,390+Math.sin(clock*18)*8);ctx.lineTo(492,344);ctx.closePath();ctx.fill();ctx.restore();drawFrog(480,390,0.55);
+  txt('LANZAMIENTO DE MISIÓN',480,95,22,'#397d65','center');txt('¡Todos los sistemas preparados! Flyn está despegando.',480,430,12,'#547a82','center');
+}
+function launchSuccessScene(){background();roundPanel(150,110,660,310,'#fffef8','#8dc7b6',16);drawFrog(480,315,0.85);txt('¡TODO EN ORDEN!',480,165,25,'#397d65','center');wrapText('La nave está en órbita y todos los sistemas funcionan correctamente.',480,365,520,18,'#426879','center');txt('PREPARADOS PARA LA MISIÓN 2',480,400,13,'#15516e','center');}
 function beginLandingMission(){
   missionIndex=2;
-  landingAltitude=650;
-  landingSpeed=55;
-  landingFuel=100;
+  landingAltitude=460;
+  landingSpeed=88;
+  landingFuel=34;
   landingStatus='ready';
   landingThrottle=false;
-  landingMessage='Usa ↑ para frenar y ↓ para acelerar el descenso.';
+  landingMessage='Mantén ESPACIO para frenar. Administra el combustible hasta tocar la plataforma.'
   challengeAnswered=false;challengeFeedback='';challengeCorrect=false;
   mode='landing';
   say('¡Regresamos a la Tierra! Usa las flechas para controlar el descenso y conserva combustible para frenar antes de tocar el suelo.');
@@ -879,100 +544,41 @@ function awardCampaignVictory(){
 function updateLanding(dt){
   if(landingStatus!=='ready')return;
   landingAudioCooldown=Math.max(0,landingAudioCooldown-dt);
-  const brake=!!keys.ArrowUp;
-  const accelerate=!!keys.ArrowDown;
+  const brake=!!keys.Space;
   landingThrottle=false;
-  // La gravedad acelera el descenso; el propulsor contrarresta la caída.
-  landingSpeed+=3.2*dt;
+  landingSpeed+=4.6*dt;
   if(brake&&landingFuel>0){
-    landingSpeed-=18*dt;
-    landingFuel=Math.max(0,landingFuel-5.2*dt);
-    landingThrottle=true;
+    landingSpeed-=22*dt;landingFuel=Math.max(0,landingFuel-8.2*dt);landingThrottle=true;
     if(landingAudioCooldown<=0){audio.brake();landingAudioCooldown=.32;}
-    landingMessage='Propulsor activo: reduces la velocidad, pero consumes combustible.';
-  }else if(accelerate){
-    landingSpeed+=10*dt;
-    landingMessage='Acelerando el descenso: aumenta la velocidad de impacto.';
-  }else{
-    landingMessage=landingFuel<=0?'Combustible agotado: ya no puedes activar el propulsor.':'Caída por gravedad: decide cuándo frenar.';
-  }
-  landingSpeed=Math.max(0,Math.min(140,landingSpeed));
-  landingAltitude-=landingSpeed/3.6*2*dt;
+    landingMessage='Frenado activo: mantén el control y vigila la reserva de combustible.';
+  }else landingMessage=landingFuel<=0?'Combustible agotado: ya no puedes frenar.':'Caída por gravedad: pulsa ESPACIO para frenar.';
+  landingSpeed=Math.max(0,Math.min(155,landingSpeed));
+  landingAltitude-=landingSpeed/3.6*2.65*dt;
   if(landingAltitude<=0){
     landingAltitude=0;
-    if(landingSpeed<=12){
-      landingStatus='landed';
-      landingMessage='¡Aterrizaje seguro! Has controlado la velocidad y el combustible.';
-      awardCampaignVictory();
-      mode='victory';audio.stopMusic();audio.landing();setTimeout(()=>audio.certificate(),220);
-    }else{
-      landingStatus='crashed';
-      landingMessage='GAME OVER · La nave llegó con demasiada velocidad.';
-      audio.bump();
-    }
+    if(landingSpeed<=18&&landingFuel>=0){
+      landingStatus='landed';landingMessage='¡Aterrizaje seguro! Has controlado la velocidad y el combustible.';
+      awardCampaignVictory();mode='victory';audio.stopMusic();audio.landing();setTimeout(()=>audio.certificate(),220);
+    }else{landingStatus='crashed';landingMessage='GAME OVER · La nave llegó con demasiada velocidad.';audio.bump();}
   }
 }
 function landingScene(){
-  const sky=ctx.createLinearGradient(0,0,0,H);
-  sky.addColorStop(0,'#bfe4f1');sky.addColorStop(.66,'#e8f5f0');sky.addColorStop(1,'#f4f2dc');
-  ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
-  for(let i=0;i<40;i++){const sx=(i*173)%W,sy=(i*67)%290;rect(sx,sy,2,2,'#ffffff');}
-  planet(790,145,58,'#7ebed5');planet(790,145,44,'#a4d7df');
-  rect(0,438,W,102,'#b5d9b6');rect(0,438,W,7,'#8fc39c');
-  for(let x=0;x<W;x+=84){rect(x,453,44,5,'#9fc99f');rect(x+20,468,31,4,'#a3cba0');}
+  const sky=ctx.createLinearGradient(0,0,0,H);sky.addColorStop(0,'#bfe4f1');sky.addColorStop(.66,'#e8f5f0');sky.addColorStop(1,'#f4f2dc');ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
+  for(let i=0;i<40;i++){const sx=(i*173)%W,sy=(i*67)%290;rect(sx,sy,2,2,'#ffffff');}planet(790,145,58,'#7ebed5');planet(790,145,44,'#a4d7df');
+  rect(0,438,W,102,'#b5d9b6');rect(0,438,W,7,'#8fc39c');for(let x=0;x<W;x+=84){rect(x,453,44,5,'#9fc99f');rect(x+20,468,31,4,'#a3cba0');}
   roundPanel(365,444,230,30,'#e5edf0','#92adb7',7);rect(385,456,190,7,'#e8c75b');
-  roundPanel(28,12,904,50,'#fffdf5','#b9d8d4',12);
-  txt('VILLA ANURA · REGRESO A LA TIERRA',48,34,14,'#397d6c');
-  txt('MISIÓN 3 · DESCENSO Y ATERRIZAJE CONTROLADO',48,52,10,'#426879');
-
-  // Indicador vertical de combustible, como en la referencia.
-  roundPanel(42,88,152,315,'#fffef8','#b9d8d4',10);
-  txt('COMBUSTIBLE',118,113,11,'#397d6c','center');
-  roundPanel(94,137,48,210,'#e5efec','#b7ceca',7);
-  const fuelH=196*(landingFuel/100);
-  rect(103,340-fuelH,30,fuelH,landingFuel>25?'#4aa879':landingFuel>10?'#e3b44b':'#d66b55');
-  txt(Math.round(landingFuel)+'%',118,376,18,'#906a32','center');
-  txt('RESERVA',118,393,8,'#6b8587','center');
-
-  // Indicador vertical de velocidad en km/h.
-  roundPanel(766,88,152,315,'#fffef8','#b9d8d4',10);
-  txt('VELOCIDAD',842,113,11,'#397d6c','center');txt('km/h',842,130,9,'#6b8587','center');
-  roundPanel(818,149,48,198,'#e5efec','#b7ceca',7);
-  const speedH=184*Math.min(1,landingSpeed/120);
-  rect(827,340-speedH,30,speedH,landingSpeed>70?'#d66b55':landingSpeed>35?'#e3b44b':'#4aa879');
-  txt(Math.round(landingSpeed)+'',842,376,20,landingSpeed>70?'#b65343':'#286b76','center');
-  txt('DESCENSO',842,393,8,'#6b8587','center');
-
-  // Altitud y nave en caída vertical.
-  roundPanel(342,82,276,55,'#fffef8','#b9d8d4',9);
-  txt('ALTITUD RESTANTE',480,102,9,'#6b8587','center');
-  txt(Math.max(0,Math.round(landingAltitude))+' m',480,126,17,'#286b76','center');
-  const shipY=165+(650-landingAltitude)*.34;
-  const cx=480;
-  ctx.save();ctx.translate(0,Math.min(150,shipY-165));
-  rect(cx-25,190,50,125,'#f8ffff');ctx.strokeStyle='#8bb5bf';ctx.lineWidth=2;ctx.strokeRect(cx-25,190,50,125);
-  ctx.fillStyle='#fff';ctx.beginPath();ctx.moveTo(cx-25,191);ctx.lineTo(cx,150);ctx.lineTo(cx+25,191);ctx.closePath();ctx.fill();ctx.stroke();
-  rect(cx-20,220,40,7,'#48b5aa');rect(cx-20,270,40,7,'#48b5aa');
-  roundPanel(cx-10,238,20,20,'#d9edf4','#83aeb9',4);
-  ctx.fillStyle='#d7e5e8';ctx.beginPath();ctx.moveTo(cx-25,292);ctx.lineTo(cx-47,325);ctx.lineTo(cx-25,312);ctx.fill();ctx.beginPath();ctx.moveTo(cx+25,292);ctx.lineTo(cx+47,325);ctx.lineTo(cx+25,312);ctx.fill();
-  if(landingThrottle){ctx.fillStyle='#f3a34b';ctx.beginPath();ctx.moveTo(cx-12,315);ctx.lineTo(cx,355+Math.sin(clock*22)*5);ctx.lineTo(cx+12,315);ctx.closePath();ctx.fill();}
-  ctx.restore();
-
-  roundPanel(220,165,180,190,'#fffef8','#b9d8d4',10);
-  txt('CONTROLES',310,190,11,'#397d6c','center');
-  roundPanel(245,208,130,48,'#e4f5ed','#8dc7ae',8);txt('↑  FRENAR',310,238,15,'#286b62','center');
-  txt('Consume combustible',310,276,9,'#a16a37','center');
-  roundPanel(245,296,130,42,'#e8f0f6','#a8c5d0',8);txt('↓  ACELERAR',310,322,13,'#31596a','center');
+  roundPanel(28,12,904,50,'#fffdf5','#b9d8d4',12);txt('VILLA ANURA · REGRESO A LA TIERRA',48,34,14,'#397d6c');txt('MISIÓN 3 · DESCENSO Y ATERRIZAJE CONTROLADO',48,52,10,'#426879');
+  roundPanel(42,88,152,315,'#fffef8','#b9d8d4',10);txt('COMBUSTIBLE',118,113,11,'#397d6c','center');roundPanel(94,137,48,210,'#e5efec','#b7ceca',7);
+  const fuelH=196*(landingFuel/34);rect(103,340-fuelH,30,fuelH,landingFuel>15?'#4aa879':landingFuel>6?'#e3b44b':'#d66b55');txt(Math.round(landingFuel)+'%',118,376,18,'#906a32','center');txt('RESERVA',118,393,8,'#6b8587','center');
+  roundPanel(766,88,152,315,'#fffef8','#b9d8d4',10);txt('VELOCIDAD',842,113,11,'#397d6c','center');txt('km/h',842,130,9,'#6b8587','center');roundPanel(818,149,48,198,'#e5efec','#b7ceca',7);
+  const speedH=184*Math.min(1,landingSpeed/120);rect(827,340-speedH,30,speedH,landingSpeed>75?'#d66b55':landingSpeed>35?'#e3b44b':'#4aa879');txt(Math.round(landingSpeed)+'',842,376,20,landingSpeed>75?'#b65343':'#286b76','center');txt('DESCENSO',842,393,8,'#6b8587','center');
+  roundPanel(342,82,276,55,'#fffef8','#b9d8d4',9);txt('ALTITUD RESTANTE',480,102,9,'#6b8587','center');txt(Math.max(0,Math.round(landingAltitude))+' m',480,126,17,'#286b76','center');
+  const shipY=165+(460-landingAltitude)*.34;ctx.save();ctx.translate(0,Math.min(150,shipY-165));drawRocketProfile(480,320,rocketProfile);if(landingThrottle){ctx.fillStyle='#f3a34b';ctx.beginPath();ctx.moveTo(468,316);ctx.lineTo(480,355+Math.sin(clock*22)*5);ctx.lineTo(492,316);ctx.closePath();ctx.fill();}ctx.restore();
+  roundPanel(220,165,180,190,'#fffef8','#b9d8d4',10);txt('CONTROLES',310,190,11,'#397d6c','center');roundPanel(245,220,130,60,'#e4f5ed','#8dc7ae',8);txt('␣  FRENAR',310,256,15,'#286b62','center');txt('Mantén ESPACIO',310,299,9,'#a16a37','center');
   drawFrog(660,405,0.55);
-  roundPanel(205,505,550,27,'#fffdf5','#b9d8d4',8);
-  txt(landingStatus==='crashed'?'GAME OVER · PULSA R PARA REINTENTAR':landingMessage,480,523,9,landingStatus==='crashed'?'#a34c43':'#426879','center');
-  if(landingStatus==='crashed'){
-    roundPanel(365,365,230,88,'#fff4ed','#d89b81',10);
-    txt('GAME OVER',480,397,19,'#a34c43','center');
-    txt('Pulsa R para volver a intentar',480,426,10,'#875e52','center');
-  }
+  roundPanel(205,505,550,27,'#fffdf5','#b9d8d4',8);txt(landingStatus==='crashed'?'GAME OVER · PULSA R PARA REINTENTAR':landingMessage,480,523,9,landingStatus==='crashed'?'#a34c43':'#426879','center');
+  if(landingStatus==='crashed'){roundPanel(365,365,230,88,'#fff4ed','#d89b81',10);txt('GAME OVER',480,397,19,'#a34c43','center');txt('Pulsa R para volver a intentar',480,426,10,'#875e52','center');}
 }
-
 function victoryScene(){
   const g=ctx.createLinearGradient(0,0,0,H);
   g.addColorStop(0,'#d8eff4');g.addColorStop(.56,'#eff8ef');g.addColorStop(1,'#d4eadb');
@@ -1042,12 +648,13 @@ function drawAudioControl(){
   roundPanel(885,10,58,38,audio.enabled?'#fffdf5':'#e8eded',audio.enabled?'#9fcfc0':'#b8c8c8',10);
   txt(audio.enabled?'♫  ON':'♪  OFF',914,35,10,audio.enabled?'#397d65':'#7b8d8d','center');
 }
-function draw(){ctx.clearRect(0,0,W,H);if(mode==='title')titleScreen();else if(mode==='hangar')controlRoom();else if(mode==='launch')launchScene();else if(mode==='botany')botanyScene();else if(mode==='landing')landingScene();else if(mode==='victory')victoryScene();else if(mode==='flyby')flybyScene();else if(mode==='complete')completeScene();else if(mode==='missed'){flybyScene();roundPanel(280,205,400,115,'#fffef5','#c6e3d7',10);txt('¡EL COMETA YA PASÓ!',480,245,20,'#a66d4d','center');txt('Pulsa R para intentarlo otra vez.',480,277,13,'#547a82','center');}drawLanguageControl();drawAudioControl();}
-function startGame(){if(mode!=='title')return;mode='hangar';missionIndex=0;missionBudget=INITIAL_MISSION_BUDGET;mdlHints=3;selectedResources={};activeCategory=null;say('¡Hola! Soy Flyn. Esta es nuestra misión de exploración espacial. Completa las tres misiones y administra el presupuesto inicial de 7.000 créditos.');audio.start();audio.playMusic();canvas.focus();}
+function draw(){ctx.clearRect(0,0,W,H);if(mode==='title')titleScreen();else if(mode==='hangar')controlRoom();else if(mode==='launch')launchScene();else if(mode==='launchSuccess')launchSuccessScene();else if(mode==='launchSuccess')launchSuccessScene();else if(mode==='botany')botanyScene();else if(mode==='landing')landingScene();else if(mode==='victory')victoryScene();else if(mode==='budgetFailed'){background();roundPanel(180,150,600,230,'#fff4ed','#d89b81',14);txt('MISSION FAILED',480,210,25,'#a34c43','center');wrapText(budgetFailureReason,480,260,500,18,'#875e52','center');txt('PRESS R TO RETURN TO THE HOME MENU',480,330,13,'#15516e','center');}else if(mode==='flyby')flybyScene();else if(mode==='complete')completeScene();else if(mode==='missed'){flybyScene();roundPanel(280,205,400,115,'#fffef5','#c6e3d7',10);txt('¡EL COMETA YA PASÓ!',480,245,20,'#a66d4d','center');txt('Pulsa R para intentarlo otra vez.',480,277,13,'#547a82','center');}drawLanguageControl();drawAudioControl();}
+function startGame(){if(mode!=='title')return;mode='hangar';missionIndex=0;missionBudget=INITIAL_MISSION_BUDGET;mdlHints=3;selectedResources={};activeCategory=null;say('¡Hola! Soy Flyn. Esta es nuestra misión de exploración espacial. Completa las tres misiones y administra el presupuesto inicial de 5.000 créditos.');audio.start();audio.playMusic();canvas.focus();}
 function keyDown(e){
  if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown',' ','Space'].includes(e.key))e.preventDefault();
  keys[e.code]=true;if(e.repeat)return;
  if(e.code==='KeyM'){audio.toggle();return;}
+ if(mode==='budgetFailed'&&e.code==='KeyR'){mode='title';budgetFailureReason='';missionBudget=INITIAL_MISSION_BUDGET;selectedResources={};activeCategory=null;return;}
  if(mode==='title'&&(e.code==='Enter'||e.code==='NumpadEnter')){e.preventDefault();startGame();return;}
  if(mode==='botany'){
    if(e.code==='Escape'){botanyActiveInput=null;return;}
@@ -1069,7 +676,7 @@ function keyDown(e){
    }
    return;
  }
- if(mode==='victory'){
+ if(mode==='budgetFailed'){roundPanel(180,150,600,230,'#fff4ed','#d89b81',14);txt('MISIÓN FALLIDA',480,210,25,'#a34c43','center');wrapText(budgetFailureReason,480,260,500,18,'#875e52','center');txt('PULSA R PARA VOLVER AL MENÚ DE INICIO',480,330,13,'#15516e','center');}
    if(e.code==='Enter'||e.code==='NumpadEnter'){mode='title';return;}
    return;
  }
@@ -1078,10 +685,11 @@ function keyDown(e){
    return;
  }
  if(mode==='hangar'){
+   if(mode==='hangar'&&budgetFailureReason&&e.code==='KeyR'){mode='title';budgetFailureReason='';missionBudget=INITIAL_MISSION_BUDGET;selectedResources={};activeCategory=null;return;}
    if(chosenAllResources()&&(e.code==='Enter'||e.code==='NumpadEnter')){mode='launch';launchTimer=0;activeCategory=null;utilityPanel=null;audio.launch();return;}
    if(activeCategory&&/^Digit[1-8]$/.test(e.code)){
      const cat=resourceCategories.find(v=>v.id===activeCategory),opt=cat.options[Number(e.code.slice(-1))-1];
-     if(opt){const old=selectedResources[cat.id];const mass=totalMass()-(old?old.mass:0)+opt[2];if(missionBudget+(old?old.cost:0)<opt[1])notify('Presupuesto insuficiente.');else if(mass>missionBriefs[missionIndex].limit)notify('La masa supera el límite permitido.');else{if(old)missionBudget+=old.cost;missionBudget-=opt[1];selectedResources[cat.id]={label:opt[0],cost:opt[1],mass:opt[2]};activeCategory=null;actionAnimation=1.8;actionLabel='FLYN INSTALANDO RECURSOS';say('¡Selección confirmada!');audio.confirm();}}
+     if(opt){const old=selectedResources[cat.id];const mass=totalMass()-(old?old.mass:0)+opt[2];if(missionBudget+(old?old.cost:0)<opt[1]){missionBudget=0;budgetFailureReason='¡Agotaste el presupuesto! La misión ha fallado.';frogMood='sad';mode='budgetFailed';audio.bump();}else if(mass>missionBriefs[missionIndex].limit)notify('La masa supera el límite permitido.');else{if(old)missionBudget+=old.cost;missionBudget-=opt[1];selectedResources[cat.id]={label:opt[0],cost:opt[1],mass:opt[2]};activeCategory=null;actionAnimation=1.8;actionLabel='FLYN INSTALANDO RECURSOS';say('¡Selección confirmada!');audio.confirm();}}
    }else if(e.code==='Escape'){activeCategory=null;utilityPanel=null;}return;
  }
  if(mode==='missed'&&e.code==='KeyR'){mode='flyby';cometX=1050;observationWindow=0;missionPhase=0;resetPlayer();return;}
@@ -1097,68 +705,9 @@ function keyDown(e){
    }
  }
 }
-function loop(now){const dt=Math.min(.035,(now-last)/1000||0);last=now;clock+=dt;if(mode==='launch'){launchTimer+=dt;if(launchTimer>3.2){if(missionIndex===0||missionIndex===1){missionIndex=1;mode='botany';botanyFactors={water:null,uv:null,co2:null};botanyActiveInput=null;botanyTested=new Set();botanyResult=null;botanyNotice='Selecciona 0 o 1 en las tres casillas y consulta el resultado.';say('¡Llegamos al espacio! Vamos a iniciar el experimento botánico.');}else{mode='complete';challengeAnswered=false;challengeFeedback='';challengeCorrect=false;}}}if(dialogueTimer>0)dialogueTimer-=dt;if(messageTimer>0)messageTimer-=dt;if(actionAnimation>0)actionAnimation=Math.max(0,actionAnimation-dt);if(mode==='flyby')updateFlyby(dt);if(mode==='landing')updateLanding(dt);draw();requestAnimationFrame(loop);}
-canvas.tabIndex=0;canvas.style.cursor='pointer';document.addEventListener('keydown',keyDown);document.addEventListener('keyup',e=>keys[e.code]=false);window.addEventListener('blur',()=>Object.keys(keys).forEach(k=>keys[k]=false));canvas.addEventListener('pointerdown',(e)=>{canvas.focus();const bounds=canvas.getBoundingClientRect(),px=(e.clientX-bounds.left)*W/bounds.width,py=(e.clientY-bounds.top)*H/bounds.height;if(mode==='title'&&((px>=790&&px<=874&&py>=10&&py<=48)||(px>=885&&px<=943&&py>=10&&py<=48)))return;if(mode==='title')startGame();else if(mode==='complete')keyDown({key:'Enter',code:'Enter',repeat:false,preventDefault(){}});});canvas.addEventListener('click',(e)=>{
-  canvas.focus();
-  const r=canvas.getBoundingClientRect(),x=(e.clientX-r.left)*W/r.width,y=(e.clientY-r.top)*H/r.height;
-  if(x>=790&&x<=874&&y>=10&&y<=48){setGameLanguage(gameLanguage==='en-US'?'es':'en-US');return;}
-  if(x>=885&&x<=943&&y>=10&&y<=48){audio.toggle();return;}
-  if(mode==='title'){startGame();return;}
-  if(mode==='hangar'){
-    if(utilityPanel){if(x<290||x>670||y<145||y>355){utilityPanel=null;return;}return;}
-    if(x>=72&&x<=222&&y>=82&&y<=120){utilityPanel='budget';audio.data();return;}
-    if(x>=230&&x<=380&&y>=82&&y<=120){utilityPanel='mass';audio.data();return;}
-    if(x>=780&&x<=902&&y>=82&&y<=124){
-      if(!activeCategory){notify('Abre primero una categoría para recibir una pista.');return;}
-      if(mdlHints<=0){notify('No quedan pistas disponibles.');return;}
-      mdlHints--;const cat=resourceCategories.find(v=>v.id===activeCategory);
-      hintMessage=({fuel:'Compara la autonomía que necesitas con el peso y el presupuesto: no siempre hace falta la opción mayor.',oxygen:'Elige una reserva que cubra la duración de la misión sin cargar oxígeno innecesario.',aero:'El perfil aerodinámico modifica el consumo durante el vuelo. Según el catálogo, la cónica es la referencia; compara las unidades por segundo antes de elegir.',safety:'Piensa en el riesgo principal de esta misión y elige la protección adecuada.',materials:'Lleva los materiales necesarios para cumplir el objetivo, evitando añadir masa sin utilidad.',technology:'Prioriza la tecnología que permita cumplir el objetivo científico y enviar los datos.'})[cat.id];
-      utilityPanel='hint';audio.data();return;
-    }
-    if(chosenAllResources()&&x>=380&&x<=580&&y>=443&&y<=468){mode='launch';launchTimer=0;activeCategory=null;utilityPanel=null;audio.launch();return;}
-    if(activeCategory){
-      const cat=resourceCategories.find(v=>v.id===activeCategory);
-      if(x>=250&&x<=710&&y>=174&&y<174+cat.options.length*33){
-        const choice=Math.max(0,Math.min(cat.options.length-1,Math.floor((y-174)/33))),opt=cat.options[choice];
-        if(missionBudget<opt[1]){notify('Presupuesto insuficiente. Elige otra opción.');return;}
-        const previous=selectedResources[cat.id];const projectedMass=totalMass()-(previous?previous.mass:0)+opt[2];if(projectedMass>missionBriefs[missionIndex].limit){notify('La masa superaría el límite de '+missionBriefs[missionIndex].limit+' kg. Elige una opción más ligera.');return;}
-        if(selectedResources[cat.id])missionBudget+=selectedResources[cat.id].cost;
-        missionBudget-=opt[1];selectedResources[cat.id]={label:opt[0],cost:opt[1],mass:opt[2]};
-        activeCategory=null;actionAnimation=1.8;actionLabel='FLYN ESTÁ INSTALANDO: '+cat.name;
-        say('¡Recurso instalado!');audio.data();return;
-      }
-      if(x<225||x>735||y<105||y>455){activeCategory=null;return;}
-      return;
-    }
-    const bx=58,by=451,bw=134,gap=8;
-    if(y>=by&&y<=by+66){const i=Math.floor((x-bx)/(bw+gap));if(i>=0&&i<6){activeCategory=resourceCategories[i].id;audio.select();return;}}
-    return;
-  }
-
-  if(mode==='victory'){
-    if(x>=350&&x<=610&&y>=495&&y<=531){mode='title';audio.select();return;}
-    return;
-  }
-  if(mode==='landing'&&landingStatus==='crashed'){beginLandingMission();audio.start();return;}
-  if(mode==='botany'){
-    if(botanyTested.size===7&&x>=755&&x<=915&&y>=478&&y<=513){beginLandingMission();audio.confirm();return;}
-    if(y>=255&&y<=325){
-      if(x>=320&&x<=440){botanyActiveInput='water';botanyNotice='Casilla Agua seleccionada. Escribe 0 o 1.';audio.select();return;}
-      if(x>=530&&x<=650){botanyActiveInput='uv';botanyNotice='Casilla Radiación UV seleccionada. Escribe 0 o 1.';audio.select();return;}
-      if(x>=740&&x<=860){botanyActiveInput='co2';botanyNotice='Casilla CO₂ seleccionada. Escribe 0 o 1.';audio.select();return;}
-    }
-    if(x>=480&&x<=706&&y>=378&&y<=407){
-      if(Object.values(botanyFactors).some(v=>v===null)){botanyNotice='Completa las tres casillas: escribe 0 o 1 en cada una.';return;}
-      const key=botanyKey();
-      if(key==='000'){botanyNotice='La combinación 000 no está incluida en el Excel. Prueba otra combinación.';botanyResult=null;return;}
-      const result=botanyExperiments[key];
-      if(!result){botanyNotice='Esta combinación no está incluida en los siete resultados del Excel.';return;}
-      botanyTested.add(key);botanyResult=result;botanyNotice='Experimento ejecutado.';botanyActiveInput=null;audio.experiment();return;
-    }
-    return;
-  }
-  if(mode==='complete'&&!challengeCorrect){
-    const choice=y>=251&&y<=299?0:y>=310&&y<=358?1:-1;
-    if(choice>=0){const q=missionChallenges[missionIndex];challengeCorrect=choice===q.correct;challengeFeedback=challengeCorrect?q.why:'No es la mejor decisión. Revisa el objetivo e inténtalo otra vez.';if(challengeCorrect){audio.win();if(!completedMissions.includes(missionIndex)){earnedStars+=2;completedMissions.push(missionIndex);saveProgress();}}else audio.data();}
-  }
-});;requestAnimationFrame(loop);
+function loop(now){
+ const dt=Math.min(.035,(now-last)/1000||0);last=now;clock+=dt;
+ if(mode==='launch'){launchTimer+=dt;if(launchTimer>3.2){mode='launchSuccess';launchTimer=0;audio.confirm();}}
+ if(mode==='launchSuccess'){launchTimer+=dt;if(launchTimer>2.6){missionIndex=1;mode='botany';botanyFactors={water:null,uv:null,co2:null};botanyActiveInput=null;botanyTested=new Set();botanyResult=null;botanyNotice='Selecciona 0 o 1 en las tres casillas y consulta el resultado.';say('¡Todo en orden! La nave está lista. Podemos avanzar con la misión 2.');}}
+ if(dialogueTimer>0)dialogueTimer-=dt;if(messageTimer>0)messageTimer-=dt;if(actionAnimation>0)actionAnimation=Math.max(0,actionAnimation-dt);if(mode==='flyby')updateFlyby(dt);if(mode==='landing')updateLanding(dt);draw();requestAnimationFrame(loop);
+}
