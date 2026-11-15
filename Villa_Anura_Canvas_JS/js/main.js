@@ -6,6 +6,192 @@ const ctx = canvas.getContext('2d');
 const W = 960, H = 540;
 const progress = new Progress();
 const audio = new AudioManager();
+const EN_US_TRANSLATIONS={
+  "VILLA ANURA · LABORATORIO ORBITAL": "VILLA ANURA · ORBITAL LAB",
+  "MISIÓN 2 · EXPERIMENTO DE BOTÁNICA EN AUSENCIA DE GRAVEDAD": "MISSION 2 · BOTANY EXPERIMENT IN MICROGRAVITY",
+  "Completa las tres casillas escribiendo 0 o 1 en cada una.": "Fill in all three boxes with 0 or 1.",
+  "Agua · Radiación UV · CO₂": "Water · UV Radiation · CO₂",
+  "FLYN · OPERADORA": "FLYN · FLIGHT OPERATOR",
+  "SISTEMA": "SYSTEM",
+  "BOTÁNICO": "BOTANY",
+  "Escribe 0 o 1": "Enter 0 or 1",
+  "CONFIGURACIÓN DE VARIABLES": "VARIABLE CONFIGURATION",
+  "AGUA": "WATER",
+  "RADIACIÓN UV": "UV RADIATION",
+  "0 o 1": "0 or 1",
+  "Haz clic en una casilla y escribe 0 o 1.": "Click a box and enter 0 or 1.",
+  "Usa Retroceso para borrar el valor de la casilla seleccionada.": "Press Backspace to clear the selected box.",
+  "CONSULTAR RESULTADO ▶": "VIEW RESULT ▶",
+  "RESULTADO DEL EXPERIMENTO": "EXPERIMENT RESULT",
+  "PRUEBAS: ": "TRIALS: ",
+  "CONTINUAR ▶": "CONTINUE ▶",
+  "VILLA ANURA  ·  CENTRO DE CONTROL": "VILLA ANURA · MISSION CONTROL",
+  "ESTRELLAS": "STARS",
+  "MISIÓN 1 / 3  ·  DISEÑO Y PREPARACIÓN": "MISSION 1 / 3 · SPACECRAFT DESIGN & PREPARATION",
+  "SEIS SISTEMAS PARA CONFIGURAR LA NAVE": "SIX SYSTEMS TO CONFIGURE YOUR SPACECRAFT",
+  "COMBUSTIBLE": "FUEL",
+  "OXÍGENO": "OXYGEN",
+  "AERODINÁMICA": "AERODYNAMICS",
+  "SEGURIDAD": "SAFETY",
+  "MATERIALES": "MATERIALS",
+  "TECNOLOGÍA": "TECHNOLOGY",
+  "MASA": "MASS",
+  "MDL": "HINTS",
+  "¡LOS SEIS SISTEMAS ESTÁN LISTOS!": "ALL SIX SYSTEMS ARE READY!",
+  "LANZAR MISIÓN  ▶": "LAUNCH MISSION ▶",
+  "RECURSOS PREPARADOS  ": "SYSTEMS CONFIGURED  ",
+  "SALDO DISPONIBLE  $ ": "AVAILABLE BALANCE  $ ",
+  "✓ SELECCIONADO": "✓ SELECTED",
+  "VER OPCIONES": "VIEW OPTIONS",
+  "ELIGE UNA OPCIÓN": "SELECT AN OPTION",
+  "Selecciona una alternativa para configurar este sistema.": "Select an option to configure this system.",
+  "ELEGIR": "SELECT",
+  "Pulsa el número correspondiente · ESC para cerrar": "Press the matching number · ESC to close",
+  "CONTROL DE MASA": "MASS CHECK",
+  "PRESUPUESTO DE MISIÓN": "MISSION BUDGET",
+  "PISTA DE FLYN": "FLYN'S HINT",
+  "MASA INSTALADA": "INSTALLED MASS",
+  "Suma de los recursos seleccionados": "Total mass of selected systems",
+  "Presupuesto restante para esta misión": "Remaining budget for this mission",
+  "Abre una categoría inferior y solicita una pista para recibir ayuda.": "Open a system category and request a hint for help.",
+  "Pistas restantes: ": "HINTS LEFT: ",
+  "Pulsa ESC o haz clic fuera para cerrar": "Press ESC or click outside to close",
+  "VILLA ANURA": "VILLA ANURA",
+  "HANGAR ESPACIAL": "SPACE HANGAR",
+  "¡BIENVENIDO, EXPLORADOR!": "WELCOME, EXPLORER!",
+  "Soy Flyn. Prepárate para diseñar": "I'm Flyn. Get ready to design",
+  "y lanzar nuestras misiones espaciales.": "and launch our space missions.",
+  "PRESIONA  ENTER  PARA JUGAR": "PRESS ENTER TO PLAY",
+  "Acércate a una consola para instalar sus sistemas.": "Move closer to a console to install its systems.",
+  "Ese sistema ya está instalado. ¡Bien hecho!": "That system is already installed. Well done!",
+  "¡Todos los sistemas listos! Pulsa ENTER para despegar.": "All systems are ready! Press ENTER to launch.",
+  "NAVE PREPARADA": "SPACECRAFT READY",
+  "¡Despegue! El cometa se aproxima por la derecha.": "Liftoff! The comet is approaching from the right.",
+  "SOBREVUELO · COMETA AURELIA": "FLYBY · AURELIA COMET",
+  "DATOS ": "DATA ",
+  "VENTANA DE OBSERVACIÓN": "OBSERVATION WINDOW",
+  "¡Pulsa E cuando el cometa esté cerca!": "Press E when the comet is nearby!",
+  "¡Foto capturada! Pulsa E para guardar.": "Image captured! Press E to save.",
+  "Datos guardados. Pulsa E para transmitir.": "Data saved. Press E to transmit.",
+  "¡Datos enviados a la Tierra!": "Data transmitted to Earth!",
+  "¡El cometa está en el campo de visión! Pulsa E ahora.": "The comet is in view! Press E now.",
+  "El cometa pasó. Pulsa R para repetir el sobrevuelo.": "The comet passed. Press R to retry the flyby.",
+  "¡Imagen capturada! Ahora guarda los datos en la memoria.": "Image captured! Now save the data to memory.",
+  "Datos almacenados. Orienta la antena para transmitir.": "Data stored. Aim the antenna to transmit.",
+  "¡La Tierra recibió los datos! Misión completada.": "Earth received the data! Mission complete.",
+  "¡MISIÓN ": "MISSION ",
+  " COMPLETADA!": " COMPLETE!",
+  "DESAFÍO DE LA MISIÓN ": "MISSION CHALLENGE ",
+  "Selecciona la decisión más adecuada:": "Choose the best decision:",
+  "PULSA A O B PARA RESPONDER": "PRESS A OR B TO ANSWER",
+  "ENTER · FINALIZAR CAMPAÑA": "ENTER · FINISH CAMPAIGN",
+  "ENTER · SIGUIENTE MISIÓN": "ENTER · NEXT MISSION",
+  "★ +2 ESTRELLAS": "★ +2 STARS",
+  "LANZAMIENTO DE MISIÓN": "MISSION LAUNCH",
+  "¡Todos los sistemas están preparados! Flyn está despegando.": "All systems are ready! Flyn is launching.",
+  "¡Regresamos a la Tierra! Usa las flechas para controlar el descenso y conserva combustible para frenar antes de tocar el suelo.": "We're returning to Earth! Use the arrow keys to control your descent and save fuel for braking before touchdown.",
+  "VILLA ANURA · REGRESO A LA TIERRA": "VILLA ANURA · RETURN TO EARTH",
+  "MISIÓN 3 · DESCENSO Y ATERRIZAJE CONTROLADO": "MISSION 3 · CONTROLLED DESCENT & LANDING",
+  "RESERVA": "REMAINING FUEL",
+  "VELOCIDAD": "SPEED",
+  "km/h": "km/h",
+  "DESCENSO": "DESCENT",
+  "ALTITUD RESTANTE": "ALTITUDE REMAINING",
+  "CONTROLES": "CONTROLS",
+  "↑  FRENAR": "↑  BRAKE",
+  "Consume combustible": "Uses fuel",
+  "↓  ACELERAR": "↓  ACCELERATE",
+  "GAME OVER · PULSA R PARA REINTENTAR": "GAME OVER · PRESS R TO RETRY",
+  "¡CAMPAÑA COMPLETADA!": "CAMPAIGN COMPLETE!",
+  "MISIÓN CUMPLIDA · REGRESO SEGURO A LA TIERRA": "MISSION ACCOMPLISHED · SAFE RETURN TO EARTH",
+  "¡Flyn celebra tu gran aterrizaje!": "Flyn celebrates your safe landing!",
+  "CERTIFICADO": "CERTIFICATE",
+  "DE EXPLORADOR ESPACIAL": "SPACE EXPLORER",
+  "Se reconoce tu habilidad para:": "This certificate recognizes your ability to:",
+  "DISEÑAR · EXPERIMENTAR · ATERRIZAR": "DESIGN · EXPERIMENT · LAND",
+  "Completaste las tres misiones de Villa Anura y lograste un regreso seguro a la Tierra.": "You completed all three Villa Anura missions and returned safely to Earth.",
+  "VILLA ANURA · ACADEMIA DE EXPLORACIÓN": "VILLA ANURA · EXPLORER ACADEMY",
+  "RECOMPENSAS": "REWARDS",
+  "★  +3 ESTRELLAS": "★  +3 STARS",
+  "🎟  +5 TICKETS": "🎟  +5 TICKETS",
+  "★  MEDALLA DE ORO": "★  GOLD MEDAL",
+  "VOLVER AL INICIO": "BACK TO HOME",
+  "FLYN ESTÁ INSTALANDO RECURSOS": "FLYN IS INSTALLING SYSTEMS",
+  "¡Selección confirmada!": "Selection confirmed!",
+  "FLYN ESTÁ INSTALANDO: ": "FLYN IS INSTALLING: ",
+  "¡Recurso instalado!": "System installed!",
+  "¡Hola! Soy Flyn. Esta es nuestra misión de exploración espacial. Completa las tres misiones y administra el presupuesto inicial de 7.000 créditos.": "Hi! I'm Flyn. Welcome to our space exploration mission. Complete all three missions and manage your starting budget of 7,000 credits.",
+  "¡Llegamos al espacio! Vamos a iniciar el experimento botánico.": "We've reached space! Let's begin the botany experiment.",
+  "Selecciona 0 o 1 en las tres casillas y consulta el resultado.": "Choose 0 or 1 in all three boxes, then view the result.",
+  "Selecciona 0 o 1 en cada casilla.": "Select 0 or 1 in each box.",
+  "Valor registrado. Completa las otras casillas y consulta el resultado.": "Value recorded. Complete the other boxes and view the result.",
+  "Casilla vacía. Escribe 0 o 1.": "Box cleared. Enter 0 or 1.",
+  "Casilla Agua seleccionada. Escribe 0 o 1.": "Water box selected. Enter 0 or 1.",
+  "Casilla Radiación UV seleccionada. Escribe 0 o 1.": "UV Radiation box selected. Enter 0 or 1.",
+  "Casilla CO₂ seleccionada. Escribe 0 o 1.": "CO₂ box selected. Enter 0 or 1.",
+  "Completa las tres casillas: escribe 0 o 1 en cada una.": "Complete all three boxes: enter 0 or 1 in each one.",
+  "La combinación 000 no está incluida en el Excel. Prueba otra combinación.": "Combination 000 is not included in the dataset. Try another combination.",
+  "Esta combinación no está incluida en los siete resultados del Excel.": "This combination is not included among the seven dataset results.",
+  "Experimento ejecutado.": "Experiment complete.",
+  "Completa las tres misiones y administra el presupuesto inicial de 7.000 créditos.": "Complete all three missions and manage the starting budget of 7,000 credits.",
+  "Continúa la primera misión administrando el presupuesto de 7.000 créditos.": "Continue the first mission and manage the 7,000-credit budget.",
+  "Compara la autonomía que necesitas con el peso y el presupuesto: no siempre hace falta la opción mayor.": "Compare the range you need with the spacecraft's weight and budget. The largest option isn't always necessary.",
+  "Elige una reserva que cubra la duración de la misión sin cargar oxígeno innecesario.": "Choose an oxygen reserve that covers the mission without adding unnecessary weight.",
+  "El perfil aerodinámico modifica el consumo durante el vuelo. Según el catálogo, la cónica es la referencia; compara las unidades por segundo antes de elegir.": "The aerodynamic profile affects fuel use during flight. The catalog lists the conical profile as a reference; compare the units per second before choosing.",
+  "Piensa en el riesgo principal de esta misión y elige la protección adecuada.": "Consider the mission's main risk and choose the right protection.",
+  "Lleva los materiales necesarios para cumplir el objetivo, evitando añadir masa sin utilidad.": "Choose the materials needed for the mission without adding unnecessary mass.",
+  "Prioriza la tecnología que permita cumplir el objetivo científico y enviar los datos.": "Prioritize technology that supports the science objectives and data transmission.",
+  "¡Los seis sistemas están listos!": "All six systems are ready!",
+  "Los seis sistemas están listos": "All six systems are ready",
+  "Presupuesto insuficiente. Elige otra opción.": "Insufficient funds. Choose another option.",
+  "La masa superaría el límite de ": "The spacecraft mass would exceed the limit of ",
+  " kg. Elige una opción más ligera.": " kg. Choose a lighter option.",
+  "Abre primero una categoría para recibir una pista.": "Open a system category before requesting a hint.",
+  "No quedan pistas disponibles.": "No hints remaining.",
+  "Abre una categoría y solicita una pista para recibir ayuda.": "Open a system category and request a hint for help.",
+  "¡Bienvenido al laboratorio! Configura agua, radiación UV y CO₂.": "Welcome to the lab! Configure water, UV radiation, and CO₂.",
+  "¡Aterrizaje seguro! Has controlado la velocidad y el combustible.": "Safe landing! You controlled your speed and fuel.",
+  "Propulsor activo: reduces la velocidad, pero consumes combustible.": "Thruster active: you're slowing down, but using fuel.",
+  "Acelerando el descenso: aumenta la velocidad de impacto.": "Accelerating descent: impact speed is increasing.",
+  "Combustible agotado: no puedes activar el propulsor.": "Out of fuel: the thruster can no longer fire.",
+  "Caída por gravedad: decide cuándo frenar.": "Gravity is increasing your descent speed. Decide when to brake.",
+  "GAME OVER · La nave llegó con demasiada velocidad.": "GAME OVER · The spacecraft hit the ground too fast.",
+  "¡Campaña completada! Has realizado el experimento botánico y regresado a la Tierra con un aterrizaje seguro.": "Campaign complete! You finished the botany experiment and returned safely to Earth.",
+  "¡Misión completada!": "Mission complete!",
+  "Elige una opción para configurar este sistema.": "Choose an option to configure this system.",
+  "COMBINACIÓN ": "COMBINATION ",
+  "Fuente: ": "Source: ",
+  "FLYN": "FLYN",
+  "Selección confirmada": "Selection confirmed"
+};
+let gameLanguage='en-US';
+try{gameLanguage=localStorage.getItem('villaAnuraLanguage')||'en-US';}catch{}
+function tr(value){
+  let raw=String(value);
+  if(gameLanguage==='es')return raw;
+  if(Object.prototype.hasOwnProperty.call(EN_US_TRANSLATIONS,raw))return EN_US_TRANSLATIONS[raw];
+  const option=raw.match(/^(\\d+\\.\\s+)(.+)$/);
+  if(option)return option[1]+tr(option[2]);
+  if(raw.startsWith('COMBINACIÓN '))return 'COMBINATION '+raw.slice('COMBINACIÓN '.length);
+  if(raw.startsWith('Fuente: '))return 'Source: '+raw.slice('Fuente: '.length);
+  if(raw.startsWith('PRUEBAS: '))return 'TRIALS: '+raw.slice('PRUEBAS: '.length);
+  if(raw.startsWith('ESTRELLAS'))return 'STARS'+raw.slice('ESTRELLAS'.length);
+  if(raw.startsWith('FLYN ESTÁ INSTALANDO: '))return 'FLYN IS INSTALLING: '+tr(raw.slice('FLYN ESTÁ INSTALANDO: '.length));
+  if(raw.startsWith('¡MISIÓN ')&&raw.endsWith(' COMPLETADA!'))return raw.replace('¡MISIÓN ','MISSION ').replace(' COMPLETADA!',' COMPLETE!');
+  if(raw.startsWith('MISIÓN ')&&raw.includes(' · '))return raw.replace('MISIÓN ','MISSION ');
+  return raw;
+}
+function setGameLanguage(next){
+  gameLanguage=next==='es'?'es':'en-US';
+  try{localStorage.setItem('villaAnuraLanguage',gameLanguage);}catch{}
+  document.documentElement.lang=gameLanguage;
+  document.title=gameLanguage==='en-US'?'Villa Anura — Space Mission Game':'Villa Anura — Videojuego';
+  canvas.setAttribute('aria-label',gameLanguage==='en-US'?'Villa Anura video game':'Videojuego Villa Anura');
+  audio.select();
+}
+document.documentElement.lang=gameLanguage;
+document.title=gameLanguage==='en-US'?'Villa Anura — Space Mission Game':'Villa Anura — Videojuego';
+
 
 const player = { x: 118, y: 420, w: 34, h: 42, vx: 0, vy: 0, grounded: true, facing: 1, anim: 0 };
 const keys = {};
@@ -43,7 +229,7 @@ const resourceCategories=[
 ];
 let particles = [], pulse = 0, message = '', messageTimer = 0, jumpWasDown = false;
 function totalMass(){return Object.values(selectedResources).reduce((sum,item)=>sum+(item.mass||0),0);}
-function wrapText(value,x,y,maxWidth,lineHeight,color='#426879',align='center'){const words=String(value).split(' '),lines=[];let line='';ctx.font='bold 11px system-ui';for(const word of words){const test=line?line+' '+word:word;if(ctx.measureText(test).width>maxWidth&&line){lines.push(line);line=word;}else line=test;}if(line)lines.push(line);ctx.fillStyle=color;ctx.textAlign=align;lines.slice(0,3).forEach((row,i)=>ctx.fillText(row,x,y+i*lineHeight));ctx.textAlign='left';}
+function wrapText(value,x,y,maxWidth,lineHeight,color='#426879',align='center'){const words=tr(value).split(' '),lines=[];let line='';ctx.font='bold 11px system-ui';for(const word of words){const test=line?line+' '+word:word;if(ctx.measureText(test).width>maxWidth&&line){lines.push(line);line=word;}else line=test;}if(line)lines.push(line);ctx.fillStyle=color;ctx.textAlign=align;lines.slice(0,3).forEach((row,i)=>ctx.fillText(row,x,y+i*lineHeight));ctx.textAlign='left';}
 function chosenAllResources(){return Object.keys(selectedResources).length===6;}
 
 const botanyExperiments = {
@@ -125,11 +311,11 @@ const stations = [
 ];
 
 function rect(x,y,w,h,color){ctx.fillStyle=color;ctx.fillRect(Math.round(x),Math.round(y),Math.round(w),Math.round(h));}
-function txt(value,x,y,size=14,color='#36576a',align='left'){ctx.fillStyle=color;ctx.font='bold '+size+'px system-ui';ctx.textAlign=align;ctx.fillText(value,x,y);ctx.textAlign='left';}
+function txt(value,x,y,size=14,color='#36576a',align='left'){ctx.fillStyle=color;ctx.font='bold '+size+'px system-ui';ctx.textAlign=align;ctx.fillText(tr(value),x,y);ctx.textAlign='left';}
 function panel(x,y,w,h,fill='#fffdf5',stroke='#cfe4d8'){rect(x,y,w,h,fill);rect(x,y,w,3,stroke);rect(x,y+h-3,w,3,stroke);rect(x,y,3,h,stroke);rect(x+w-3,y,3,h,stroke);}
 function roundPanel(x,y,w,h,fill='#fffdf5',stroke='#cfe4d8',r=10){ctx.fillStyle=fill;ctx.strokeStyle=stroke;ctx.lineWidth=2;ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill();ctx.stroke();}
-function say(t){dialogue=t;dialogueTimer=3.8;}
-function notify(t){message=t;messageTimer=2.2;}
+function say(t){dialogue=tr(t);dialogueTimer=3.8;}
+function notify(t){message=tr(t);messageTimer=2.2;}
 function planet(x,y,r,color){ctx.fillStyle=color;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();ctx.fillStyle='#ffffff45';ctx.beginPath();ctx.ellipse(x-r*.2,y-r*.25,r*.55,r*.17,-.4,0,Math.PI*2);ctx.fill();}
 function stars(){for(let i=0;i<50;i++){const x=(i*191-clock*(i%3+1)*5)%W;const y=(i*79)%300;rect((x+W)%W,y,2+(i%3===0?1:0),2,'#ffffffaa');}}
 function drawFrog(x,y,scale=1){
@@ -217,7 +403,7 @@ function controlRoom(){
   txt('SEIS SISTEMAS PARA CONFIGURAR LA NAVE',48,64,9,'#66828a');
   // Presupuesto y masa como controles visibles en la esquina izquierda
   roundPanel(38,70,150,42,'#fff0bd','#e4bd55',10);
-  txt('$ '+missionBudget.toLocaleString('es-CO'),113,97,18,'#8b5b23','center');
+  txt('$ '+missionBudget.toLocaleString(gameLanguage==='en-US'?'en-US':'es-CO'),113,97,18,'#8b5b23','center');
   roundPanel(38,119,150,38,'#ffd13e','#e4b52e',10);
   txt('MASA  ·  '+totalMass().toFixed(1)+' kg',113,143,12,'#8b315f','center');
   // MDL es el botón de pistas
@@ -248,7 +434,7 @@ function controlRoom(){
   if(actionAnimation>0){roundPanel(335,356,290,28,'#fffdf4','#c5ded8',8);txt(actionLabel,480,375,10,'#397c68','center');}
   ctx.restore();
   // Controles superiores al frente de la pantalla: presupuesto, masa y pistas
-  roundPanel(72,82,150,38,'#fff0bd','#e4bd55',10);txt('$ '+missionBudget.toLocaleString('es-CO'),147,107,16,'#8b5b23','center');
+  roundPanel(72,82,150,38,'#fff0bd','#e4bd55',10);txt('$ '+missionBudget.toLocaleString(gameLanguage==='en-US'?'en-US':'es-CO'),147,107,16,'#8b5b23','center');
   roundPanel(230,82,150,38,'#ffd13e','#e4b52e',10);txt('MASA  '+totalMass().toFixed(1)+' / '+missionBriefs[missionIndex].limit+' kg',305,107,11,'#8b315f','center');
   roundPanel(780,82,122,42,'#ffd13e','#e4b52e',20);txt('MDL  '+mdlHints,841,109,16,'#8b315f','center');
   // Objetivo de la misión siempre visible en el escenario
@@ -258,7 +444,7 @@ function controlRoom(){
   const chosen=Object.keys(selectedResources).length;
   roundPanel(75,408,810,32,'#fffdf5','#c8ded8',9);
   if(chosen===6){txt('¡LOS SEIS SISTEMAS ESTÁN LISTOS!',480,429,12,'#397d65','center');roundPanel(380,443,200,25,'#ffd13e','#e4b52e',9);txt('LANZAR MISIÓN  ▶',480,460,11,'#754c24','center');}
-  else{txt('RECURSOS PREPARADOS  '+chosen+'/6',94,429,11,'#477b6c');txt('SALDO DISPONIBLE  $ '+missionBudget.toLocaleString('es-CO'),866,429,11,'#8b672e','right');}
+  else{txt('RECURSOS PREPARADOS  '+chosen+'/6',94,429,11,'#477b6c');txt('SALDO DISPONIBLE  $ '+missionBudget.toLocaleString(gameLanguage==='en-US'?'en-US':'es-CO'),866,429,11,'#8b672e','right');}
   // seis botones inferiores
   const startX=58, gap=8, bw=134, by=451;
   resourceCategories.forEach((cat,i)=>{
@@ -293,7 +479,7 @@ function controlRoom(){
       txt(totalMass().toFixed(1)+' kg',480,269,24,'#397d65','center');
       txt('Suma de los recursos seleccionados',480,296,10,'#66828a','center');
     }else if(utilityPanel==='budget'){
-      txt('SALDO DISPONIBLE',480,235,11,'#66828a','center');txt('$ '+missionBudget.toLocaleString('es-CO'),480,269,24,'#397d65','center');txt('Presupuesto restante para esta misión',480,296,10,'#66828a','center');
+      txt('SALDO DISPONIBLE',480,235,11,'#66828a','center');txt('$ '+missionBudget.toLocaleString(gameLanguage==='en-US'?'en-US':'es-CO'),480,269,24,'#397d65','center');txt('Presupuesto restante para esta misión',480,296,10,'#66828a','center');
     }else{
       const hint=hintMessage||'Abre una categoría inferior y solicita una pista para recibir ayuda.';
       wrapText(hint,480,237,290,15,'#426879','center');
@@ -546,11 +732,15 @@ function victoryScene(){
   roundPanel(350,495,260,36,'#15516e','#58c9cf',9);
   txt('VOLVER AL INICIO',480,518,11,'#ffffff','center');
 }
+function drawLanguageControl(){
+  roundPanel(790,10,84,38,'#fffdf5','#9fcfc0',10);
+  txt(gameLanguage==='en-US'?'🌐 EN-US':'🌐 ES',832,35,10,'#397d65','center');
+}
 function drawAudioControl(){
   roundPanel(885,10,58,38,audio.enabled?'#fffdf5':'#e8eded',audio.enabled?'#9fcfc0':'#b8c8c8',10);
   txt(audio.enabled?'♫  ON':'♪  OFF',914,35,10,audio.enabled?'#397d65':'#7b8d8d','center');
 }
-function draw(){ctx.clearRect(0,0,W,H);if(mode==='title')titleScreen();else if(mode==='hangar')controlRoom();else if(mode==='launch')launchScene();else if(mode==='botany')botanyScene();else if(mode==='landing')landingScene();else if(mode==='victory')victoryScene();else if(mode==='flyby')flybyScene();else if(mode==='complete')completeScene();else if(mode==='missed'){flybyScene();roundPanel(280,205,400,115,'#fffef5','#c6e3d7',10);txt('¡EL COMETA YA PASÓ!',480,245,20,'#a66d4d','center');txt('Pulsa R para intentarlo otra vez.',480,277,13,'#547a82','center');}drawAudioControl();}
+function draw(){ctx.clearRect(0,0,W,H);if(mode==='title')titleScreen();else if(mode==='hangar')controlRoom();else if(mode==='launch')launchScene();else if(mode==='botany')botanyScene();else if(mode==='landing')landingScene();else if(mode==='victory')victoryScene();else if(mode==='flyby')flybyScene();else if(mode==='complete')completeScene();else if(mode==='missed'){flybyScene();roundPanel(280,205,400,115,'#fffef5','#c6e3d7',10);txt('¡EL COMETA YA PASÓ!',480,245,20,'#a66d4d','center');txt('Pulsa R para intentarlo otra vez.',480,277,13,'#547a82','center');}drawLanguageControl();drawAudioControl();}
 function startGame(){if(mode!=='title')return;mode='hangar';missionIndex=0;missionBudget=INITIAL_MISSION_BUDGET;mdlHints=3;selectedResources={};activeCategory=null;say('¡Hola! Soy Flyn. Esta es nuestra misión de exploración espacial. Completa las tres misiones y administra el presupuesto inicial de 7.000 créditos.');audio.start();audio.playMusic();canvas.focus();}
 function keyDown(e){
  if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown',' ','Space'].includes(e.key))e.preventDefault();
@@ -606,9 +796,10 @@ function keyDown(e){
  }
 }
 function loop(now){const dt=Math.min(.035,(now-last)/1000||0);last=now;clock+=dt;if(mode==='launch'){launchTimer+=dt;if(launchTimer>3.2){if(missionIndex===0||missionIndex===1){missionIndex=1;mode='botany';botanyFactors={water:null,uv:null,co2:null};botanyActiveInput=null;botanyTested=new Set();botanyResult=null;botanyNotice='Selecciona 0 o 1 en las tres casillas y consulta el resultado.';say('¡Llegamos al espacio! Vamos a iniciar el experimento botánico.');}else{mode='complete';challengeAnswered=false;challengeFeedback='';challengeCorrect=false;}}}if(dialogueTimer>0)dialogueTimer-=dt;if(messageTimer>0)messageTimer-=dt;if(actionAnimation>0)actionAnimation=Math.max(0,actionAnimation-dt);if(mode==='flyby')updateFlyby(dt);if(mode==='landing')updateLanding(dt);draw();requestAnimationFrame(loop);}
-canvas.tabIndex=0;canvas.style.cursor='pointer';document.addEventListener('keydown',keyDown);document.addEventListener('keyup',e=>keys[e.code]=false);window.addEventListener('blur',()=>Object.keys(keys).forEach(k=>keys[k]=false));canvas.addEventListener('pointerdown',(e)=>{canvas.focus();const bounds=canvas.getBoundingClientRect(),px=(e.clientX-bounds.left)*W/bounds.width,py=(e.clientY-bounds.top)*H/bounds.height;if(mode==='title'&&px>=885&&px<=943&&py>=10&&py<=48)return;if(mode==='title')startGame();else if(mode==='complete')keyDown({key:'Enter',code:'Enter',repeat:false,preventDefault(){}});});canvas.addEventListener('click',(e)=>{
+canvas.tabIndex=0;canvas.style.cursor='pointer';document.addEventListener('keydown',keyDown);document.addEventListener('keyup',e=>keys[e.code]=false);window.addEventListener('blur',()=>Object.keys(keys).forEach(k=>keys[k]=false));canvas.addEventListener('pointerdown',(e)=>{canvas.focus();const bounds=canvas.getBoundingClientRect(),px=(e.clientX-bounds.left)*W/bounds.width,py=(e.clientY-bounds.top)*H/bounds.height;if(mode==='title'&&((px>=790&&px<=874&&py>=10&&py<=48)||(px>=885&&px<=943&&py>=10&&py<=48)))return;if(mode==='title')startGame();else if(mode==='complete')keyDown({key:'Enter',code:'Enter',repeat:false,preventDefault(){}});});canvas.addEventListener('click',(e)=>{
   canvas.focus();
   const r=canvas.getBoundingClientRect(),x=(e.clientX-r.left)*W/r.width,y=(e.clientY-r.top)*H/r.height;
+  if(x>=790&&x<=874&&y>=10&&y<=48){setGameLanguage(gameLanguage==='en-US'?'es':'en-US');return;}
   if(x>=885&&x<=943&&y>=10&&y<=48){audio.toggle();return;}
   if(mode==='title'){startGame();return;}
   if(mode==='hangar'){
