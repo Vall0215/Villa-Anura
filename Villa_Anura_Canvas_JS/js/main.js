@@ -95,6 +95,18 @@ const EN_US_TRANSLATIONS={
   "¡Regresamos a la Tierra! Usa las flechas para controlar el descenso y conserva combustible para frenar antes de tocar el suelo.": "We're returning to Earth! Use the arrow keys to control your descent and save fuel for braking before touchdown.",
   "VILLA ANURA · REGRESO A LA TIERRA": "VILLA ANURA · RETURN TO EARTH",
   "MISIÓN 3 · DESCENSO Y ATERRIZAJE CONTROLADO": "MISSION 3 · CONTROLLED DESCENT & LANDING",
+  "FRENADO ACTIVO · Suelta ESPACIO al llegar a 18 km/h. Vigila el combustible.": "BRAKES ACTIVE · Release SPACE at 18 km/h. Watch your fuel.",
+  "SIN COMBUSTIBLE · Ya no puedes frenar.": "OUT OF FUEL · You can no longer brake.",
+  "GRAVEDAD ACTIVA · Mantén ESPACIO para reducir la velocidad.": "GRAVITY ACTIVE · Hold SPACE to slow down.",
+  "MISIÓN FALLIDA · Te quedaste sin combustible antes de aterrizar.": "MISSION FAILED · You ran out of fuel before touchdown.",
+  "MISIÓN FALLIDA · Superaste la velocidad máxima de aterrizaje (18 km/h).": "MISSION FAILED · You exceeded the maximum landing speed (18 km/h).",
+  "LÍNEA DE ATERRIZAJE · 0 m": "TOUCHDOWN LINE · 0 m",
+  "MISIÓN FALLIDA · PRESIONA R PARA REINTENTAR": "MISSION FAILED · PRESS R TO RETRY",
+  "PRESIONA R PARA REINTENTAR": "PRESS R TO RETRY",
+  "OBJETIVO DE ATERRIZAJE": "LANDING TARGET",
+  "MANTÉN ESPACIO": "HOLD SPACE",
+  "Pulsa para reducir velocidad": "Press to slow down",
+  "FRENANDO AHORA": "BRAKING NOW"
   "RESERVA": "REMAINING FUEL",
   "VELOCIDAD": "SPEED",
   "km/h": "km/h",
@@ -732,7 +744,7 @@ function updateLanding(dt){
       awardCampaignVictory();mode='victory';audio.stopMusic();audio.landing();setTimeout(()=>audio.certificate(),220);
     }else{
       landingStatus='crashed';
-      landingMessage=landingFuel<=0?'GAME OVER · Te quedaste sin combustible antes de aterrizar.':'GAME OVER · Superaste la velocidad máxima de aterrizaje (18 km/h).';
+      landingMessage=landingFuel<=0?'MISIÓN FALLIDA · Te quedaste sin combustible antes de aterrizar.':'MISIÓN FALLIDA · Superaste la velocidad máxima de aterrizaje (18 km/h).';
       setFrogMood('sad',8);audio.bump();
     }
   }
@@ -760,14 +772,14 @@ function landingScene(){
   drawFrog(660,405,0.55);
   // Aterrizaje: línea de contacto visible y plataforma claramente delimitada.
   rect(0,431,W,4,'#e4bd4f');rect(365,426,230,6,'#fff1a8');
-  txt('TOUCHDOWN LINE · 0 m',480,420,9,'#9b6c27','center');
+  txt('LÍNEA DE ATERRIZAJE · 0 m',480,420,9,'#9b6c27','center');
   roundPanel(205,505,550,27,'#fffdf5','#b9d8d4',8);
-  txt(landingStatus==='crashed'?'GAME OVER · PRESS R TO RETRY':landingMessage,480,523,9,landingStatus==='crashed'?'#a34c43':'#426879','center');
+  txt(landingStatus==='crashed'?'MISIÓN FALLIDA · PRESIONA R PARA REINTENTAR':landingMessage,480,523,9,landingStatus==='crashed'?'#a34c43':'#426879','center');
   if(landingStatus==='crashed'){
     roundPanel(330,355,300,105,'#fff4ed','#d89b81',10);
     txt('GAME OVER',480,382,19,'#a34c43','center');
     wrapText(landingMessage,480,408,260,14,'#875e52','center');
-    txt('PRESS R TO RETRY',480,443,9,'#15516e','center');
+    txt('PRESIONA R PARA REINTENTAR',480,443,9,'#15516e','center');
   }
 }
 function victoryScene(){
