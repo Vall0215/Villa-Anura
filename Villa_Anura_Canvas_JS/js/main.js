@@ -278,6 +278,11 @@ const ADDITIONAL_EN_US_TRANSLATIONS={
   "La masa superaría el límite de 12.5 kg. Ajusta tu selección.": "The spacecraft mass would exceed the 12.5 kg limit. Adjust your selection.",
   "Seis sistemas para configurar la nave": "Six systems to configure your spacecraft.",
   "Perfil instalado:": "Installed profile:",
+  "Has superado el límite de masa de 12.5 kg. La misión ha fallado.": "You have exceeded the 12.5 kg mass limit. Mission failed.",
+  "Has superado el presupuesto disponible. La misión ha fallado.": "You have exceeded the available budget. Mission failed.",
+  "REINTENTAR MISIÓN": "RETRY MISSION",
+  "Presiona R o Enter, o selecciona el botón para intentarlo otra vez.": "Press R or Enter, or select the button to try again.",
+  "Vamos a intentarlo de nuevo. Configura la nave sin superar la masa ni el presupuesto.": "Let's try again. Configure the spacecraft without exceeding the mass limit or budget.",
   "¡CONFIGURACIÓN COMPLETADA! PRESIONA ENTER PARA LANZAR":"CONFIGURATION COMPLETE! PRESS ENTER TO LAUNCH",
   "¡Todo en orden! La nave está lista. Podemos avanzar con la misión 2.":"Everything is in order! The spacecraft is ready. We can proceed to Mission 2.",
   "MISIÓN FALLIDA":"MISSION FAILED",
@@ -820,11 +825,39 @@ function draw(){
  else if(mode==='botany')botanyScene();
  else if(mode==='landing')landingScene();
  else if(mode==='victory')victoryScene();
- else if(mode==='budgetFailed'){background();roundPanel(180,150,600,230,'#fff4ed','#d89b81',14);txt(tr('MISIÓN FALLIDA'),480,210,25,'#a34c43','center');wrapText(budgetFailureReason,480,260,500,18,'#875e52','center');txt(tr('PULSA R PARA VOLVER AL MENÚ DE INICIO'),480,330,13,'#15516e','center');}
+ else if(mode==='budgetFailed'){
+  background();
+  roundPanel(180,115,600,310,'#fff4ed','#d89b81',16);
+  txt(tr('MISIÓN FALLIDA'),480,174,27,'#a34c43','center');
+  wrapText(budgetFailureReason,480,230,500,22,'#875e52','center');
+  roundPanel(365,300,230,52,'#15516e','#58c9cf',11);
+  txt(tr('REINTENTAR MISIÓN'),480,332,14,'#ffffff','center');
+  txt(tr('Presiona R o Enter, o selecciona el botón para intentarlo otra vez.'),480,390,10,'#547a82','center');
+ }
  else if(mode==='flyby')flybyScene();
  else if(mode==='complete')completeScene();
  else if(mode==='missed'){flybyScene();roundPanel(280,205,400,115,'#fffef5','#c6e3d7',10);txt('¡EL COMETA YA PASÓ!',480,245,20,'#a66d4d','center');txt('Pulsa R para intentarlo otra vez.',480,277,13,'#547a82','center');}
  drawLanguageControl();drawAudioControl();
+}
+function restartMissionOne(){
+  mode='hangar';
+  missionIndex=0;
+  missionBudget=INITIAL_MISSION_BUDGET;
+  mdlHints=3;
+  selectedResources={};
+  activeCategory=null;
+  utilityPanel=null;
+  hintMessage='';
+  budgetFailureReason='';
+  actionAnimation=0;
+  actionLabel='';
+  message='';
+  messageTimer=0;
+  rocketProfile=0;
+  setFrogMood('neutral',0);
+  say('Vamos a intentarlo de nuevo. Configura la nave sin superar la masa ni el presupuesto.');
+  audio.start();
+  canvas.focus();
 }
 function startGame(){if(mode!=='title')return;setFrogMood('neutral',0);budgetFailureReason='';mode='hangar';missionIndex=0;missionBudget=INITIAL_MISSION_BUDGET;mdlHints=3;selectedResources={};activeCategory=null;say('¡Hola! Soy Flyn. Esta es nuestra misión de exploración espacial. Completa las tres misiones y administra el presupuesto inicial de 12.000 créditos.');audio.start();audio.playMusic();canvas.focus();}
 function keyDown(e){
@@ -832,7 +865,7 @@ function keyDown(e){
  if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Space'].includes(e.code))e.preventDefault();
  keys[e.code]=true;if(e.repeat)return;
  if(e.code==='KeyM'){audio.toggle();return;}
- if(mode==='budgetFailed'&&e.code==='KeyR'){mode='title';budgetFailureReason='';missionBudget=INITIAL_MISSION_BUDGET;selectedResources={};activeCategory=null;setFrogMood('neutral',0);return;}
+ if(mode==='budgetFailed'&&(e.code==='KeyR'||e.code==='Enter'||e.code==='NumpadEnter')){restartMissionOne();return;}
  if(mode==='title'&&(e.code==='Enter'||e.code==='NumpadEnter')){e.preventDefault();startGame();return;}
  if(mode==='botany'){
    if(e.code==='Escape'){botanyActiveInput=null;return;}
@@ -864,8 +897,8 @@ const SAFETY_LEVELS=['Totalmente en desacuerdo','En desacuerdo','Ni de acuerdo n
 function commitCategorySelection(cat,items,choiceForRocket=null){
  const cost=items.reduce((s,o)=>s+o[1],0),mass=items.reduce((s,o)=>s+o[2],0),previous=selectedResources[cat.id];
  const projected=totalMass()-(previous?previous.mass:0)+mass;
- if(missionBudget+(previous?previous.cost:0)<cost){budgetFailureReason='¡Agotaste todo el presupuesto! La misión ha fallado.';setFrogMood('sad',5);mode='budgetFailed';audio.bump();return false;}
- if(projected>missionBriefs[0].limit){notify('La masa superaría el límite de 12.5 kg. Ajusta tu selección.');setFrogMood('nervous');return false;}
+ if(missionBudget+(previous?previous.cost:0)<cost){budgetFailureReason='Has superado el presupuesto disponible. La misión ha fallado.';setFrogMood('sad',5);mode='budgetFailed';activeCategory=null;utilityPanel=null;audio.bump();return false;}
+ if(projected>missionBriefs[0].limit){budgetFailureReason='Has superado el límite de masa de 12.5 kg. La misión ha fallado.';setFrogMood('sad',5);mode='budgetFailed';activeCategory=null;utilityPanel=null;audio.bump();return false;}
  missionBudget+=(previous?previous.cost:0)-cost;
  if(items.length)selectedResources[cat.id]={label:items.map(o=>o[0]).join(', '),cost,mass,items};else delete selectedResources[cat.id];
  if(cat.id==='aero'&&choiceForRocket!==null)rocketProfile=choiceForRocket;
@@ -902,7 +935,7 @@ canvas.addEventListener('click',(e)=>{
  if(x>=790&&x<=874&&y>=10&&y<=48){setGameLanguage(gameLanguage==='en-US'?'es':'en-US');return;}
  if(x>=885&&x<=943&&y>=10&&y<=48){audio.toggle();return;}
  if(mode==='title'){startGame();return;}
- if(mode==='budgetFailed')return;
+ if(mode==='budgetFailed'){if(x>=350&&x<=610&&y>=292&&y<=360)restartMissionOne();return;}
  if(mode==='hangar'){
    if(utilityPanel){if(x<290||x>670||y<145||y>355)utilityPanel=null;return;}
    if(x>=38&&x<=188&&y>=70&&y<=112){utilityPanel='budget';audio.data();return;}
