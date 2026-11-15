@@ -477,11 +477,74 @@ function hud(){roundPanel(18,14,210,43,'#fffdf5','#c8e3d8',8);txt('VILLA ANURA',
 function dialogBox(t){roundPanel(675,390,265,65,'#fffef8','#c9e4d7',9);txt('FLYN',690,411,10,'#65a078');txt(t.length>35?t.slice(0,34)+'…':t,690,435,11,'#456879');}
 function titleScreen(){
   background();
-  roundPanel(30,28,286,100,'#faffff','#18a8a7',15);txt('✦  VILLA',54,67,34,'#087d68');txt('ANURA 🚀',54,105,34,'#087d68');roundPanel(43,112,255,28,'#087b9a','#d6ffff',12);txt('SPACE MISSION ADVENTURE',170,131,11,'#ffffff','center');
-  rect(410,94,12,255,'#dba32e');rect(538,94,12,255,'#dba32e');rect(410,94,140,9,'#e7b844');drawRocket();
+  // Logo stays in the upper-left corner; rocket emoji intentionally removed.
+  roundPanel(30,28,286,100,'#faffff','#18a8a7',15);
+  txt('✦  VILLA',54,67,34,'#087d68');
+  txt('ANURA',54,105,34,'#087d68');
+  roundPanel(43,112,255,28,'#087b9a','#d6ffff',12);
+  txt('SPACE MISSION ADVENTURE',170,131,11,'#ffffff','center');
+
+  // A hovering rocket with animated exhaust replaces the yellow launch frame.
+  drawFloatingRocket();
   drawFrog(480,438,0.82);
-  roundPanel(620,347,302,91,'#fffdf2','#1b7895',10);txt('¡BIENVENIDO, EXPLORADOR!',638,371,12,'#153d62');txt('Soy Flyn. Prepárate para diseñar',638,395,11,'#153d62');txt('y lanzar nuestras misiones espaciales.',638,414,11,'#153d62');
-  roundPanel(244,458,472,68,'#ffd13e','#fff0a6',17);roundPanel(253,464,454,55,'#087b91','#baf6ed',13);txt('PRESIONA  ENTER  PARA JUGAR',480,499,17,'#ffffff','center');txt('VILLA ANURA v1.0',18,532,9,'#26445a');
+
+  roundPanel(620,347,302,91,'#fffdf2','#1b7895',10);
+  txt('¡BIENVENIDO, EXPLORADOR!',638,371,12,'#153d62');
+  txt('Soy Flyn. Prepárate para diseñar',638,395,11,'#153d62');
+  txt('y lanzar nuestras misiones espaciales.',638,414,11,'#153d62');
+  roundPanel(244,458,472,68,'#ffd13e','#fff0a6',17);
+  roundPanel(253,464,454,55,'#087b91','#baf6ed',13);
+  txt('PRESIONA  ENTER  PARA JUGAR',480,499,17,'#ffffff','center');
+  txt('VILLA ANURA v1.0',18,532,9,'#26445a');
+}
+function drawFloatingRocket(){
+  const bob=Math.sin(clock*1.45)*5.5;
+  const drift=Math.sin(clock*.68)*7;
+  const cx=480+drift;
+  const baseY=282+bob;
+
+  // Soft engine glow
+  ctx.save();
+  ctx.globalAlpha=.17;
+  ctx.fillStyle='#54cbe8';
+  ctx.beginPath();ctx.ellipse(cx,baseY+7,24,29,0,0,Math.PI*2);ctx.fill();
+  ctx.restore();
+
+  drawRocketProfile(cx,baseY,rocketProfile);
+
+  // Animated pixel-art exhaust, like a small rocket gently climbing.
+  const flicker=Math.sin(clock*17)*5+Math.sin(clock*9)*3;
+  ctx.save();
+  ctx.fillStyle='#f07843';
+  ctx.beginPath();
+  ctx.moveTo(cx-10,baseY-10);
+  ctx.lineTo(cx-7,baseY+12+flicker*.25);
+  ctx.lineTo(cx,baseY+37+flicker);
+  ctx.lineTo(cx+7,baseY+12-flicker*.2);
+  ctx.lineTo(cx+10,baseY-10);
+  ctx.closePath();ctx.fill();
+
+  ctx.fillStyle='#ffd45c';
+  ctx.beginPath();
+  ctx.moveTo(cx-5,baseY-8);
+  ctx.lineTo(cx-3,baseY+13);
+  ctx.lineTo(cx,baseY+28+flicker*.65);
+  ctx.lineTo(cx+4,baseY+12);
+  ctx.lineTo(cx+5,baseY-8);
+  ctx.closePath();ctx.fill();
+
+  rect(cx-2,baseY+1,4,13,'#fff1b0');
+
+  // Small glowing exhaust pixels drift below the flame.
+  for(let i=0;i<5;i++){
+    const phase=(clock*34+i*17)%34;
+    const px=cx+Math.sin(clock*4+i*2)*((i%2)*4+2);
+    const py=baseY+17+phase;
+    const alpha=Math.max(0,1-phase/36);
+    ctx.globalAlpha=alpha*.8;
+    rect(px,py,3,3,i%2?'#ffb14f':'#f47a48');
+  }
+  ctx.restore();
 }
 function resetPlayer(){player.x=115;player.y=420;player.vx=0;player.vy=0;player.grounded=true;}
 function updatePlayer(dt){const left=keys.ArrowLeft||keys.KeyA,right=keys.ArrowRight||keys.KeyD,jump=keys.Space||keys.ArrowUp||keys.KeyW;const moving=left||right;player.vx=((right?1:0)-(left?1:0))*185;if(player.vx)player.facing=Math.sign(player.vx);if(player.grounded&&((jump&&!jumpWasDown)||moving)){player.vy=jump?-570:-455;player.grounded=false;audio.jump();}jumpWasDown=!!jump;player.vy+=1450*dt;player.x=Math.max(32,Math.min(928,player.x+player.vx*dt));player.y+=player.vy*dt;if(player.y>=420){player.y=420;player.vy=0;player.grounded=true;}player.anim+=dt;}
