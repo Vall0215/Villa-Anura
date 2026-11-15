@@ -609,6 +609,7 @@ function loop(now){const dt=Math.min(.035,(now-last)/1000||0);last=now;clock+=dt
 canvas.tabIndex=0;canvas.style.cursor='pointer';document.addEventListener('keydown',keyDown);document.addEventListener('keyup',e=>keys[e.code]=false);window.addEventListener('blur',()=>Object.keys(keys).forEach(k=>keys[k]=false));canvas.addEventListener('pointerdown',()=>{canvas.focus();if(mode==='title')startGame();else if(mode==='complete')keyDown({key:'Enter',code:'Enter',repeat:false,preventDefault(){}});});canvas.addEventListener('click',(e)=>{
   canvas.focus();
   const r=canvas.getBoundingClientRect(),x=(e.clientX-r.left)*W/r.width,y=(e.clientY-r.top)*H/r.height;
+  if(x>=885&&x<=943&&y>=10&&y<=48){audio.toggle();return;}
   if(mode==='title'){startGame();return;}
   if(mode==='hangar'){
     if(utilityPanel){if(x<290||x>670||y<145||y>355){utilityPanel=null;return;}return;}
