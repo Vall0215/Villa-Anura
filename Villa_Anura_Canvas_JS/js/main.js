@@ -45,7 +45,9 @@ const EN_US_TRANSLATIONS={
   "✓ SELECCIONADO": "✓ SELECTED",
   "VER OPCIONES": "VIEW OPTIONS",
   "ELIGE UNA OPCIÓN": "SELECT AN OPTION",
+  "ELIGE UNA O VARIAS OPCIONES": "SELECT ONE OR MORE OPTIONS",
   "Selecciona una alternativa para configurar este sistema.": "Select an option to configure this system.",
+  "Selecciona una o varias alternativas para configurar este sistema.": "Select one or more options to configure this system.",
   "ELEGIR": "SELECT",
   "Pulsa el número correspondiente · ESC para cerrar": "Press the matching number · ESC to close",
   "CONTROL DE MASA": "MASS CHECK",
@@ -450,8 +452,8 @@ function controlRoom(){
   roundPanel(484,125,448,306,'#fffef8','#a9d0c7',14);
   if(activeCategory){
     const cat=resourceCategories.find(v=>v.id===activeCategory);
-    roundPanel(502,141,412,36,'#15516e','#58c9cf',8);txt(cat.name+' · ELIGE UNA OPCIÓN',708,164,12,'#ffffff','center');
-    txt('Selecciona una alternativa para configurar este sistema.',708,193,9,'#547782','center');
+    roundPanel(502,141,412,36,'#15516e','#58c9cf',8);const multiSelectCategory=cat.id==='safety'||cat.id==='technology';txt(cat.name+' · '+tr(multiSelectCategory?'ELIGE UNA O VARIAS OPCIONES':'ELIGE UNA OPCIÓN'),708,164,12,'#ffffff','center');
+    txt(tr(multiSelectCategory?'Selecciona una o varias alternativas para configurar este sistema.':'Selecciona una alternativa para configurar este sistema.'),708,193,9,'#547782','center');
     if(cat.id==='technology'){
       const chosen=selectedResources.technology?.items||[],rowH=18.5;
       cat.options.forEach((opt,i)=>{const yy=204+i*rowH,checked=chosen.some(v=>v[0]===opt[0]);roundPanel(508,yy,400,17,checked?'#dff4e6':'#edf8f5',checked?'#69b78a':'#9acbbd',5);roundPanel(515,yy+3,11,11,checked?'#4ba878':'#ffffff',checked?'#398b66':'#8fbdb2',2);if(checked)txt('✓',520,yy+12,9,'#ffffff','center');txt((i+1)+'. '+opt[0],534,yy+12,opt[0].length>29?7:8,'#31596c');txt(opt[1]+' CR',899,yy+12,8,'#397d65','right');});
