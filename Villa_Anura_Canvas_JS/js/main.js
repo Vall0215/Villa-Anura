@@ -13,10 +13,12 @@ let mode = 'title', clock = 0, last = 0, dialogue = '', dialogueTimer = 0;
 let installed = new Set(), missionPhase = 0, cometX = 1030, observationWindow = 0, dataSaved = false, dataSent = false;
 const missionNames = ['SOBREVUELO','ORBITADOR','SONDA ATMOSFÉRICA','ATERRIZADOR','ROVER EXPLORADOR','RETORNO DE MUESTRAS'];
 let missionIndex = 0, challengeAnswered = false, challengeFeedback = '', challengeCorrect = false;
-let missionBudget=5000, mdlHints=3, activeCategory=null, selectedResources={}, actionAnimation=0, actionLabel='', utilityPanel=null, hintMessage='';
+let missionBudget=5000, mdlHints=3, activeCategory=null, selectedResources={}, actionAnimation=0, actionLabel='', utilityPanel=null, hintMessage='', launchTimer=0;
 const resourceCategories=[{id:'fuel',name:'COMBUSTIBLE',icon:'⛽',options:[['1 galón',500,1.2],['2 galones',900,2.1],['3 galones',1500,3.2]]},{id:'oxygen',name:'OXÍGENO',icon:'◉',options:[['Reserva básica',400,0.8],['Reserva estándar',750,1.4],['Reserva extendida',1200,2.2]]},{id:'energy',name:'ENERGÍA',icon:'⚡',options:[['Batería compacta',450,1.0],['Batería reforzada',850,1.8],['Panel + batería',1300,2.6]]},{id:'safety',name:'SEGURIDAD',icon:'🛡',options:[['Protección básica',500,0.7],['Protección reforzada',950,1.5],['Sistema redundante',1400,2.3]]},{id:'materials',name:'MATERIALES',icon:'▣',options:[['Kit ligero',350,0.6],['Kit científico',700,1.3],['Kit avanzado',1100,2.0]]},{id:'technology',name:'TECNOLOGÍA',icon:'⌘',options:[['Sistema básico',500,0.5],['Sistema mejorado',900,1.0],['Sistema avanzado',1350,1.7]]}];
 let particles = [], pulse = 0, message = '', messageTimer = 0, jumpWasDown = false;
 function totalMass(){return Object.values(selectedResources).reduce((sum,item)=>sum+(item.mass||0),0);}
+function wrapText(value,x,y,maxWidth,lineHeight,color='#426879',align='center'){const words=String(value).split(' '),lines=[];let line='';ctx.font='bold 11px system-ui';for(const word of words){const test=line?line+' '+word:word;if(ctx.measureText(test).width>maxWidth&&line){lines.push(line);line=word;}else line=test;}if(line)lines.push(line);ctx.fillStyle=color;ctx.textAlign=align;lines.slice(0,3).forEach((row,i)=>ctx.fillText(row,x,y+i*lineHeight));ctx.textAlign='left';}
+function chosenAllResources(){return Object.keys(selectedResources).length===6;}
 
 const stations = [
   { id: 'camera', x: 170, icon: '📷', name: 'CÁMARA', desc: 'Captura imágenes científicas' },
@@ -146,11 +148,15 @@ function controlRoom(){
   drawFrog(frogX,actionAnimation>0?340:350,0.58);
   if(actionAnimation>0){roundPanel(335,356,290,28,'#fffdf4','#c5ded8',8);txt(actionLabel,480,375,10,'#397c68','center');}
   ctx.restore();
+  // Controles superiores al frente de la pantalla: presupuesto, masa y pistas
+  roundPanel(72,82,150,38,'#fff0bd','#e4bd55',10);txt('$ '+missionBudget.toLocaleString('es-CO'),147,107,16,'#8b5b23','center');
+  roundPanel(230,82,150,38,'#ffd13e','#e4b52e',10);txt('MASA  '+totalMass().toFixed(1)+' kg',305,107,12,'#8b315f','center');
+  roundPanel(780,82,122,42,'#ffd13e','#e4b52e',20);txt('MDL  '+mdlHints,841,109,16,'#8b315f','center');
   // estado de recursos
-  roundPanel(75,408,810,32,'#fffdf5','#c8ded8',9);
   const chosen=Object.keys(selectedResources).length;
-  txt('RECURSOS PREPARADOS  '+chosen+'/6',94,429,11,'#477b6c');
-  txt('SALDO DISPONIBLE  $ '+missionBudget.toLocaleString('es-CO'),866,429,11,'#8b672e','right');
+  roundPanel(75,408,810,32,'#fffdf5','#c8ded8',9);
+  if(chosen===6){txt('¡LOS SEIS SISTEMAS ESTÁN LISTOS!',480,429,12,'#397d65','center');roundPanel(380,443,200,25,'#ffd13e','#e4b52e',9);txt('LANZAR MISIÓN  ▶',480,460,11,'#754c24','center');}
+  else{txt('RECURSOS PREPARADOS  '+chosen+'/6',94,429,11,'#477b6c');txt('SALDO DISPONIBLE  $ '+missionBudget.toLocaleString('es-CO'),866,429,11,'#8b672e','right');}
   // seis botones inferiores
   const startX=58, gap=8, bw=134, by=451;
   resourceCategories.forEach((cat,i)=>{
@@ -179,13 +185,15 @@ function controlRoom(){
   if(utilityPanel){
     roundPanel(300,155,360,190,'#fffef8','#62aeb4',13);
     roundPanel(318,169,324,37,'#15516e','#58c9cf',8);
-    txt(utilityPanel==='mass'?'CONTROL DE MASA':'PISTA DE FLYING',480,193,13,'#ffffff','center');
+    txt(utilityPanel==='mass'?'CONTROL DE MASA':utilityPanel==='budget'?'PRESUPUESTO DE MISIÓN':'PISTA DE FLYING',480,193,13,'#ffffff','center');
     if(utilityPanel==='mass'){
       txt('MASA INSTALADA',480,235,11,'#66828a','center');
       txt(totalMass().toFixed(1)+' kg',480,269,24,'#397d65','center');
       txt('Suma de los recursos seleccionados',480,296,10,'#66828a','center');
+    }else if(utilityPanel==='budget'){
+      txt('SALDO DISPONIBLE',480,235,11,'#66828a','center');txt('$ '+missionBudget.toLocaleString('es-CO'),480,269,24,'#397d65','center');txt('Presupuesto restante para esta misión',480,296,10,'#66828a','center');
     }else{
-      const hint=hintMessage||'Selecciona primero una categoría para recibir una pista.';
+      const hint=hintMessage||'Abre una categoría inferior y solicita una pista para recibir ayuda.';
       wrapText(hint,480,237,290,15,'#426879','center');
       txt('Pistas restantes: '+mdlHints,480,320,10,'#66828a','center');
     }
@@ -252,27 +260,27 @@ function completeScene(){
   roundPanel(330,449,300,48,'#15516e','#65d3cf',10);
   txt(challengeCorrect?'ENTER · CONTINUAR':'PULSA A O B PARA RESPONDER',480,478,challengeCorrect?13:11,'#ffffff','center');
 }
-function draw(){ctx.clearRect(0,0,W,H);if(mode==='title')titleScreen();else if(mode==='hangar')controlRoom();else if(mode==='flyby')flybyScene();else if(mode==='complete')completeScene();else if(mode==='missed'){flybyScene();roundPanel(280,205,400,115,'#fffef5','#c6e3d7',10);txt('¡EL COMETA YA PASÓ!',480,245,20,'#a66d4d','center');txt('Pulsa R para intentarlo otra vez.',480,277,13,'#547a82','center');}}
+function launchScene(){background();planet(760,170,62,'#b5dce8');roundPanel(60,55,840,410,'#eaf5f2','#9abdc0',16);for(let x=100;x<880;x+=100)rect(x,80,3,300,'#c0d5d7');for(let y=120;y<390;y+=65)rect(60,y,840,3,'#c5dadd');rect(410,350,140,14,'#e4bd55');rect(425,315,110,35,'#d7e5e7');const lift=Math.min(210,launchTimer*72);ctx.save();ctx.translate(0,-lift);rect(452,175,57,168,'#f8ffff');ctx.fillStyle='#fff';ctx.beginPath();ctx.moveTo(452,177);ctx.lineTo(480,137);ctx.lineTo(509,177);ctx.closePath();ctx.fill();rect(459,206,42,7,'#48b5aa');rect(459,271,42,7,'#48b5aa');ctx.fillStyle='#f3a34b';ctx.beginPath();ctx.moveTo(462,344);ctx.lineTo(480,390+Math.sin(clock*18)*8);ctx.lineTo(498,344);ctx.closePath();ctx.fill();ctx.restore();drawFrog(480,390,0.55);txt('LANZAMIENTO DE MISIÓN',480,95,22,'#397d65','center');txt('¡Todos los sistemas preparados! Flying está despegando.',480,430,12,'#547a82','center');}
+function draw(){ctx.clearRect(0,0,W,H);if(mode==='title')titleScreen();else if(mode==='hangar')controlRoom();else if(mode==='launch')launchScene();else if(mode==='flyby')flybyScene();else if(mode==='complete')completeScene();else if(mode==='missed'){flybyScene();roundPanel(280,205,400,115,'#fffef5','#c6e3d7',10);txt('¡EL COMETA YA PASÓ!',480,245,20,'#a66d4d','center');txt('Pulsa R para intentarlo otra vez.',480,277,13,'#547a82','center');}}
 function startGame(){if(mode!=='title')return;mode='hangar';missionBudget=5000;mdlHints=3;selectedResources={};activeCategory=null;say('¡Hola! Soy Flying. Prepara los seis sistemas sin superar el presupuesto.');audio.start();canvas.focus();}
-function keyDown(e){if(['ArrowLeft','ArrowRight','ArrowUp',' ','Space'].includes(e.key))e.preventDefault();keys[e.code]=true;if(e.repeat)return;if(mode==='title'&&(e.code==='Enter'||e.code==='NumpadEnter')){e.preventDefault();startGame();}else if(mode==='hangar'){if(activeCategory&&['Digit1','Digit2','Digit3'].includes(e.code)){const cat=resourceCategories.find(v=>v.id===activeCategory),opt=cat.options[Number(e.code.slice(-1))-1];if(opt&&missionBudget>=opt[1]){if(selectedResources[cat.id])missionBudget+=selectedResources[cat.id].cost;missionBudget-=opt[1];selectedResources[cat.id]={label:opt[0],cost:opt[1],mass:opt[2]};activeCategory=null;actionAnimation=1.8;actionLabel='FLYING INSTALANDO RECURSOS';say('¡Selección confirmada!');audio.data();}}else if(e.code==='Escape'){activeCategory=null;utilityPanel=null;}}else if(mode==='flyby'){if(e.code==='KeyE')interactFlyby();}else if(mode==='missed'&&e.code==='KeyR'){mode='flyby';cometX=1050;observationWindow=0;missionPhase=0;resetPlayer();say('¡Nueva oportunidad! Prepárate.');}else if(mode==='complete'&&(e.code==='KeyA'||e.code==='Digit1'||e.code==='KeyB'||e.code==='Digit2')&&!challengeCorrect){const q=[{"q":"El cometa pasa muy rápido. ¿Qué sistema necesitas para obtener imágenes?","a":"Cámara científica","b":"Antena de comunicación","correct":0,"why":"¡Correcto! La cámara captura imágenes. La antena sirve para enviar los datos a la Tierra.","icon":"camera"},{"q":"Tu nave se acerca al planeta demasiado rápido. ¿Qué debes hacer para entrar en órbita?","a":"Encender motores para frenar","b":"Acelerar hacia el planeta","correct":0,"why":"¡Bien pensado! Reducir la velocidad permite que la nave sea capturada por una órbita estable.","icon":"orbit"},{"q":"La sonda va a entrar en una atmósfera muy caliente. ¿Qué componente la protege?","a":"Un panel solar más grande","b":"Un escudo térmico","correct":1,"why":"¡Exacto! El escudo térmico ayuda a soportar el calor durante la entrada atmosférica.","icon":"shield"},{"q":"Hay rocas y una pendiente pronunciada. ¿Dónde debería aterrizar la nave?","a":"En una zona plana y despejada","b":"En la pendiente junto a las rocas","correct":0,"why":"¡Correcto! Una superficie plana reduce el riesgo de volcar o dañar las patas de aterrizaje.","icon":"lander"},{"q":"El rover tiene poca energía y encuentra dos caminos. ¿Cuál conviene elegir?","a":"El camino corto y despejado","b":"El camino largo con muchas rocas","correct":0,"why":"¡Buena decisión! Una ruta despejada y corta ayuda a ahorrar energía y evitar daños.","icon":"rover"},{"q":"Ya recogiste una muestra. ¿Cómo la conservas durante el regreso?","a":"Dejarla expuesta para ahorrar peso","b":"Sellarla en un contenedor protegido","correct":1,"why":"¡Excelente! Sellar y proteger la muestra evita contaminación y ayuda a conservarla para su análisis.","icon":"sample"}][missionIndex];const choice=(e.code==='KeyA'||e.code==='Digit1')?0:1;challengeAnswered=true;challengeCorrect=choice===q.correct;challengeFeedback=challengeCorrect?q.why:'No exactamente. Piensa en el objetivo de la misión e inténtalo otra vez.';if(challengeCorrect)audio.win();else audio.data();}else if(mode==='complete'&&e.code==='Enter'&&challengeCorrect){if(missionIndex<5){missionIndex++;challengeAnswered=false;challengeFeedback='';challengeCorrect=false;installed.clear();mode='hangar';resetPlayer();say('¡Vamos con la misión '+(missionIndex+1)+': '+missionNames[missionIndex]+'. Revisa el centro de control!');}else{missionIndex=0;challengeAnswered=false;challengeFeedback='';challengeCorrect=false;installed.clear();mode='title';say('¡Has completado las seis misiones espaciales!');}}}
-function loop(now){const dt=Math.min(.035,(now-last)/1000||0);last=now;clock+=dt;if(dialogueTimer>0)dialogueTimer-=dt;if(messageTimer>0)messageTimer-=dt;if(actionAnimation>0)actionAnimation=Math.max(0,actionAnimation-dt);if(mode==='flyby')updateFlyby(dt);draw();requestAnimationFrame(loop);}
+function keyDown(e){if(['ArrowLeft','ArrowRight','ArrowUp',' ','Space'].includes(e.key))e.preventDefault();keys[e.code]=true;if(e.repeat)return;if(mode==='title'&&(e.code==='Enter'||e.code==='NumpadEnter')){e.preventDefault();startGame();}else if(mode==='hangar'){if(chosenAllResources()&&(e.code==='Enter'||e.code==='NumpadEnter')){mode='launch';launchTimer=0;activeCategory=null;utilityPanel=null;audio.start();}else if(activeCategory&&['Digit1','Digit2','Digit3'].includes(e.code)){const cat=resourceCategories.find(v=>v.id===activeCategory),opt=cat.options[Number(e.code.slice(-1))-1];if(opt&&missionBudget>=opt[1]){if(selectedResources[cat.id])missionBudget+=selectedResources[cat.id].cost;missionBudget-=opt[1];selectedResources[cat.id]={label:opt[0],cost:opt[1],mass:opt[2]};activeCategory=null;actionAnimation=1.8;actionLabel='FLYING INSTALANDO RECURSOS';say('¡Selección confirmada!');audio.data();}}else if(e.code==='Escape'){activeCategory=null;utilityPanel=null;}}else if(mode==='flyby'){if(e.code==='KeyE')interactFlyby();}else if(mode==='missed'&&e.code==='KeyR'){mode='flyby';cometX=1050;observationWindow=0;missionPhase=0;resetPlayer();say('¡Nueva oportunidad! Prepárate.');}else if(mode==='complete'&&(e.code==='KeyA'||e.code==='Digit1'||e.code==='KeyB'||e.code==='Digit2')&&!challengeCorrect){const q=[{"q":"El cometa pasa muy rápido. ¿Qué sistema necesitas para obtener imágenes?","a":"Cámara científica","b":"Antena de comunicación","correct":0,"why":"¡Correcto! La cámara captura imágenes. La antena sirve para enviar los datos a la Tierra.","icon":"camera"},{"q":"Tu nave se acerca al planeta demasiado rápido. ¿Qué debes hacer para entrar en órbita?","a":"Encender motores para frenar","b":"Acelerar hacia el planeta","correct":0,"why":"¡Bien pensado! Reducir la velocidad permite que la nave sea capturada por una órbita estable.","icon":"orbit"},{"q":"La sonda va a entrar en una atmósfera muy caliente. ¿Qué componente la protege?","a":"Un panel solar más grande","b":"Un escudo térmico","correct":1,"why":"¡Exacto! El escudo térmico ayuda a soportar el calor durante la entrada atmosférica.","icon":"shield"},{"q":"Hay rocas y una pendiente pronunciada. ¿Dónde debería aterrizar la nave?","a":"En una zona plana y despejada","b":"En la pendiente junto a las rocas","correct":0,"why":"¡Correcto! Una superficie plana reduce el riesgo de volcar o dañar las patas de aterrizaje.","icon":"lander"},{"q":"El rover tiene poca energía y encuentra dos caminos. ¿Cuál conviene elegir?","a":"El camino corto y despejado","b":"El camino largo con muchas rocas","correct":0,"why":"¡Buena decisión! Una ruta despejada y corta ayuda a ahorrar energía y evitar daños.","icon":"rover"},{"q":"Ya recogiste una muestra. ¿Cómo la conservas durante el regreso?","a":"Dejarla expuesta para ahorrar peso","b":"Sellarla en un contenedor protegido","correct":1,"why":"¡Excelente! Sellar y proteger la muestra evita contaminación y ayuda a conservarla para su análisis.","icon":"sample"}][missionIndex];const choice=(e.code==='KeyA'||e.code==='Digit1')?0:1;challengeAnswered=true;challengeCorrect=choice===q.correct;challengeFeedback=challengeCorrect?q.why:'No exactamente. Piensa en el objetivo de la misión e inténtalo otra vez.';if(challengeCorrect)audio.win();else audio.data();}else if(mode==='complete'&&e.code==='Enter'&&challengeCorrect){if(missionIndex<5){missionIndex++;challengeAnswered=false;challengeFeedback='';challengeCorrect=false;installed.clear();mode='hangar';resetPlayer();say('¡Vamos con la misión '+(missionIndex+1)+': '+missionNames[missionIndex]+'. Revisa el centro de control!');}else{missionIndex=0;challengeAnswered=false;challengeFeedback='';challengeCorrect=false;installed.clear();mode='title';say('¡Has completado las seis misiones espaciales!');}}}
+function loop(now){const dt=Math.min(.035,(now-last)/1000||0);last=now;clock+=dt;if(mode==='launch'){launchTimer+=dt;if(launchTimer>3.2){mode='complete';challengeAnswered=false;challengeFeedback='';challengeCorrect=false;}}if(dialogueTimer>0)dialogueTimer-=dt;if(messageTimer>0)messageTimer-=dt;if(actionAnimation>0)actionAnimation=Math.max(0,actionAnimation-dt);if(mode==='flyby')updateFlyby(dt);draw();requestAnimationFrame(loop);}
 canvas.tabIndex=0;canvas.style.cursor='pointer';document.addEventListener('keydown',keyDown);document.addEventListener('keyup',e=>keys[e.code]=false);window.addEventListener('blur',()=>Object.keys(keys).forEach(k=>keys[k]=false));canvas.addEventListener('pointerdown',()=>{canvas.focus();if(mode==='title')startGame();else if(mode==='complete')keyDown({key:'Enter',code:'Enter',repeat:false,preventDefault(){}});});canvas.addEventListener('click',(e)=>{
   canvas.focus();
   const r=canvas.getBoundingClientRect(),x=(e.clientX-r.left)*W/r.width,y=(e.clientY-r.top)*H/r.height;
   if(mode==='title'){startGame();return;}
   if(mode==='hangar'){
-    if(utilityPanel){
-      if(x<300||x>660||y<155||y>345){utilityPanel=null;return;}
-      return;
-    }
-    if(x>=38&&x<=188&&y>=119&&y<=157){utilityPanel='mass';audio.data();return;}
-    if(x>=810&&x<=932&&y>=70&&y<=118){
+    if(utilityPanel){if(x<290||x>670||y<145||y>355){utilityPanel=null;return;}return;}
+    if(x>=72&&x<=222&&y>=82&&y<=120){utilityPanel='budget';audio.data();return;}
+    if(x>=230&&x<=380&&y>=82&&y<=120){utilityPanel='mass';audio.data();return;}
+    if(x>=780&&x<=902&&y>=82&&y<=124){
+      if(!activeCategory){notify('Abre primero una categoría para recibir una pista.');return;}
       if(mdlHints<=0){notify('No quedan pistas disponibles.');return;}
-      mdlHints--;
-      const cat=activeCategory?resourceCategories.find(v=>v.id===activeCategory):null;
-      hintMessage=cat?({fuel:'Elige combustible suficiente para la duración de la misión, sin cargar de más.',oxygen:'Piensa cuánto tiempo debe mantenerse la tripulación o los instrumentos protegidos.',energy:'Los instrumentos consumen energía: busca un equilibrio entre autonomía y peso.',safety:'La protección debe responder al mayor riesgo de esta misión.',materials:'Lleva solo los materiales necesarios para cumplir el objetivo científico.',technology:'Prioriza la tecnología que permita observar, almacenar y comunicar los datos.'}[cat.id]):'Antes de elegir, revisa qué necesita la misión y evita gastar recursos que no vas a utilizar.';
+      mdlHints--;const cat=resourceCategories.find(v=>v.id===activeCategory);
+      hintMessage=({fuel:'Compara la autonomía que necesitas con el peso y el presupuesto: no siempre hace falta la opción mayor.',oxygen:'Elige una reserva que cubra la duración de la misión sin cargar oxígeno innecesario.',energy:'Los instrumentos consumen energía. Busca una batería que alcance para operar y transmitir.',safety:'Piensa en el riesgo principal de esta misión y elige la protección adecuada.',materials:'Lleva los materiales necesarios para cumplir el objetivo, evitando añadir masa sin utilidad.',technology:'Prioriza la tecnología que permita cumplir el objetivo científico y enviar los datos.'})[cat.id];
       utilityPanel='hint';audio.data();return;
     }
+    if(chosenAllResources()&&x>=380&&x<=580&&y>=443&&y<=468){mode='launch';launchTimer=0;activeCategory=null;utilityPanel=null;audio.start();return;}
     if(activeCategory){
       const cat=resourceCategories.find(v=>v.id===activeCategory);
       if(x>=280&&x<=680&&y>=215&&y<=344){
@@ -281,7 +289,7 @@ canvas.tabIndex=0;canvas.style.cursor='pointer';document.addEventListener('keydo
         if(selectedResources[cat.id])missionBudget+=selectedResources[cat.id].cost;
         missionBudget-=opt[1];selectedResources[cat.id]={label:opt[0],cost:opt[1],mass:opt[2]};
         activeCategory=null;actionAnimation=1.8;actionLabel='FLYING ESTÁ INSTALANDO: '+cat.name;
-        say('¡Recurso instalado! Se descontaron $'+opt[1].toLocaleString('es-CO')+'.');audio.data();return;
+        say('¡Recurso instalado!');audio.data();return;
       }
       if(x<245||x>715||y<125||y>377){activeCategory=null;return;}
       return;
