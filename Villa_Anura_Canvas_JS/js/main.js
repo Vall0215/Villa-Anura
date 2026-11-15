@@ -17,6 +17,7 @@ const INITIAL_MISSION_BUDGET=7000;
 let missionBudget=INITIAL_MISSION_BUDGET, mdlHints=3, activeCategory=null, selectedResources={}, actionAnimation=0, actionLabel='', utilityPanel=null, hintMessage='', launchTimer=0;
 let botanyFactors={water:null,uv:null,co2:null}, botanyActiveInput=null, botanyTested=new Set(), botanyResult=null, botanyNotice='Selecciona 0 o 1 en cada casilla.';
 let landingAltitude=650, landingSpeed=55, landingFuel=100, landingStatus='ready', landingThrottle=false, landingMessage='Usa ↑ para frenar y ↓ para acelerar el descenso.';
+let landingAudioCooldown=0;
 const missionBriefs=[
 {title:'DISEÑO Y PUESTA EN ÓRBITA',objective:'Prepara una nave equilibrada y lista para el lanzamiento.',limit:12.5},
 {title:'BOTÁNICA EN MICROGRAVEDAD',objective:'Investiga cómo se comportan las plantas al combinar agua, radiación UV y CO₂.',limit:11.5},
@@ -389,6 +390,7 @@ function awardCampaignVictory(){
 }
 function updateLanding(dt){
   if(landingStatus!=='ready')return;
+  landingAudioCooldown=Math.max(0,landingAudioCooldown-dt);
   const brake=!!keys.ArrowUp;
   const accelerate=!!keys.ArrowDown;
   landingThrottle=false;
@@ -398,6 +400,7 @@ function updateLanding(dt){
     landingSpeed-=18*dt;
     landingFuel=Math.max(0,landingFuel-5.2*dt);
     landingThrottle=true;
+    if(landingAudioCooldown<=0){audio.brake();landingAudioCooldown=.32;}
     landingMessage='Propulsor activo: reduces la velocidad, pero consumes combustible.';
   }else if(accelerate){
     landingSpeed+=10*dt;
@@ -413,11 +416,11 @@ function updateLanding(dt){
       landingStatus='landed';
       landingMessage='¡Aterrizaje seguro! Has controlado la velocidad y el combustible.';
       awardCampaignVictory();
-      mode='victory';audio.win();
+      mode='victory';audio.stopMusic();audio.win();
     }else{
       landingStatus='crashed';
       landingMessage='GAME OVER · La nave llegó con demasiada velocidad.';
-      audio.data();
+      audio.bump();
     }
   }
 }
@@ -543,11 +546,16 @@ function victoryScene(){
   roundPanel(350,495,260,36,'#15516e','#58c9cf',9);
   txt('VOLVER AL INICIO',480,518,11,'#ffffff','center');
 }
-function draw(){ctx.clearRect(0,0,W,H);if(mode==='title')titleScreen();else if(mode==='hangar')controlRoom();else if(mode==='launch')launchScene();else if(mode==='botany')botanyScene();else if(mode==='landing')landingScene();else if(mode==='victory')victoryScene();else if(mode==='flyby')flybyScene();else if(mode==='complete')completeScene();else if(mode==='missed'){flybyScene();roundPanel(280,205,400,115,'#fffef5','#c6e3d7',10);txt('¡EL COMETA YA PASÓ!',480,245,20,'#a66d4d','center');txt('Pulsa R para intentarlo otra vez.',480,277,13,'#547a82','center');}}
-function startGame(){if(mode!=='title')return;mode='hangar';missionIndex=0;missionBudget=INITIAL_MISSION_BUDGET;mdlHints=3;selectedResources={};activeCategory=null;say('¡Hola! Soy Flyn. Esta es nuestra misión de exploración espacial. Completa las tres misiones y administra el presupuesto inicial de 7.000 créditos.');audio.start();canvas.focus();}
+function drawAudioControl(){
+  roundPanel(885,10,58,38,audio.enabled?'#fffdf5':'#e8eded',audio.enabled?'#9fcfc0':'#b8c8c8',10);
+  txt(audio.enabled?'♫  ON':'♪  OFF',914,35,10,audio.enabled?'#397d65':'#7b8d8d','center');
+}
+function draw(){ctx.clearRect(0,0,W,H);if(mode==='title')titleScreen();else if(mode==='hangar')controlRoom();else if(mode==='launch')launchScene();else if(mode==='botany')botanyScene();else if(mode==='landing')landingScene();else if(mode==='victory')victoryScene();else if(mode==='flyby')flybyScene();else if(mode==='complete')completeScene();else if(mode==='missed'){flybyScene();roundPanel(280,205,400,115,'#fffef5','#c6e3d7',10);txt('¡EL COMETA YA PASÓ!',480,245,20,'#a66d4d','center');txt('Pulsa R para intentarlo otra vez.',480,277,13,'#547a82','center');}drawAudioControl();}
+function startGame(){if(mode!=='title')return;mode='hangar';missionIndex=0;missionBudget=INITIAL_MISSION_BUDGET;mdlHints=3;selectedResources={};activeCategory=null;say('¡Hola! Soy Flyn. Esta es nuestra misión de exploración espacial. Completa las tres misiones y administra el presupuesto inicial de 7.000 créditos.');audio.start();audio.playMusic();canvas.focus();}
 function keyDown(e){
  if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown',' ','Space'].includes(e.key))e.preventDefault();
  keys[e.code]=true;if(e.repeat)return;
+ if(e.code==='KeyM'){audio.toggle();return;}
  if(mode==='title'&&(e.code==='Enter'||e.code==='NumpadEnter')){e.preventDefault();startGame();return;}
  if(mode==='botany'){
    if(e.code==='Escape'){botanyActiveInput=null;return;}
@@ -574,14 +582,14 @@ function keyDown(e){
    return;
  }
  if(mode==='landing'){
-   if(e.code==='KeyR'&&landingStatus==='crashed'){beginLandingMission();return;}
+   if(e.code==='KeyR'&&landingStatus==='crashed'){beginLandingMission();audio.start();return;}
    return;
  }
  if(mode==='hangar'){
-   if(chosenAllResources()&&(e.code==='Enter'||e.code==='NumpadEnter')){mode='launch';launchTimer=0;activeCategory=null;utilityPanel=null;audio.start();return;}
+   if(chosenAllResources()&&(e.code==='Enter'||e.code==='NumpadEnter')){mode='launch';launchTimer=0;activeCategory=null;utilityPanel=null;audio.launch();return;}
    if(activeCategory&&/^Digit[1-8]$/.test(e.code)){
      const cat=resourceCategories.find(v=>v.id===activeCategory),opt=cat.options[Number(e.code.slice(-1))-1];
-     if(opt){const old=selectedResources[cat.id];const mass=totalMass()-(old?old.mass:0)+opt[2];if(missionBudget+(old?old.cost:0)<opt[1])notify('Presupuesto insuficiente.');else if(mass>missionBriefs[missionIndex].limit)notify('La masa supera el límite permitido.');else{if(old)missionBudget+=old.cost;missionBudget-=opt[1];selectedResources[cat.id]={label:opt[0],cost:opt[1],mass:opt[2]};activeCategory=null;actionAnimation=1.8;actionLabel='FLYN INSTALANDO RECURSOS';say('¡Selección confirmada!');audio.data();}}
+     if(opt){const old=selectedResources[cat.id];const mass=totalMass()-(old?old.mass:0)+opt[2];if(missionBudget+(old?old.cost:0)<opt[1])notify('Presupuesto insuficiente.');else if(mass>missionBriefs[missionIndex].limit)notify('La masa supera el límite permitido.');else{if(old)missionBudget+=old.cost;missionBudget-=opt[1];selectedResources[cat.id]={label:opt[0],cost:opt[1],mass:opt[2]};activeCategory=null;actionAnimation=1.8;actionLabel='FLYN INSTALANDO RECURSOS';say('¡Selección confirmada!');audio.confirm();}}
    }else if(e.code==='Escape'){activeCategory=null;utilityPanel=null;}return;
  }
  if(mode==='missed'&&e.code==='KeyR'){mode='flyby';cometX=1050;observationWindow=0;missionPhase=0;resetPlayer();return;}
@@ -613,7 +621,7 @@ canvas.tabIndex=0;canvas.style.cursor='pointer';document.addEventListener('keydo
       hintMessage=({fuel:'Compara la autonomía que necesitas con el peso y el presupuesto: no siempre hace falta la opción mayor.',oxygen:'Elige una reserva que cubra la duración de la misión sin cargar oxígeno innecesario.',aero:'El perfil aerodinámico modifica el consumo durante el vuelo. Según el catálogo, la cónica es la referencia; compara las unidades por segundo antes de elegir.',safety:'Piensa en el riesgo principal de esta misión y elige la protección adecuada.',materials:'Lleva los materiales necesarios para cumplir el objetivo, evitando añadir masa sin utilidad.',technology:'Prioriza la tecnología que permita cumplir el objetivo científico y enviar los datos.'})[cat.id];
       utilityPanel='hint';audio.data();return;
     }
-    if(chosenAllResources()&&x>=380&&x<=580&&y>=443&&y<=468){mode='launch';launchTimer=0;activeCategory=null;utilityPanel=null;audio.start();return;}
+    if(chosenAllResources()&&x>=380&&x<=580&&y>=443&&y<=468){mode='launch';launchTimer=0;activeCategory=null;utilityPanel=null;audio.launch();return;}
     if(activeCategory){
       const cat=resourceCategories.find(v=>v.id===activeCategory);
       if(x>=250&&x<=710&&y>=174&&y<174+cat.options.length*33){
@@ -629,21 +637,21 @@ canvas.tabIndex=0;canvas.style.cursor='pointer';document.addEventListener('keydo
       return;
     }
     const bx=58,by=451,bw=134,gap=8;
-    if(y>=by&&y<=by+66){const i=Math.floor((x-bx)/(bw+gap));if(i>=0&&i<6){activeCategory=resourceCategories[i].id;audio.data();return;}}
+    if(y>=by&&y<=by+66){const i=Math.floor((x-bx)/(bw+gap));if(i>=0&&i<6){activeCategory=resourceCategories[i].id;audio.select();return;}}
     return;
   }
 
   if(mode==='victory'){
-    if(x>=350&&x<=610&&y>=495&&y<=531){mode='title';return;}
+    if(x>=350&&x<=610&&y>=495&&y<=531){mode='title';audio.select();return;}
     return;
   }
-  if(mode==='landing'&&landingStatus==='crashed'){beginLandingMission();return;}
+  if(mode==='landing'&&landingStatus==='crashed'){beginLandingMission();audio.start();return;}
   if(mode==='botany'){
-    if(botanyTested.size===7&&x>=755&&x<=915&&y>=478&&y<=513){beginLandingMission();return;}
+    if(botanyTested.size===7&&x>=755&&x<=915&&y>=478&&y<=513){beginLandingMission();audio.confirm();return;}
     if(y>=255&&y<=325){
-      if(x>=320&&x<=440){botanyActiveInput='water';botanyNotice='Casilla Agua seleccionada. Escribe 0 o 1.';return;}
-      if(x>=530&&x<=650){botanyActiveInput='uv';botanyNotice='Casilla Radiación UV seleccionada. Escribe 0 o 1.';return;}
-      if(x>=740&&x<=860){botanyActiveInput='co2';botanyNotice='Casilla CO₂ seleccionada. Escribe 0 o 1.';return;}
+      if(x>=320&&x<=440){botanyActiveInput='water';botanyNotice='Casilla Agua seleccionada. Escribe 0 o 1.';audio.select();return;}
+      if(x>=530&&x<=650){botanyActiveInput='uv';botanyNotice='Casilla Radiación UV seleccionada. Escribe 0 o 1.';audio.select();return;}
+      if(x>=740&&x<=860){botanyActiveInput='co2';botanyNotice='Casilla CO₂ seleccionada. Escribe 0 o 1.';audio.select();return;}
     }
     if(x>=480&&x<=706&&y>=378&&y<=407){
       if(Object.values(botanyFactors).some(v=>v===null)){botanyNotice='Completa las tres casillas: escribe 0 o 1 en cada una.';return;}
@@ -651,7 +659,7 @@ canvas.tabIndex=0;canvas.style.cursor='pointer';document.addEventListener('keydo
       if(key==='000'){botanyNotice='La combinación 000 no está incluida en el Excel. Prueba otra combinación.';botanyResult=null;return;}
       const result=botanyExperiments[key];
       if(!result){botanyNotice='Esta combinación no está incluida en los siete resultados del Excel.';return;}
-      botanyTested.add(key);botanyResult=result;botanyNotice='Experimento ejecutado.';botanyActiveInput=null;audio.data();return;
+      botanyTested.add(key);botanyResult=result;botanyNotice='Experimento ejecutado.';botanyActiveInput=null;audio.experiment();return;
     }
     return;
   }
