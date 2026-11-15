@@ -498,51 +498,56 @@ function titleScreen(){
   txt('VILLA ANURA v1.0',18,532,9,'#26445a');
 }
 function drawFloatingRocket(){
-  const bob=Math.sin(clock*1.45)*5.5;
-  const drift=Math.sin(clock*.68)*7;
-  const cx=480+drift;
-  const baseY=282+bob;
+  // Horizontal flyby inspired by the supplied GIF: nose points left,
+  // engine flame trails to the right, crossing the full starfield above Flyn.
+  const span=W+260;
+  const progress=(clock*105+span*.48)%span;
+  const x=W+130-progress;
+  const y=263+Math.sin(clock*2.1)*7;
 
-  // Soft engine glow
+  // Soft cyan engine glow behind the spacecraft.
   ctx.save();
-  ctx.globalAlpha=.17;
-  ctx.fillStyle='#54cbe8';
-  ctx.beginPath();ctx.ellipse(cx,baseY+7,24,29,0,0,Math.PI*2);ctx.fill();
+  ctx.globalAlpha=.13;
+  ctx.fillStyle='#51cce9';
+  ctx.beginPath();ctx.ellipse(x+48,y,49,15,0,0,Math.PI*2);ctx.fill();
   ctx.restore();
 
-  drawRocketProfile(cx,baseY,rocketProfile);
-
-  // Animated pixel-art exhaust, like a small rocket gently climbing.
-  const flicker=Math.sin(clock*17)*5+Math.sin(clock*9)*3;
+  // Rotate the existing vertical pixel rocket so its nose points left.
   ctx.save();
+  ctx.translate(x,y);
+  ctx.rotate(-Math.PI/2);
+  ctx.scale(.43,.43);
+  drawRocketProfile(0,100,rocketProfile);
+
+  // Exhaust extends backward (right on screen) and flickers in pixel blocks.
+  const flicker=Math.sin(clock*19)*7+Math.sin(clock*11)*4;
   ctx.fillStyle='#f07843';
   ctx.beginPath();
-  ctx.moveTo(cx-10,baseY-10);
-  ctx.lineTo(cx-7,baseY+12+flicker*.25);
-  ctx.lineTo(cx,baseY+37+flicker);
-  ctx.lineTo(cx+7,baseY+12-flicker*.2);
-  ctx.lineTo(cx+10,baseY-10);
+  ctx.moveTo(-11,94);
+  ctx.lineTo(-8,116+flicker*.25);
+  ctx.lineTo(0,151+flicker);
+  ctx.lineTo(8,116-flicker*.2);
+  ctx.lineTo(11,94);
   ctx.closePath();ctx.fill();
 
   ctx.fillStyle='#ffd45c';
   ctx.beginPath();
-  ctx.moveTo(cx-5,baseY-8);
-  ctx.lineTo(cx-3,baseY+13);
-  ctx.lineTo(cx,baseY+28+flicker*.65);
-  ctx.lineTo(cx+4,baseY+12);
-  ctx.lineTo(cx+5,baseY-8);
+  ctx.moveTo(-5,94);
+  ctx.lineTo(-4,117);
+  ctx.lineTo(0,139+flicker*.65);
+  ctx.lineTo(4,117);
+  ctx.lineTo(5,94);
   ctx.closePath();ctx.fill();
 
-  rect(cx-2,baseY+1,4,13,'#fff1b0');
+  rect(-2,98,4,25,'#fff1b0');
 
-  // Small glowing exhaust pixels drift below the flame.
-  for(let i=0;i<5;i++){
-    const phase=(clock*34+i*17)%34;
-    const px=cx+Math.sin(clock*4+i*2)*((i%2)*4+2);
-    const py=baseY+17+phase;
-    const alpha=Math.max(0,1-phase/36);
-    ctx.globalAlpha=alpha*.8;
-    rect(px,py,3,3,i%2?'#ffb14f':'#f47a48');
+  // Tiny exhaust pixels stream out behind the rocket.
+  for(let i=0;i<8;i++){
+    const phase=(clock*38+i*13)%58;
+    const px=Math.sin(clock*5+i*1.7)*7;
+    const py=151+phase;
+    ctx.globalAlpha=Math.max(0,1-phase/60)*.85;
+    rect(px,py,4,4,i%3===0?'#ffe08a':i%2?'#ffb14f':'#f47a48');
   }
   ctx.restore();
 }
