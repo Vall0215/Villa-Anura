@@ -14,7 +14,7 @@ let installed = new Set(), missionPhase = 0, cometX = 1030, observationWindow = 
 const missionNames = ['SOBREVUELO','ORBITADOR','SONDA ATMOSFÉRICA','ATERRIZADOR','ROVER EXPLORADOR','RETORNO DE MUESTRAS'];
 let missionIndex = 0, challengeAnswered = false, challengeFeedback = '', challengeCorrect = false;
 let missionBudget=5000, mdlHints=3, activeCategory=null, selectedResources={}, actionAnimation=0, actionLabel='', utilityPanel=null, hintMessage='', launchTimer=0;
-let botanyFactors={water:null,uv:null,co2:null}, botanyTested=new Set(), botanyResult=null, botanyNotice='Activa uno o más factores y ejecuta el experimento.';
+let botanyFactors={water:null,uv:null,co2:null}, botanyActiveInput=null, botanyTested=new Set(), botanyResult=null, botanyNotice='Selecciona 0 o 1 en cada casilla.';
 const missionBriefs=[
 {title:'DISEÑO Y PUESTA EN ÓRBITA',objective:'Prepara una nave equilibrada y lista para el lanzamiento.',limit:12.5},
 {title:'BOTÁNICA EN MICROGRAVEDAD',objective:'Investiga cómo se comportan las plantas al combinar agua, radiación UV y CO₂.',limit:11.5},
@@ -56,23 +56,18 @@ function botanyScene(){
   const sky=ctx.createLinearGradient(0,0,0,H);
   sky.addColorStop(0,'#d8edf5');sky.addColorStop(.55,'#eaf5f3');sky.addColorStop(1,'#d4e8e9');
   ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
-  // Ventana orbital y estrellas claras
-  for(let i=0;i<68;i++){
-    const sx=(i*137)%W, sy=(i*73)%H;
-    rect(sx,sy,2+(i%4===0?1:0),2,'#ffffff');
-  }
+  for(let i=0;i<68;i++){const sx=(i*137)%W,sy=(i*73)%H;rect(sx,sy,2+(i%4===0?1:0),2,'#ffffff');}
   planet(845,112,65,'#a9d7e7');planet(845,112,51,'#b9e3e9');
   ctx.strokeStyle='#9fc6cd';ctx.lineWidth=8;ctx.beginPath();ctx.arc(845,112,77,0,Math.PI*2);ctx.stroke();
-  // Estructura interior de la nave
   rect(0,0,W,12,'#b7d2d6');rect(0,12,W,4,'#e7f6f3');
   roundPanel(28,12,904,50,'#fffdf5','#b9d8d4',12);
   txt('VILLA ANURA · LABORATORIO ORBITAL',48,34,14,'#397d6c');
   txt('MISIÓN 2 · EXPERIMENTO DE BOTÁNICA EN AUSENCIA DE GRAVEDAD',48,52,10,'#426879');
   roundPanel(55,76,850,54,'#e8f5ef','#a9d2c4',10);
-  txt('Configura las tres variables con 0 o 1 y consulta el resultado del experimento.',480,99,13,'#285d60','center');
+  txt('Completa las tres casillas escribiendo 0 o 1 en cada una.',480,99,13,'#285d60','center');
   txt('Agua · Radiación UV · CO₂',480,117,10,'#5c7d7b','center');
 
-  // Flying opera la consola desde la nave
+  // Flying acompaña al jugador desde la consola de la nave
   roundPanel(48,150,205,265,'#e5f1f0','#9dbfc2',12);
   txt('FLYING · OPERADORA',150,177,11,'#397d6c','center');
   roundPanel(70,192,161,78,'#164e70','#78b8bf',8);
@@ -80,28 +75,26 @@ function botanyScene(){
   txt('BOTÁNICO',150,232,14,'#ffffff','center');
   for(let i=0;i<4;i++)rect(94,246+i*5,35+i*10,2,'#6ed8d5');
   drawFrog(150,382,0.63);
-  txt('¡Elige 0 o 1 en cada',150,404,9,'#547782','center');
-  // Panel principal con las tres casillas de entrada
-  roundPanel(275,150,637,265,'#fffef8','#c8ded8',12);
-  txt('CONFIGURACIÓN DE VARIABLES',593,178,13,'#397d6c','center');
-  const factors=[['water','AGUA','CASILLA 1',295],['uv','RADIACIÓN UV','CASILLA 2',500],['co2','CO₂','CASILLA 3',705]];
-  factors.forEach(([id,label,number,x])=>{
-    const value=botanyFactors[id];
-    roundPanel(x,195,180,172,'#edf5f2','#b8d5ce',9);
-    txt(number,x+90,218,9,'#6b8587','center');
-    txt(label,x+90,242,label==='RADIACIÓN UV'?10:12,'#31596a','center');
-    roundPanel(x+48,252,84,52,'#ffffff','#9abfc0',8);
-    txt(value===null?'—':String(value),x+90,287,25,value===null?'#9aadae':'#267f61','center');
-    txt('SELECCIONA',x+90,324,8,'#6b8587','center');
-    roundPanel(x+22,333,58,27,value===0?'#3a9a67':'#dfe9e7',value===0?'#2c8155':'#c2d5d1',6);
-    txt('0',x+51,352,13,value===0?'#ffffff':'#668080','center');
-    roundPanel(x+100,333,58,27,value===1?'#3a9a67':'#dfe9e7',value===1?'#2c8155':'#c2d5d1',6);
-    txt('1',x+129,352,13,value===1?'#ffffff':'#668080','center');
-  });
-  roundPanel(480,375,226,30,'#15516e','#58c9cf',8);
-  txt('CONSULTAR RESULTADO ▶',593,395,10,'#ffffff','center');
+  txt('Escribe 0 o 1',150,404,9,'#547782','center');
 
-  // Resultado fiel al Excel y referencia que lo respalda
+  // Tres campos de entrada vacíos, en una sola fila
+  roundPanel(275,150,637,265,'#fffef8','#c8ded8',12);
+  txt('CONFIGURACIÓN DE VARIABLES',593,185,13,'#397d6c','center');
+  const fields=[['water','AGUA',380,320],['uv','RADIACIÓN UV',590,530],['co2','CO₂',800,740]];
+  fields.forEach(([id,label,center,left])=>{
+    txt(label,center,235,label==='RADIACIÓN UV'?11:13,'#31596a','center');
+    const active=botanyActiveInput===id;
+    roundPanel(left,255,120,70,active?'#f0fbf7':'#ffffff',active?'#299b82':'#9abfc0',8);
+    txt(botanyFactors[id]===null?'':String(botanyFactors[id]),center,301,28,'#267f61','center');
+    if(botanyFactors[id]===null)txt('0 o 1',center,301,12,'#a5b8b8','center');
+    if(active)roundPanel(left+4,259,112,62,'#00000000','#55bda7',6);
+  });
+  txt('Haz clic en una casilla y escribe 0 o 1.',593,348,10,'#66828a','center');
+  txt('Usa Retroceso para borrar el valor de la casilla seleccionada.',593,365,9,'#82999a','center');
+  roundPanel(480,378,226,29,'#15516e','#58c9cf',8);
+  txt('CONSULTAR RESULTADO ▶',593,398,10,'#ffffff','center');
+
+  // Resultado y referencia del Excel
   roundPanel(48,430,864,98,'#fffef8','#c8ded8',9);
   txt('RESULTADO DEL EXPERIMENTO',68,451,9,'#397d6c');
   if(botanyResult){
@@ -373,7 +366,22 @@ function keyDown(e){
  keys[e.code]=true;if(e.repeat)return;
  if(mode==='title'&&(e.code==='Enter'||e.code==='NumpadEnter')){e.preventDefault();startGame();return;}
  if(mode==='botany'){
-   if(e.code==='Escape'){mode='hangar';return;}
+   if(e.code==='Escape'){botanyActiveInput=null;return;}
+   const digit=(e.code==='Digit0'||e.code==='Numpad0')?0:(e.code==='Digit1'||e.code==='Numpad1')?1:null;
+   if((digit===0||digit===1)&&botanyActiveInput){
+     botanyFactors[botanyActiveInput]=digit;
+     botanyResult=null;
+     botanyNotice='Valor registrado. Completa las otras casillas y consulta el resultado.';
+     audio.data();
+   }else if((e.code==='Backspace'||e.code==='Delete')&&botanyActiveInput){
+     botanyFactors[botanyActiveInput]=null;botanyResult=null;
+     botanyNotice='Casilla vacía. Escribe 0 o 1.';
+   }else if(e.code==='Tab'){
+     const order=['water','uv','co2'];
+     const current=order.indexOf(botanyActiveInput);
+     botanyActiveInput=order[(current+1)%order.length];
+     e.preventDefault();
+   }
    return;
  }
  if(mode==='hangar'){
@@ -434,20 +442,18 @@ canvas.tabIndex=0;canvas.style.cursor='pointer';document.addEventListener('keydo
 
   if(mode==='botany'){
     if(botanyTested.size===7&&x>=755&&x<=915&&y>=478&&y<=513){mode='complete';challengeAnswered=false;challengeFeedback='';challengeCorrect=false;return;}
-    const factorRows=[['water',295],['uv',500],['co2',705]];
-    for(const [id,fx] of factorRows){
-      if(y>=333&&y<=360){
-        if(x>=fx+22&&x<=fx+80){botanyFactors[id]=0;botanyResult=null;return;}
-        if(x>=fx+100&&x<=fx+158){botanyFactors[id]=1;botanyResult=null;return;}
-      }
+    if(y>=255&&y<=325){
+      if(x>=320&&x<=440){botanyActiveInput='water';botanyNotice='Casilla Agua seleccionada. Escribe 0 o 1.';return;}
+      if(x>=530&&x<=650){botanyActiveInput='uv';botanyNotice='Casilla Radiación UV seleccionada. Escribe 0 o 1.';return;}
+      if(x>=740&&x<=860){botanyActiveInput='co2';botanyNotice='Casilla CO₂ seleccionada. Escribe 0 o 1.';return;}
     }
-    if(x>=480&&x<=706&&y>=375&&y<=405){
-      if(Object.values(botanyFactors).some(v=>v===null)){botanyNotice='Completa las tres casillas: cada variable debe tener un 0 o un 1.';return;}
+    if(x>=480&&x<=706&&y>=378&&y<=407){
+      if(Object.values(botanyFactors).some(v=>v===null)){botanyNotice='Completa las tres casillas: escribe 0 o 1 en cada una.';return;}
       const key=botanyKey();
       if(key==='000'){botanyNotice='La combinación 000 no está incluida en el Excel. Prueba otra combinación.';botanyResult=null;return;}
       const result=botanyExperiments[key];
       if(!result){botanyNotice='Esta combinación no está incluida en los siete resultados del Excel.';return;}
-      botanyTested.add(key);botanyResult=result;botanyNotice='Experimento ejecutado.';audio.data();return;
+      botanyTested.add(key);botanyResult=result;botanyNotice='Experimento ejecutado.';botanyActiveInput=null;audio.data();return;
     }
     return;
   }
