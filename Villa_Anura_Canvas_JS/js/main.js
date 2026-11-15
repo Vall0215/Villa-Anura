@@ -307,13 +307,13 @@ function tr(value){
   if(raw.startsWith('PRUEBAS: '))return 'TRIALS: '+raw.slice('PRUEBAS: '.length);
   if(raw.startsWith('ESTRELLAS'))return 'STARS'+raw.slice('ESTRELLAS'.length);
   const dynamicTranslations=[
-    [/^★\\s*(\\d+)\\s+ESTRELLAS$/,(_,n)=>'★ '+n+' STARS'],
-    [/^RECURSOS PREPARADOS\\s+(\\d+\\/6)$/,(_,n)=>'SYSTEMS CONFIGURED '+n],
-    [/^SALDO DISPONIBLE\\s+\\$\\s*(.+)$/,(_,n)=>'AVAILABLE BALANCE $ '+n],
-    [/^PRESUPUESTO DISPONIBLE\\s+\\$\\s*(.+)$/,(_,n)=>'AVAILABLE BUDGET $ '+n],
-    [/^MASA\\s+(.+)$/,(_,n)=>'MASS '+n],
-    [/^Pistas restantes:\\s*(\\d+)$/,(_,n)=>'HINTS LEFT: '+n],
-    [/^Perfil instalado:\\s*(.+)$/,(_,n)=>'Installed profile: '+tr(n)]
+    [/^★\s*(\d+)\s+ESTRELLAS$/,(_,n)=>'★ '+n+' STARS'],
+    [/^RECURSOS PREPARADOS\s+(\d+\/6)$/,(_,n)=>'SYSTEMS CONFIGURED '+n],
+    [/^SALDO DISPONIBLE\s+\$\s*(.+)$/,(_,n)=>'AVAILABLE BALANCE $ '+n],
+    [/^PRESUPUESTO DISPONIBLE\s+\$\s*(.+)$/,(_,n)=>'AVAILABLE BUDGET $ '+n],
+    [/^MASA\s+(.+)$/,(_,n)=>'MASS '+n],
+    [/^Pistas restantes:\s*(\d+)$/,(_,n)=>'HINTS LEFT: '+n],
+    [/^Perfil instalado:\s*(.+)$/,(_,n)=>'Installed profile: '+tr(n)]
   ];
   for(const [pattern,replace] of dynamicTranslations){const match=raw.match(pattern);if(match)return raw.replace(pattern,replace);}
   if(raw.startsWith('DESAFÍO DE LA MISIÓN '))return 'MISSION CHALLENGE '+raw.slice('DESAFÍO DE LA MISIÓN '.length);
