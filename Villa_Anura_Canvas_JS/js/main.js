@@ -25,6 +25,7 @@ const EN_US_TRANSLATIONS={
   "RESULTADO DEL EXPERIMENTO": "EXPERIMENT RESULT",
   "PRUEBAS: ": "TRIALS: ",
   "CONTINUAR ▶": "CONTINUE ▶",
+  "¡LOS 6 SISTEMAS ESTÁN LISTOS! PRESIONA ENTER PARA LANZAR": "ALL 6 SYSTEMS ARE READY! PRESS ENTER TO LAUNCH",
   "VILLA ANURA  ·  CENTRO DE CONTROL": "VILLA ANURA · MISSION CONTROL",
   "ESTRELLAS": "STARS",
   "MISIÓN 1 / 3  ·  DISEÑO Y PREPARACIÓN": "MISSION 1 / 3 · SPACECRAFT DESIGN & PREPARATION",
@@ -736,11 +737,16 @@ function controlRoom(){
   // Objetivo de la misión siempre visible en el escenario
   roundPanel(265,115,450,42,'#fffdf4','#c5ded8',8);
   txt(missionBriefs[missionIndex].objective,490,141,10,'#426879','center');
-  // estado de recursos
+  // Estado de recursos y una instrucción clara cuando la nave está lista.
   const chosen=Object.keys(selectedResources).length;
-  roundPanel(75,408,810,32,'#fffdf5','#c8ded8',9);
-  if(chosen===6){txt('¡LOS SEIS SISTEMAS ESTÁN LISTOS!',480,429,12,'#397d65','center');roundPanel(380,443,200,25,'#ffd13e','#e4b52e',9);txt('LANZAR MISIÓN  ▶',480,460,11,'#754c24','center');}
-  else{txt('RECURSOS PREPARADOS  '+chosen+'/6',94,429,11,'#477b6c');txt('SALDO DISPONIBLE  $ '+missionBudget.toLocaleString(gameLanguage==='en-US'?'en-US':'es-CO'),866,429,11,'#8b672e','right');}
+  if(chosen===6){
+    roundPanel(75,408,810,32,'#e2f5e9','#72bc91',9);
+    txt('¡LOS 6 SISTEMAS ESTÁN LISTOS! PRESIONA ENTER PARA LANZAR',480,429,12,'#28764f','center');
+  }else{
+    roundPanel(75,408,810,32,'#fffdf5','#c8ded8',9);
+    txt('RECURSOS PREPARADOS  '+chosen+'/6',94,429,11,'#477b6c');
+    txt('SALDO DISPONIBLE  $ '+missionBudget.toLocaleString(gameLanguage==='en-US'?'en-US':'es-CO'),866,429,11,'#8b672e','right');
+  }
   // seis botones inferiores
   const startX=58, gap=8, bw=134, by=451;
   resourceCategories.forEach((cat,i)=>{
