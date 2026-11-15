@@ -1,8 +1,9 @@
 export class AudioManager{
   constructor(){
     this.enabled=true;this.musicRequested=false;
-    this.ambient=new Audio(new URL('../assets/audio/ambient-space.mp3',import.meta.url));
-    this.ambient.loop=true;this.ambient.volume=.16;this.ambient.preload='auto';
+    this.ambient=new Audio(new URL('../assets/audio/ambient-sad.mp3',import.meta.url));
+    this.ambient.loop=true;this.ambient.volume=.075;this.ambient.preload='auto';
+    this.fadeFrame=null;
     this.effects={
       landing:new Audio(new URL('../assets/audio/landing-soft.mp3',import.meta.url)),
       certificate:new Audio(new URL('../assets/audio/certificate-victory.mp3',import.meta.url)),
@@ -27,11 +28,41 @@ export class AudioManager{
     if(!this.enabled||!this.effects[name])return;
     try{const sound=this.effects[name].cloneNode();sound.volume=this.effects[name].volume;sound.play().catch(()=>{});}catch{}
   }
+  fadeMusicTo(target,duration=1200,onComplete=null){
+    try{
+      if(this.fadeFrame!==null)cancelAnimationFrame(this.fadeFrame);
+      const from=this.ambient.volume,start=performance.now();
+      const step=(now)=>{
+        const progress=Math.min(1,(now-start)/duration);
+        const eased=progress*progress*(3-2*progress);
+        this.ambient.volume=from+(target-from)*eased;
+        if(progress<1)this.fadeFrame=requestAnimationFrame(step);
+        else{this.fadeFrame=null;if(onComplete)onComplete();}
+      };
+      this.fadeFrame=requestAnimationFrame(step);
+    }catch{
+      this.ambient.volume=target;
+      if(onComplete)onComplete();
+    }
+  }
   playMusic(){
     this.musicRequested=true;if(!this.enabled)return;
-    try{this.ambient.play().catch(()=>{});}catch{}
+    try{
+      if(this.ambient.paused){
+        this.ambient.volume=0;
+        const playback=this.ambient.play();
+        if(playback&&typeof playback.then==='function'){
+          playback.then(()=>this.fadeMusicTo(.075,1800)).catch(()=>{});
+        }else this.fadeMusicTo(.075,1800);
+      }else this.fadeMusicTo(.075,900);
+    }catch{}
   }
-  stopMusic(){try{this.ambient.pause();this.ambient.currentTime=0;}catch{}}
+  stopMusic(){
+    try{
+      if(this.ambient.paused){this.ambient.currentTime=0;return;}
+      this.fadeMusicTo(0,900,()=>{this.ambient.pause();this.ambient.currentTime=0;});
+    }catch{}
+  }
   toggle(){
     this.enabled=!this.enabled;
     if(this.enabled){if(this.musicRequested)this.playMusic();}
