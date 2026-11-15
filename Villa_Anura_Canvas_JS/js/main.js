@@ -30,7 +30,14 @@ let earnedStars=Number(localStorage.getItem('villaAnuraStars')||0);
 let completedMissions=JSON.parse(localStorage.getItem('villaAnuraCompleted')||'[]');
 function saveProgress(){localStorage.setItem('villaAnuraStars',String(earnedStars));localStorage.setItem('villaAnuraCompleted',JSON.stringify(completedMissions));}
 
-const resourceCategories=[{id:'fuel',name:'COMBUSTIBLE',icon:'⛽',options:[['1 galón',500,1.2],['2 galones',900,2.1],['3 galones',1500,3.2]]},{id:'oxygen',name:'OXÍGENO',icon:'◉',options:[['Reserva básica',400,0.8],['Reserva estándar',750,1.4],['Reserva extendida',1200,2.2]]},{id:'aero',name:'AERODINÁMICA',icon:'✈',options:[['Elíptica · 11 unidades/s',100,0],['Cónica · 10 unidades/s',250,0],['Ojival · 9,5 unidades/s',500,0],['Von Kármán · 9 unidades/s',900,0]]},{id:'safety',name:'SEGURIDAD',icon:'🛡',options:[['Protección básica',500,0.7],['Protección reforzada',950,1.5],['Sistema redundante',1400,2.3]]},{id:'materials',name:'MATERIALES',icon:'▣',options:[['Kit ligero',350,0.6],['Kit científico',700,1.3],['Kit avanzado',1100,2.0]]},{id:'technology',name:'TECNOLOGÍA',icon:'⌘',options:[['Sistema básico',500,0.5],['Sistema mejorado',900,1.0],['Sistema avanzado',1350,1.7]]}];
+const resourceCategories=[
+{id:'fuel',name:'COMBUSTIBLE',icon:'⛽',options:[['Criogénico',500,1.2],['Hidrocarburo',900,2.1],['Hipergólico',1500,3.2],['Sólido',1500,3.2],['Eléctrico / Iónico',1500,3.2]]},
+{id:'oxygen',name:'OXÍGENO',icon:'◉',options:[['Holgada',400,0.8],['Estándar',750,1.4],['Moderada',1200,2.2],['Muy limitada',1200,2.2]]},
+{id:'aero',name:'AERODINÁMICA',icon:'✈',options:[['Elíptica',100,0],['Cónica',250,0],['Ojival',500,0],['Von Kármán',900,0]]},
+{id:'safety',name:'SEGURIDAD',icon:'🛡',options:[['Escape en el Lanzamiento',500,0.7],['Protección Térmica',950,1.5],['Soporte Vital y Control Ambiental',1400,2.3],['Blindaje contra Micrometeoritos',1400,2.3],['Sistema de Paracaídas y Aterrizaje',1400,2.3],['Trajes Espaciales',1400,2.3],['Sistemas de Supresión de Incendios',1400,2.3],['Equipos de Supervivencia y Botiquines',1400,2.3]]},
+{id:'materials',name:'MATERIALES',icon:'▣',options:[['Económica',350,0.6],['Ligera',700,1.3],['Compuesta',1100,2.0],['Carga especializada',1100,2.0]]},
+{id:'technology',name:'TECNOLOGÍA',icon:'⌘',options:[['Sistema de propulsión',500,0.5],['Software de vuelo',900,1.0],['Sistemas mecánicos',1350,1.7],['Sistemas de energía',1350,1.7],['Aislante Térmico',1350,1.7]]}
+];
 let particles = [], pulse = 0, message = '', messageTimer = 0, jumpWasDown = false;
 function totalMass(){return Object.values(selectedResources).reduce((sum,item)=>sum+(item.mass||0),0);}
 function wrapText(value,x,y,maxWidth,lineHeight,color='#426879',align='center'){const words=String(value).split(' '),lines=[];let line='';ctx.font='bold 11px system-ui';for(const word of words){const test=line?line+' '+word:word;if(ctx.measureText(test).width>maxWidth&&line){lines.push(line);line=word;}else line=test;}if(line)lines.push(line);ctx.fillStyle=color;ctx.textAlign=align;lines.slice(0,3).forEach((row,i)=>ctx.fillText(row,x,y+i*lineHeight));ctx.textAlign='left';}
@@ -261,17 +268,17 @@ function controlRoom(){
   // panel desplegable de opciones integrado en la misma pantalla
   if(activeCategory){
     const cat=resourceCategories.find(v=>v.id===activeCategory);
-    roundPanel(245,125,470,252,'#fffef8','#6daeb4',13);
-    roundPanel(263,140,434,39,'#15516e','#58c9cf',8);
-    txt(cat.name+' · ELIGE UNA OPCIÓN',480,165,13,'#ffffff','center');
-    txt('El costo se descuenta del presupuesto total de esta misión.',480,198,10,'#547782','center');
+    roundPanel(225,105,510,350,'#fffef8','#6daeb4',13);
+    roundPanel(243,117,474,34,'#15516e','#58c9cf',8);
+    txt(cat.name+' · ELIGE UNA OPCIÓN',480,140,12,'#ffffff','center');
+    txt('Selecciona una alternativa para configurar este sistema.',480,160,9,'#547782','center');
     cat.options.forEach((opt,i)=>{
-      const yy=215+i*43,canPay=missionBudget>=opt[1];
-      roundPanel(280,yy,400,35,canPay?'#edf8f5':'#f2eeee',canPay?'#9acbbd':'#d9c5c5',7);
-      txt((i+1)+'. '+opt[0],296,yy+22,11,canPay?'#31596c':'#a18e8e');
-      txt('SELECCIONAR',661,yy+22,9,canPay?'#397d65':'#a18e8e','right');
+      const yy=174+i*33,canPay=missionBudget>=opt[1];
+      roundPanel(250,yy,460,28,canPay?'#edf8f5':'#f2eeee',canPay?'#9acbbd':'#d9c5c5',6);
+      txt((i+1)+'. '+opt[0],264,yy+19,opt[0].length>31?9:10,canPay?'#31596c':'#a18e8e');
+      txt('ELEGIR',694,yy+19,8,canPay?'#397d65':'#a18e8e','right');
     });
-    txt('Pulsa 1, 2 o 3 · ESC para cerrar',480,361,9,'#66828a','center');
+    txt('Pulsa el número correspondiente · ESC para cerrar',480,445,8,'#66828a','center');
   }
   if(messageTimer>0){roundPanel(330,388,300,26,'#fffef5','#c6e0d7',8);txt(message,480,406,10,'#3e8066','center');}
   if(utilityPanel){
@@ -494,7 +501,7 @@ function keyDown(e){
  }
  if(mode==='hangar'){
    if(chosenAllResources()&&(e.code==='Enter'||e.code==='NumpadEnter')){mode='launch';launchTimer=0;activeCategory=null;utilityPanel=null;audio.start();return;}
-   if(activeCategory&&['Digit1','Digit2','Digit3'].includes(e.code)){
+   if(activeCategory&&/^Digit[1-8]$/.test(e.code)){
      const cat=resourceCategories.find(v=>v.id===activeCategory),opt=cat.options[Number(e.code.slice(-1))-1];
      if(opt){const old=selectedResources[cat.id];const mass=totalMass()-(old?old.mass:0)+opt[2];if(missionBudget+(old?old.cost:0)<opt[1])notify('Presupuesto insuficiente.');else if(mass>missionBriefs[missionIndex].limit)notify('La masa supera el límite permitido.');else{if(old)missionBudget+=old.cost;missionBudget-=opt[1];selectedResources[cat.id]={label:opt[0],cost:opt[1],mass:opt[2]};activeCategory=null;actionAnimation=1.8;actionLabel='FLYN INSTALANDO RECURSOS';say('¡Selección confirmada!');audio.data();}}
    }else if(e.code==='Escape'){activeCategory=null;utilityPanel=null;}return;
@@ -531,8 +538,8 @@ canvas.tabIndex=0;canvas.style.cursor='pointer';document.addEventListener('keydo
     if(chosenAllResources()&&x>=380&&x<=580&&y>=443&&y<=468){mode='launch';launchTimer=0;activeCategory=null;utilityPanel=null;audio.start();return;}
     if(activeCategory){
       const cat=resourceCategories.find(v=>v.id===activeCategory);
-      if(x>=280&&x<=680&&y>=215&&y<=344){
-        const choice=Math.max(0,Math.min(2,Math.floor((y-215)/43))),opt=cat.options[choice];
+      if(x>=250&&x<=710&&y>=174&&y<174+cat.options.length*33){
+        const choice=Math.max(0,Math.min(cat.options.length-1,Math.floor((y-174)/33))),opt=cat.options[choice];
         if(missionBudget<opt[1]){notify('Presupuesto insuficiente. Elige otra opción.');return;}
         const previous=selectedResources[cat.id];const projectedMass=totalMass()-(previous?previous.mass:0)+opt[2];if(projectedMass>missionBriefs[missionIndex].limit){notify('La masa superaría el límite de '+missionBriefs[missionIndex].limit+' kg. Elige una opción más ligera.');return;}
         if(selectedResources[cat.id])missionBudget+=selectedResources[cat.id].cost;
@@ -540,7 +547,7 @@ canvas.tabIndex=0;canvas.style.cursor='pointer';document.addEventListener('keydo
         activeCategory=null;actionAnimation=1.8;actionLabel='FLYN ESTÁ INSTALANDO: '+cat.name;
         say('¡Recurso instalado!');audio.data();return;
       }
-      if(x<245||x>715||y<125||y>377){activeCategory=null;return;}
+      if(x<225||x>735||y<105||y>455){activeCategory=null;return;}
       return;
     }
     const bx=58,by=451,bw=134,gap=8;
