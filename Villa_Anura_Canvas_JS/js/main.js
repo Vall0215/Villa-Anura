@@ -273,6 +273,11 @@ const ADDITIONAL_EN_US_TRANSLATIONS={
   "Permitió controlar la humedad de la zona radicular y la concentración de CO₂. En experimentos con trigo y Arabidopsis se validó el control de estas condiciones y el seguimiento del crecimiento en órbita.": "It enabled control of root-zone moisture and CO₂ concentration. Experiments with wheat and Arabidopsis validated control of these conditions and growth monitoring in orbit.",
   "La exposición a la radiación espacial en los niveles probados no tuvo un impacto significativo en la tasa de germinación de Arabidopsis y las semillas de múltiples plantas de cultivo.": "At the tested levels, space radiation exposure did not significantly affect the germination rate of Arabidopsis and seeds from several crop plants.",
   "La exposición a la radiación espacial en los niveles probados no tuvo un impacto significativo en la tasa de germinación y las semillas de múltiples plantas de cultivo.": "At the tested levels, space radiation exposure did not significantly affect germination rates in seeds from several crop plants.",
+  "Espera a que el cometa entre en el campo de visión.": "Wait until the comet enters the field of view.",
+  "¡Todos los sistemas preparados! Flyn está despegando.": "All systems are ready! Flyn is taking off.",
+  "La masa superaría el límite de 12.5 kg. Ajusta tu selección.": "The spacecraft mass would exceed the 12.5 kg limit. Adjust your selection.",
+  "Seis sistemas para configurar la nave": "Six systems to configure your spacecraft.",
+  "Perfil instalado:": "Installed profile:",
   "¡CONFIGURACIÓN COMPLETADA! PRESIONA ENTER PARA LANZAR":"CONFIGURATION COMPLETE! PRESS ENTER TO LAUNCH",
   "¡Todo en orden! La nave está lista. Podemos avanzar con la misión 2.":"Everything is in order! The spacecraft is ready. We can proceed to Mission 2.",
   "MISIÓN FALLIDA":"MISSION FAILED",
@@ -311,6 +316,7 @@ function tr(value){
     [/^Perfil instalado:\\s*(.+)$/,(_,n)=>'Installed profile: '+tr(n)]
   ];
   for(const [pattern,replace] of dynamicTranslations){const match=raw.match(pattern);if(match)return raw.replace(pattern,replace);}
+  if(raw.startsWith('DESAFÍO DE LA MISIÓN '))return 'MISSION CHALLENGE '+raw.slice('DESAFÍO DE LA MISIÓN '.length);
   if(raw.startsWith('FLYN ESTÁ INSTALANDO: '))return 'FLYN IS INSTALLING: '+tr(raw.slice('FLYN ESTÁ INSTALANDO: '.length));
   if(raw.startsWith('¡MISIÓN ')&&raw.endsWith(' COMPLETADA!'))return raw.replace('¡MISIÓN ','MISSION ').replace(' COMPLETADA!',' COMPLETE!');
   if(raw.startsWith('MISIÓN ')&&raw.includes(' · '))return raw.replace('MISIÓN ','MISSION ');
