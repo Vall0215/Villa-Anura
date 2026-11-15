@@ -761,7 +761,7 @@ function landingScene(){
   roundPanel(766,88,152,315,'#fffef8','#b9d8d4',10);txt('VELOCIDAD',842,113,11,'#397d6c','center');txt('km/h',842,130,9,'#6b8587','center');roundPanel(818,149,48,198,'#e5efec','#b7ceca',7);
   const speedH=184*Math.min(1,landingSpeed/120);rect(827,340-speedH,30,speedH,landingSpeed>75?'#d66b55':landingSpeed>35?'#e3b44b':'#4aa879');txt(Math.round(landingSpeed)+'',842,376,20,landingSpeed>75?'#b65343':'#286b76','center');txt('DESCENSO',842,393,8,'#6b8587','center');
   roundPanel(342,82,276,55,'#fffef8','#b9d8d4',9);txt('ALTITUD RESTANTE',480,102,9,'#6b8587','center');txt(Math.max(0,Math.round(landingAltitude))+' m',480,126,17,'#286b76','center');
-  const shipY=165+(460-landingAltitude)*.34;ctx.save();ctx.translate(0,Math.min(150,shipY-165));drawRocketProfile(480,320,rocketProfile);if(landingThrottle){setFrogMood('nervous',.35);ctx.fillStyle='#f3a34b';ctx.beginPath();ctx.moveTo(468,316);ctx.lineTo(480,355+Math.sin(clock*22)*5);ctx.lineTo(492,316);ctx.closePath();ctx.fill();}ctx.restore();
+  const touchdownOffset=114*(1-Math.max(0,Math.min(460,landingAltitude))/460);ctx.save();ctx.translate(0,touchdownOffset);drawRocketProfile(480,320,rocketProfile);if(landingThrottle){setFrogMood('nervous',.35);ctx.fillStyle='#f3a34b';ctx.beginPath();ctx.moveTo(468,316);ctx.lineTo(480,355+Math.sin(clock*22)*5);ctx.lineTo(492,316);ctx.closePath();ctx.fill();}ctx.restore();
   roundPanel(220,165,180,190,'#fffef8','#b9d8d4',10);
   txt('CONTROLES',310,190,11,'#397d6c','center');
   roundPanel(245,210,130,54,landingThrottle?'#d7f3e5':'#e4f5ed','#58b995',8);
@@ -773,7 +773,7 @@ function landingScene(){
   drawFrog(660,405,0.55);
   // Aterrizaje: línea de contacto visible y plataforma claramente delimitada.
   rect(0,431,W,4,'#e4bd4f');rect(365,426,230,6,'#fff1a8');
-  txt('LÍNEA DE ATERRIZAJE · 0 m',480,420,9,'#9b6c27','center');
+  roundPanel(600,408,150,26,'#fffdf5','#c6d9c6',7);txt('LÍNEA DE ATERRIZAJE · 0 m',675,425,7,'#9b6c27','center');
   roundPanel(205,505,550,27,'#fffdf5','#b9d8d4',8);
   txt(landingStatus==='crashed'?'MISIÓN FALLIDA · PRESIONA R PARA REINTENTAR':landingMessage,480,523,9,landingStatus==='crashed'?'#a34c43':'#426879','center');
   if(landingStatus==='crashed'){
