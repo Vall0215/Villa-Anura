@@ -376,6 +376,17 @@ function beginLandingMission(){
   say('¡Regresamos a la Tierra! Usa las flechas para controlar el descenso y conserva combustible para frenar antes de tocar el suelo.');
   audio.start();
 }
+function awardCampaignVictory(){
+  const firstCompletion=progress.completeMission('villa-anura-final-campaign');
+  if(firstCompletion){
+    progress.data.flies+=1;
+    progress.data.tickets+=5;
+    progress.save();
+    earnedStars+=3;
+    if(!completedMissions.includes(2))completedMissions.push(2);
+    saveProgress();
+  }
+}
 function updateLanding(dt){
   if(landingStatus!=='ready')return;
   const brake=!!keys.ArrowUp;
@@ -401,8 +412,8 @@ function updateLanding(dt){
     if(landingSpeed<=12){
       landingStatus='landed';
       landingMessage='¡Aterrizaje seguro! Has controlado la velocidad y el combustible.';
-      challengeAnswered=false;challengeFeedback='';challengeCorrect=false;
-      mode='complete';audio.win();
+      awardCampaignVictory();
+      mode='victory';audio.win();
     }else{
       landingStatus='crashed';
       landingMessage='GAME OVER · La nave llegó con demasiada velocidad.';
@@ -471,7 +482,68 @@ function landingScene(){
   }
 }
 
-function draw(){ctx.clearRect(0,0,W,H);if(mode==='title')titleScreen();else if(mode==='hangar')controlRoom();else if(mode==='launch')launchScene();else if(mode==='botany')botanyScene();else if(mode==='landing')landingScene();else if(mode==='flyby')flybyScene();else if(mode==='complete')completeScene();else if(mode==='missed'){flybyScene();roundPanel(280,205,400,115,'#fffef5','#c6e3d7',10);txt('¡EL COMETA YA PASÓ!',480,245,20,'#a66d4d','center');txt('Pulsa R para intentarlo otra vez.',480,277,13,'#547a82','center');}}
+function victoryScene(){
+  const g=ctx.createLinearGradient(0,0,0,H);
+  g.addColorStop(0,'#d8eff4');g.addColorStop(.56,'#eff8ef');g.addColorStop(1,'#d4eadb');
+  ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  // Celebratory confetti and soft orbital backdrop
+  for(let i=0;i<48;i++){
+    const x=(i*137+clock*13)%W;
+    const y=(i*71+Math.sin(clock*1.5+i)*9)%470;
+    const colors=['#e7bd50','#66bfa4','#72b9d5','#f19a8e','#ffffff'];
+    rect(x,y,5,8,colors[i%colors.length]);
+  }
+  planet(830,130,70,'#a9d8e8');planet(830,130,55,'#bce6ec');
+  ctx.strokeStyle='#9fcbd0';ctx.lineWidth=6;ctx.beginPath();ctx.arc(830,130,83,0,Math.PI*2);ctx.stroke();
+
+  roundPanel(28,15,904,66,'#fffdf5','#b9d8d4',14);
+  txt('¡CAMPAÑA COMPLETADA!',480,47,25,'#397d65','center');
+  txt('MISIÓN CUMPLIDA · REGRESO SEGURO A LA TIERRA',480,68,10,'#527986','center');
+
+  // Celebration platform
+  rect(0,458,W,82,'#e4f0e9');rect(0,458,W,5,'#a7c9b9');
+  for(let x=0;x<W;x+=52){rect(x,515,25,7,'#e9c85f');}
+
+  // Flyn celebrates next to the certificate
+  drawFrog(315,430,0.9);
+  roundPanel(110,455,410,30,'#fffdf5','#c1d9ce',9);
+  txt('¡Flyn celebra tu gran aterrizaje!',315,475,11,'#397d65','center');
+
+  // Certificate card
+  roundPanel(475,130,410,330,'#fffdf4','#d9b75b',16);
+  roundPanel(490,145,380,300,'#fffef9','#e8d69b',11);
+  // ornamental corners
+  for(const [x,y] of [[510,165],[850,165],[510,420],[850,420]]){
+    rect(x,y,14,4,'#d4aa44');rect(x,y,4,14,'#d4aa44');
+  }
+  txt('CERTIFICADO',680,190,12,'#9a792d','center');
+  txt('DE EXPLORADOR ESPACIAL',680,218,17,'#245b70','center');
+  rect(555,231,250,3,'#e3c66d');
+  txt('Se reconoce tu habilidad para:',680,260,10,'#5a7377','center');
+  txt('DISEÑAR · EXPERIMENTAR · ATERRIZAR',680,286,11,'#397d65','center');
+  wrapText('Completaste las tres misiones de Villa Anura y lograste un regreso seguro a la Tierra.',680,315,315,16,'#4b6872','center');
+  txt('MISIÓN 1  ✓     MISIÓN 2  ✓     MISIÓN 3  ✓',680,375,9,'#548477','center');
+  txt('VILLA ANURA · ACADEMIA DE EXPLORACIÓN',680,424,8,'#9a792d','center');
+
+  // Gold medal and ribbon laid over the lower-right corner of the certificate
+  ctx.fillStyle='#4d91b6';ctx.beginPath();ctx.moveTo(770,350);ctx.lineTo(795,350);ctx.lineTo(786,390);ctx.lineTo(768,390);ctx.closePath();ctx.fill();
+  ctx.fillStyle='#e77770';ctx.beginPath();ctx.moveTo(795,350);ctx.lineTo(820,350);ctx.lineTo(815,390);ctx.lineTo(793,390);ctx.closePath();ctx.fill();
+  ctx.fillStyle='#f0c64e';ctx.beginPath();ctx.arc(795,400,36,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle='#b8872e';ctx.lineWidth=4;ctx.stroke();
+  ctx.fillStyle='#fff3bc';ctx.beginPath();ctx.arc(795,400,26,0,Math.PI*2);ctx.fill();
+  txt('★',795,410,29,'#b9892e','center');
+
+  // Reward summary
+  roundPanel(42,95,185,116,'#fffef8','#b8d8d0',11);
+  txt('RECOMPENSAS',134,120,10,'#397d65','center');
+  txt('★  +3 ESTRELLAS',134,151,12,'#a47727','center');
+  txt('🎟  +5 TICKETS',134,177,11,'#477b85','center');
+  txt('★  MEDALLA DE ORO',134,197,9,'#a47727','center');
+
+  roundPanel(350,495,260,36,'#15516e','#58c9cf',9);
+  txt('VOLVER AL INICIO',480,518,11,'#ffffff','center');
+}
+function draw(){ctx.clearRect(0,0,W,H);if(mode==='title')titleScreen();else if(mode==='hangar')controlRoom();else if(mode==='launch')launchScene();else if(mode==='botany')botanyScene();else if(mode==='landing')landingScene();else if(mode==='victory')victoryScene();else if(mode==='flyby')flybyScene();else if(mode==='complete')completeScene();else if(mode==='missed'){flybyScene();roundPanel(280,205,400,115,'#fffef5','#c6e3d7',10);txt('¡EL COMETA YA PASÓ!',480,245,20,'#a66d4d','center');txt('Pulsa R para intentarlo otra vez.',480,277,13,'#547a82','center');}}
 function startGame(){if(mode!=='title')return;mode='hangar';missionIndex=0;missionBudget=INITIAL_MISSION_BUDGET;mdlHints=3;selectedResources={};activeCategory=null;say('¡Hola! Soy Flyn. Esta es nuestra misión de exploración espacial. Completa las tres misiones y administra el presupuesto inicial de 7.000 créditos.');audio.start();canvas.focus();}
 function keyDown(e){
  if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown',' ','Space'].includes(e.key))e.preventDefault();
@@ -495,6 +567,10 @@ function keyDown(e){
      botanyActiveInput=order[(current+1)%order.length];
      e.preventDefault();
    }
+   return;
+ }
+ if(mode==='victory'){
+   if(e.code==='Enter'||e.code==='NumpadEnter'){mode='title';return;}
    return;
  }
  if(mode==='landing'){
@@ -557,9 +633,13 @@ canvas.tabIndex=0;canvas.style.cursor='pointer';document.addEventListener('keydo
     return;
   }
 
+  if(mode==='victory'){
+    if(x>=350&&x<=610&&y>=495&&y<=531){mode='title';return;}
+    return;
+  }
   if(mode==='landing'&&landingStatus==='crashed'){beginLandingMission();return;}
   if(mode==='botany'){
-    if(botanyTested.size===7&&x>=755&&x<=915&&y>=478&&y<=513){mode='complete';challengeAnswered=false;challengeFeedback='';challengeCorrect=false;return;}
+    if(botanyTested.size===7&&x>=755&&x<=915&&y>=478&&y<=513){beginLandingMission();return;}
     if(y>=255&&y<=325){
       if(x>=320&&x<=440){botanyActiveInput='water';botanyNotice='Casilla Agua seleccionada. Escribe 0 o 1.';return;}
       if(x>=530&&x<=650){botanyActiveInput='uv';botanyNotice='Casilla Radiación UV seleccionada. Escribe 0 o 1.';return;}
