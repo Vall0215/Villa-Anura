@@ -367,6 +367,7 @@ function keyDown(e){
  if(mode==='title'&&(e.code==='Enter'||e.code==='NumpadEnter')){e.preventDefault();startGame();return;}
  if(mode==='botany'){
    if(e.code==='Escape'){botanyActiveInput=null;return;}
+   if(e.code==='Backspace'||e.code==='Delete')e.preventDefault();
    const digit=(e.code==='Digit0'||e.code==='Numpad0')?0:(e.code==='Digit1'||e.code==='Numpad1')?1:null;
    if((digit===0||digit===1)&&botanyActiveInput){
      botanyFactors[botanyActiveInput]=digit;
@@ -404,7 +405,7 @@ function keyDown(e){
    }
  }
 }
-function loop(now){const dt=Math.min(.035,(now-last)/1000||0);last=now;clock+=dt;if(mode==='launch'){launchTimer+=dt;if(launchTimer>3.2){if(missionIndex===0||missionIndex===1){missionIndex=1;mode='botany';botanyFactors={water:null,uv:null,co2:null};botanyTested=new Set();botanyResult=null;botanyNotice='Selecciona 0 o 1 en las tres casillas y consulta el resultado.';say('¡Llegamos al espacio! Vamos a iniciar el experimento botánico.');}else{mode='complete';challengeAnswered=false;challengeFeedback='';challengeCorrect=false;}}}if(dialogueTimer>0)dialogueTimer-=dt;if(messageTimer>0)messageTimer-=dt;if(actionAnimation>0)actionAnimation=Math.max(0,actionAnimation-dt);if(mode==='flyby')updateFlyby(dt);draw();requestAnimationFrame(loop);}
+function loop(now){const dt=Math.min(.035,(now-last)/1000||0);last=now;clock+=dt;if(mode==='launch'){launchTimer+=dt;if(launchTimer>3.2){if(missionIndex===0||missionIndex===1){missionIndex=1;mode='botany';botanyFactors={water:null,uv:null,co2:null};botanyActiveInput=null;botanyTested=new Set();botanyResult=null;botanyNotice='Selecciona 0 o 1 en las tres casillas y consulta el resultado.';say('¡Llegamos al espacio! Vamos a iniciar el experimento botánico.');}else{mode='complete';challengeAnswered=false;challengeFeedback='';challengeCorrect=false;}}}if(dialogueTimer>0)dialogueTimer-=dt;if(messageTimer>0)messageTimer-=dt;if(actionAnimation>0)actionAnimation=Math.max(0,actionAnimation-dt);if(mode==='flyby')updateFlyby(dt);draw();requestAnimationFrame(loop);}
 canvas.tabIndex=0;canvas.style.cursor='pointer';document.addEventListener('keydown',keyDown);document.addEventListener('keyup',e=>keys[e.code]=false);window.addEventListener('blur',()=>Object.keys(keys).forEach(k=>keys[k]=false));canvas.addEventListener('pointerdown',()=>{canvas.focus();if(mode==='title')startGame();else if(mode==='complete')keyDown({key:'Enter',code:'Enter',repeat:false,preventDefault(){}});});canvas.addEventListener('click',(e)=>{
   canvas.focus();
   const r=canvas.getBoundingClientRect(),x=(e.clientX-r.left)*W/r.width,y=(e.clientY-r.top)*H/r.height;
