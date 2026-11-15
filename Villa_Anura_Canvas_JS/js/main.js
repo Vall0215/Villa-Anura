@@ -196,6 +196,84 @@ const EN_US_TRANSLATIONS={
 
 };
 const ADDITIONAL_EN_US_TRANSLATIONS={
+  "Elíptica": "Elliptical",
+  "Cónica": "Conical",
+  "Ojival": "Ogive",
+  "Criogénico": "Cryogenic",
+  "Hidrocarburo": "Hydrocarbon",
+  "Hipergólico": "Hypergolic",
+  "Sólido": "Solid",
+  "Eléctrico / Iónico": "Electric / Ion",
+  "Holgada": "Generous reserve",
+  "Estándar": "Standard",
+  "Moderada": "Moderate",
+  "Muy limitada": "Very limited",
+  "Escape en el Lanzamiento": "Launch Escape System",
+  "Protección Térmica": "Thermal Protection",
+  "Soporte Vital y Control Ambiental": "Life Support and Environmental Control",
+  "Blindaje contra Micrometeoritos": "Micrometeoroid Shielding",
+  "Sistema de Paracaídas y Aterrizaje": "Parachute and Landing System",
+  "Trajes Espaciales": "Space Suits",
+  "Sistemas de Supresión de Incendios": "Fire Suppression Systems",
+  "Equipos de Supervivencia y Botiquines": "Survival Equipment and First-Aid Kits",
+  "Económica": "Economy",
+  "Ligera": "Lightweight",
+  "Compuesta": "Composite",
+  "Carga especializada": "Specialized Payload",
+  "Blindaje contra radiación": "Radiation Shielding",
+  "Autonomía inteligente": "Intelligent Autonomy",
+  "Instrumentos científicos": "Scientific Instruments",
+  "Sensores avanzados": "Advanced Sensors",
+  "Comunicaciones": "Communications",
+  "Sistema de propulsión": "Propulsion System",
+  "Software de vuelo": "Flight Software",
+  "Sistemas mecánicos y estructurales": "Mechanical and Structural Systems",
+  "Sistemas de energía": "Power Systems",
+  "Aislante y control térmico": "Thermal Insulation and Control",
+  "Marca todas las tecnologías que necesite la misión.": "Select all technologies required for the mission.",
+  "Valora cada elemento en una escala de cinco niveles.": "Rate each item on a five-point scale.",
+  "1 Muy en desacuerdo  ·  5 Muy de acuerdo": "1 Strongly disagree  ·  5 Strongly agree",
+  "Muy en desacuerdo": "Strongly disagree",
+  "En desacuerdo": "Disagree",
+  "Ni de acuerdo ni en desacuerdo": "Neither agree nor disagree",
+  "De acuerdo": "Agree",
+  "Totalmente de acuerdo": "Strongly agree",
+  "CONFIGURACIÓN DE LA NAVE": "SPACECRAFT CONFIGURATION",
+  "Selecciona uno de los seis sistemas.": "Select one of the six systems.",
+  "FLYN TE ACOMPAÑA": "FLYN IS HERE TO HELP",
+  "Elige cada sistema. Observa cómo cambia la nave y mantén el presupuesto bajo control.": "Configure each system, watch your spacecraft change, and keep your budget under control.",
+  "PRESUPUESTO DISPONIBLE": "AVAILABLE BUDGET",
+  "¡TODO EN ORDEN!": "ALL SYSTEMS GO!",
+  "La nave está en órbita y todos los sistemas funcionan correctamente.": "The spacecraft is in orbit and all systems are working correctly.",
+  "PREPARADOS PARA LA MISIÓN 2": "READY FOR MISSION 2",
+  "VISTA PREVIA DE CRECIMIENTO": "GROWTH PREVIEW",
+  "PLANTA CONFIGURADA": "PLANT CONFIGURED",
+  "SIN CONFIGURAR": "NOT CONFIGURED",
+  "ACTIVADO": "ON",
+  "DESACTIVADO": "OFF",
+  "Selecciona cada variable y escribe 0 o 1.": "Select each variable and enter 0 or 1.",
+  "Perfil instalado: ": "Installed profile: ",
+  "Marca todas las tecnologías que necesite la misión.": "Select all technologies required for the mission.",
+  "¿Qué debes comprobar antes de autorizar el lanzamiento?": "What should you check before authorizing launch?",
+  "Que la nave cumpla los límites de masa y tenga sus sistemas preparados": "That the spacecraft meets mass limits and has its systems ready",
+  "Que la nave lleve la mayor cantidad posible de recursos": "That the spacecraft carries as many resources as possible",
+  "¡Correcto! Antes del lanzamiento se verifican la configuración, los sistemas y los límites de masa.": "Correct! Before launch, the configuration, systems, and mass limits must be checked.",
+  "En microgravedad, ¿qué debes considerar al estudiar el crecimiento de una planta?": "In microgravity, what should you consider when studying plant growth?",
+  "Observar cómo cambian germinación y orientación al variar las condiciones": "Observe how germination and orientation change under different conditions",
+  "Suponer que todas las plantas crecen igual que en la Tierra": "Assume that all plants grow the same way as they do on Earth",
+  "¡Correcto! El experimento permite comparar resultados de germinación, orientación y condiciones ambientales.": "Correct! The experiment compares germination, orientation, and environmental conditions.",
+  "¿Qué indica que el aterrizaje fue seguro?": "What indicates that the landing was safe?",
+  "Tocar tierra con una velocidad vertical baja y controlada": "Touch down with a low, controlled vertical speed",
+  "Llegar a la superficie a la mayor velocidad posible": "Reach the surface at the highest possible speed",
+  "¡Aterrizaje exitoso! Una velocidad vertical baja y controlada reduce el riesgo de daños en la nave.": "Successful landing! A low, controlled vertical speed reduces the risk of spacecraft damage.",
+  "Se obtuvo un 100 % de germinación, pero las raíces y los brotes presentaron orientaciones anormales y aleatorias.": "A 100% germination rate was observed, but the roots and shoots showed abnormal and random orientations.",
+  "Se identificaron daños en el desarrollo de los cloroplastos. La exposición espacial incluía diferentes factores, por lo que no puede atribuirse el daño exclusivamente a la radiación UV.": "Damage to chloroplast development was identified. Space exposure involved several factors, so the damage cannot be attributed solely to UV radiation.",
+  "En algunas especies de plantas similares al maíz se proporcionó una gran carga evaporativa que puso a prueba el control de la humedad de la zona radicular y la recuperación del agua transpirada por condensación.": "In some corn-like plant species, a high evaporative load tested root-zone moisture control and the recovery of transpired water through condensation.",
+  "Los estudios de maíz en microgravedad documentan la importancia de la hidratación para la germinación, mientras que los estudios de exposición espacial muestran posibles daños por radiación.": "Microgravity corn studies document the importance of hydration for germination, while space-exposure studies show possible radiation damage.",
+  "Permitió controlar la humedad de la zona radicular y la concentración de CO₂. En experimentos con trigo y Arabidopsis se validó el control de estas condiciones y el seguimiento del crecimiento en órbita.": "It enabled control of root-zone moisture and CO₂ concentration. Experiments with wheat and Arabidopsis validated control of these conditions and growth monitoring in orbit.",
+  "La exposición a la radiación espacial en los niveles probados no tuvo un impacto significativo en la tasa de germinación de Arabidopsis y las semillas de múltiples plantas de cultivo.": "At the tested levels, space radiation exposure did not significantly affect the germination rate of Arabidopsis and seeds from several crop plants.",
+  "La exposición a la radiación espacial en los niveles probados no tuvo un impacto significativo en la tasa de germinación y las semillas de múltiples plantas de cultivo.": "At the tested levels, space radiation exposure did not significantly affect germination rates in seeds from several crop plants."
+
   "¡CONFIGURACIÓN COMPLETADA! PRESIONA ENTER PARA LANZAR":"CONFIGURATION COMPLETE! PRESS ENTER TO LAUNCH",
   "¡Todo en orden! La nave está lista. Podemos avanzar con la misión 2.":"Everything is in order! The spacecraft is ready. We can proceed to Mission 2.",
   "MISIÓN FALLIDA":"MISSION FAILED",
@@ -224,6 +302,16 @@ function tr(value){
   if(raw.startsWith('Fuente: '))return 'Source: '+raw.slice('Fuente: '.length);
   if(raw.startsWith('PRUEBAS: '))return 'TRIALS: '+raw.slice('PRUEBAS: '.length);
   if(raw.startsWith('ESTRELLAS'))return 'STARS'+raw.slice('ESTRELLAS'.length);
+  const dynamicTranslations=[
+    [/^★\\s*(\\d+)\\s+ESTRELLAS$/,(_,n)=>'★ '+n+' STARS'],
+    [/^RECURSOS PREPARADOS\\s+(\\d+\\/6)$/,(_,n)=>'SYSTEMS CONFIGURED '+n],
+    [/^SALDO DISPONIBLE\\s+\\$\\s*(.+)$/,(_,n)=>'AVAILABLE BALANCE $ '+n],
+    [/^PRESUPUESTO DISPONIBLE\\s+\\$\\s*(.+)$/,(_,n)=>'AVAILABLE BUDGET $ '+n],
+    [/^MASA\\s+(.+)$/,(_,n)=>'MASS '+n],
+    [/^Pistas restantes:\\s*(\\d+)$/,(_,n)=>'HINTS LEFT: '+n],
+    [/^Perfil instalado:\\s*(.+)$/,(_,n)=>'Installed profile: '+tr(n)]
+  ];
+  for(const [pattern,replace] of dynamicTranslations){const match=raw.match(pattern);if(match)return raw.replace(pattern,replace);}
   if(raw.startsWith('FLYN ESTÁ INSTALANDO: '))return 'FLYN IS INSTALLING: '+tr(raw.slice('FLYN ESTÁ INSTALANDO: '.length));
   if(raw.startsWith('¡MISIÓN ')&&raw.endsWith(' COMPLETADA!'))return raw.replace('¡MISIÓN ','MISSION ').replace(' COMPLETADA!',' COMPLETE!');
   if(raw.startsWith('MISIÓN ')&&raw.includes(' · '))return raw.replace('MISIÓN ','MISSION ');
@@ -334,15 +422,15 @@ function drawPlantPreview(x,y){
   if(height>12){ctx.fillStyle=water===0?'#86aa80':'#4aa56b';ctx.beginPath();ctx.ellipse(x-9,y-height+9,10,5,-.5,0,Math.PI*2);ctx.ellipse(x+9,y-height+17,10,5,.5,0,Math.PI*2);ctx.fill();}
   if(height>28){ctx.fillStyle=co2===1?'#43a56a':'#80ad77';ctx.beginPath();ctx.ellipse(x-7,y-height+24,8,4,-.5,0,Math.PI*2);ctx.ellipse(x+8,y-height+30,8,4,.5,0,Math.PI*2);ctx.fill();}
   if(ready&&uv===1){ctx.fillStyle='#e6bd55';ctx.beginPath();ctx.arc(x+26,y-height-1,5,0,Math.PI*2);ctx.fill();}
-  if(!ready){ctx.fillStyle='#597a79';ctx.font='bold 8px system-ui';ctx.textAlign='center';ctx.fillText('VISTA PREVIA DE CRECIMIENTO',x,y+39);ctx.textAlign='left';}
-  else{ctx.fillStyle='#397d65';ctx.font='bold 8px system-ui';ctx.textAlign='center';ctx.fillText('PLANTA CONFIGURADA',x,y+39);ctx.textAlign='left';}
+  if(!ready){ctx.fillStyle='#597a79';ctx.font='bold 8px system-ui';ctx.textAlign='center';ctx.fillText(tr('VISTA PREVIA DE CRECIMIENTO'),x,y+39);ctx.textAlign='left';}
+  else{ctx.fillStyle='#397d65';ctx.font='bold 8px system-ui';ctx.textAlign='center';ctx.fillText(tr('PLANTA CONFIGURADA'),x,y+39);ctx.textAlign='left';}
 }
 function rect(x,y,w,h,color){ctx.fillStyle=color;ctx.fillRect(Math.round(x),Math.round(y),Math.round(w),Math.round(h));}
 function txt(value,x,y,size=14,color='#36576a',align='left'){ctx.fillStyle=color;ctx.font='bold '+size+'px system-ui';ctx.textAlign=align;ctx.fillText(tr(value),x,y);ctx.textAlign='left';}
 function panel(x,y,w,h,fill='#fffdf5',stroke='#cfe4d8'){rect(x,y,w,h,fill);rect(x,y,w,3,stroke);rect(x,y+h-3,w,3,stroke);rect(x,y,3,h,stroke);rect(x+w-3,y,3,h,stroke);}
 function roundPanel(x,y,w,h,fill='#fffdf5',stroke='#cfe4d8',r=10){ctx.fillStyle=fill;ctx.strokeStyle=stroke;ctx.lineWidth=2;ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill();ctx.stroke();}
-function say(t){dialogue=tr(t);dialogueTimer=3.8;}
-function notify(t){message=tr(t);messageTimer=2.2;}
+function say(t){dialogue=t;dialogueTimer=3.8;}
+function notify(t){message=t;messageTimer=2.2;}
 function planet(x,y,r,color){ctx.fillStyle=color;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();ctx.fillStyle='#ffffff45';ctx.beginPath();ctx.ellipse(x-r*.2,y-r*.25,r*.55,r*.17,-.4,0,Math.PI*2);ctx.fill();}
 function stars(){for(let i=0;i<50;i++){const x=(i*191-clock*(i%3+1)*5)%W;const y=(i*79)%300;rect((x+W)%W,y,2+(i%3===0?1:0),2,'#ffffffaa');}}
 function drawFrog(x,y,scale=1){
@@ -452,7 +540,7 @@ function controlRoom(){
   roundPanel(484,125,448,306,'#fffef8','#a9d0c7',14);
   if(activeCategory){
     const cat=resourceCategories.find(v=>v.id===activeCategory);
-    roundPanel(502,141,412,36,'#15516e','#58c9cf',8);const multiSelectCategory=cat.id==='safety'||cat.id==='technology';txt(cat.name+' · '+tr(multiSelectCategory?'ELIGE UNA O VARIAS OPCIONES':'ELIGE UNA OPCIÓN'),708,164,12,'#ffffff','center');
+    roundPanel(502,141,412,36,'#15516e','#58c9cf',8);const multiSelectCategory=cat.id==='safety'||cat.id==='technology';txt(tr(cat.name)+' · '+tr(multiSelectCategory?'ELIGE UNA O VARIAS OPCIONES':'ELIGE UNA OPCIÓN'),708,164,12,'#ffffff','center');
     txt(tr(multiSelectCategory?'Selecciona una o varias alternativas para configurar este sistema.':'Selecciona una alternativa para configurar este sistema.'),708,193,9,'#547782','center');
     if(cat.id==='technology'){
       const chosen=selectedResources.technology?.items||[],rowH=18.5;
