@@ -11,6 +11,8 @@ const player = { x: 118, y: 420, w: 34, h: 42, vx: 0, vy: 0, grounded: true, fac
 const keys = {};
 let mode = 'title', clock = 0, last = 0, dialogue = '', dialogueTimer = 0;
 let installed = new Set(), missionPhase = 0, cometX = 1030, observationWindow = 0, dataSaved = false, dataSent = false;
+const missionNames = ['SOBREVUELO','ORBITADOR','SONDA ATMOSFÉRICA','ATERRIZADOR','ROVER EXPLORADOR','RETORNO DE MUESTRAS'];
+let missionIndex = 0;
 let particles = [], pulse = 0, message = '', messageTimer = 0, jumpWasDown = false;
 
 const stations = [
@@ -30,37 +32,35 @@ function planet(x,y,r,color){ctx.fillStyle=color;ctx.beginPath();ctx.arc(x,y,r,0
 function stars(){for(let i=0;i<50;i++){const x=(i*191-clock*(i%3+1)*5)%W;const y=(i*79)%300;rect((x+W)%W,y,2+(i%3===0?1:0),2,'#ffffffaa');}}
 function drawFrog(x,y,scale=1){
   ctx.save();ctx.translate(Math.round(x),Math.round(y));ctx.scale(scale,scale);
-  const walking=Math.abs(player.vx)>5,step=walking?Math.sin(player.anim*15)*3:0;
+  const walking=Math.abs(player.vx)>5,step=walking?Math.sin(player.anim*13)*3:0;
   const blink=Math.sin(clock*1.7)>0.985;
-  // soft shadow and tiny antenna spark
-  ctx.globalAlpha=.2;ctx.fillStyle='#315b68';ctx.beginPath();ctx.ellipse(0,2,25,5,0,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
-  // backpack
-  rect(-21,-29,8,25,'#24617a');rect(-19,-27,5,19,'#57a9b5');rect(14,-29,8,25,'#24617a');
-  // legs and boots
-  rect(-14,-9+step,11,9,'#167b4c');rect(4,-9-step,11,9,'#167b4c');
-  rect(-17,-4+step,14,6,'#17354f');rect(3,-4-step,14,6,'#17354f');rect(-15,-3+step,9,2,'#83d8c5');rect(5,-3-step,9,2,'#83d8c5');
-  // astronaut body suit
-  rect(-17,-30,34,25,'#183b58');rect(-14,-29,28,22,'#f4fbf7');rect(-11,-27,22,17,'#ffffff');rect(-9,-12,18,3,'#a9dfe0');
-  rect(-5,-24,10,10,'#4a9fae');rect(-3,-22,6,6,'#d6f4e9');rect(-2,-21,4,2,'#f5c65b');
-  // arms, animated slightly while walking
-  rect(-22,-27,7,17,'#1b4761');rect(-20,-25,6,12,'#f5fbf5');rect(-22,-13,8,6,'#54b84c');
-  rect(15,-27,7,17,'#1b4761');rect(15,-25,6,12,'#f5fbf5');rect(14,-13,8,6,'#54b84c');
-  // frog head silhouette with dark pixel outline
-  rect(-19,-52,38,29,'#17274c');rect(-22,-47,5,18,'#17274c');rect(17,-47,5,18,'#17274c');
-  rect(-16,-54,11,7,'#17274c');rect(5,-54,11,7,'#17274c');
-  rect(-17,-50,34,25,'#39a94a');rect(-20,-45,4,14,'#39a94a');rect(16,-45,4,14,'#39a94a');
-  rect(-14,-53,9,5,'#91dc54');rect(5,-53,9,5,'#91dc54');rect(-16,-49,32,21,'#65c83e');rect(-18,-43,4,11,'#65c83e');
-  // forehead shine and eyes
-  rect(-12,-49,7,2,'#c9f47b');rect(6,-49,6,2,'#c9f47b');
-  rect(-12,-45,8,9,'#17274c');rect(5,-45,8,9,'#17274c');
-  if(blink){rect(-10,-41,5,2,'#f8fff8');rect(7,-41,5,2,'#f8fff8');}
-  else{rect(-9,-44,4,6,'#ffffff');rect(7,-44,4,6,'#ffffff');rect(-8,-43,2,4,'#182b50');rect(8,-43,2,4,'#182b50');}
-  // cheeks, nose and smile
-  rect(-16,-35,6,5,'#f27c9a');rect(10,-35,6,5,'#f27c9a');rect(-2,-35,2,2,'#17304b');rect(3,-35,2,2,'#17304b');
-  rect(-5,-30,10,2,'#17304b');rect(-3,-28,6,2,'#17304b');
-  // headset and glass highlights
-  rect(-22,-47,4,9,'#55b8d2');rect(18,-47,4,9,'#55b8d2');rect(-19,-53,7,3,'#2c5068');rect(12,-53,7,3,'#2c5068');
-  rect(-13,-51,4,2,'#ffffff');rect(7,-51,4,2,'#ffffff');
+  // sombra
+  ctx.globalAlpha=.18;ctx.fillStyle='#173b38';ctx.beginPath();ctx.ellipse(0,1,39,8,0,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
+  // patas traseras anchas
+  rect(-36,-18+step,18,13,'#087d32');rect(-43,-13+step,18,9,'#39b923');rect(20,-18-step,18,13,'#087d32');rect(26,-13-step,18,9,'#39b923');
+  rect(-39,-8+step,23,7,'#050d0b');rect(19,-8-step,23,7,'#050d0b');
+  // cuerpo verde y vientre crema, sin ropa ni accesorios
+  rect(-25,-48,50,37,'#050d0b');rect(-22,-46,44,34,'#168b26');rect(-18,-42,36,27,'#43bd27');
+  rect(-16,-29,32,18,'#050d0b');rect(-13,-28,26,16,'#f0df8a');rect(-10,-24,20,11,'#f7e9a4');
+  // brazos/patitas delanteras
+  rect(-31,-42,13,31,'#050d0b');rect(-28,-40,12,27,'#15932b');rect(-25,-35,9,22,'#55c92c');
+  rect(18,-42,13,31,'#050d0b');rect(16,-40,12,27,'#15932b');rect(16,-35,9,22,'#55c92c');
+  // cabeza ancha con contorno pixelado
+  rect(-35,-91,70,55,'#050d0b');rect(-39,-81,8,31,'#050d0b');rect(31,-81,8,31,'#050d0b');
+  rect(-32,-88,64,49,'#15962b');rect(-35,-78,70,30,'#15962b');rect(-30,-84,60,42,'#4bc52b');
+  // ojos elevados y grandes
+  rect(-31,-105,26,28,'#050d0b');rect(5,-105,26,28,'#050d0b');
+  rect(-28,-102,22,24,'#42c52b');rect(7,-102,22,24,'#42c52b');
+  rect(-25,-98,17,18,'#f2d96e');rect(8,-98,17,18,'#f2d96e');
+  rect(-20,-94,12,13,'#050d0b');rect(11,-94,12,13,'#050d0b');
+  if(blink){rect(-19,-87,10,3,'#ffffff');rect(12,-87,10,3,'#ffffff');}
+  else{rect(-18,-96,8,9,'#ffffff');rect(13,-96,8,9,'#ffffff');rect(-15,-93,5,7,'#050d0b');rect(16,-93,5,7,'#050d0b');}
+  // hocico, mejillas y sonrisa
+  rect(-9,-76,5,4,'#147d24');rect(5,-76,5,4,'#147d24');
+  rect(-27,-67,9,7,'#f18b83');rect(18,-67,9,7,'#f18b83');
+  rect(-12,-58,24,3,'#050d0b');rect(-7,-55,14,3,'#050d0b');
+  // pequeños brillos y motas
+  rect(-28,-82,5,5,'#9be94d');rect(23,-82,5,5,'#9be94d');rect(-18,-48,4,4,'#83e44b');rect(13,-45,4,4,'#83e44b');
   ctx.restore();
 }
 function background(){
@@ -137,7 +137,7 @@ function controlRoom(){
   roundPanel(272,177,160,62,'#f9ffff','#c3d9df',6);planet(303,206,15,'#5ab6c6');txt('VILLA ANURA',326,204,13,'#1d617c');txt('CENTRO ESPACIAL',326,222,8,'#47798a');
   // encabezado y panel de misión
   roundPanel(14,12,260,48,'#fafdff','#b8d9df',8);txt('VILLA ANURA',29,33,15,'#177b70');txt('CENTRO DE CONTROL ESPACIAL',29,50,8,'#527e8d');
-  roundPanel(14,75,265,74,'#f9ffff','#9fcbd1',10);txt('MISIÓN 1 / 6 · SOBREVUELO',29,99,11,'#155b79');txt('Prepara la nave para estudiar',29,119,11,'#243d64');txt('un cometa de cerca.',29,135,11,'#243d64');
+  roundPanel(14,75,265,74,'#f9ffff','#9fcbd1',10);txt('MISIÓN '+(missionIndex+1)+' / 6 · '+missionNames[missionIndex],29,99,11,'#155b79');txt('Prepara la nave para estudiar',29,119,11,'#243d64');txt('un cometa de cerca.',29,135,11,'#243d64');
   // HUD superior derecha
   roundPanel(790,12,156,45,'#f9ffff','#b8d9df',8);txt('★  0       🎟  0',807,41,16,'#155b79');
   // estaciones interactivas: consolas delante del hangar
@@ -163,7 +163,7 @@ function titleScreen(){
   roundPanel(34,264,190,100,'#dfeaf0','#9ebbc7',8);rect(46,276,166,75,'#06436f');planet(92,312,25,'#50b6d0');for(let i=0;i<4;i++)rect(132,292+i*12,62,3,'#59dbe0');
   roundPanel(737,257,190,104,'#dfeaf0','#9ebbc7',8);rect(750,269,164,78,'#06436f');planet(826,307,26,'#64b9c8');for(let i=0;i<4;i++)rect(861,287+i*12,38,3,'#57d7df');
   // Flying en traje espacial, en el centro
-  drawFrog(480,438,2.05);
+  drawFrog(480,438,1.75);
   // mensaje de bienvenida
   roundPanel(620,347,302,91,'#fffdf2','#1b7895',10);txt('¡BIENVENIDO, EXPLORADOR!',638,371,12,'#153d62');txt('Soy Flying. Prepárate para diseñar',638,395,11,'#153d62');txt('y lanzar nuestras misiones espaciales.',638,414,11,'#153d62');
   // botón principal tipo pixel UI
@@ -186,9 +186,9 @@ drawFrog(player.x,player.y);if(dialogueTimer>0)dialogBox(dialogue);
 }
 function updateFlyby(dt){updatePlayer(dt);cometX-=125*dt;observationWindow+=dt;if(missionPhase===0&&cometX<250){say('¡El cometa está en el campo de visión! Pulsa E ahora.');missionPhase=0;}if(cometX<-90&&missionPhase===0){say('El cometa pasó. Pulsa R para repetir el sobrevuelo.');mode='missed';}if(missionPhase===1&&dataSaved===false){}}
 function interactFlyby(){if(missionPhase===0){if(cometX<400&&cometX>95){missionPhase=1;say('¡Imagen capturada! Ahora guarda los datos en la memoria.');audio.data();}else say('Espera a que el cometa entre en el campo de visión.');}else if(missionPhase===1){dataSaved=true;missionPhase=2;say('Datos almacenados. Orienta la antena para transmitir.');audio.data();}else if(missionPhase===2){dataSent=true;missionPhase=3;say('¡La Tierra recibió los datos! Misión completada.');audio.win();setTimeout(()=>{if(mode==='flyby'){mode='complete';if(!progress.data.completed.includes('flyby-v1')){progress.data.completed.push('flyby-v1');progress.data.flies++;progress.data.tickets+=3;progress.save();}}},1000);}}
-function completeScene(){background();planet(480,215,112,'#abd9cf');drawFrog(480,365,1.8);txt('¡MISIÓN COMPLETADA!',480,88,29,'#4c8668','center');txt('Capturaste, guardaste y transmitiste los datos del cometa.',480,123,13,'#547a82','center');roundPanel(330,445,300,55,'#fffef6','#c6e3d7',9);txt('ENTER · SIGUIENTE DESTINO',480,479,13,'#4b8965','center');}
+function completeScene(){background();planet(480,215,112,'#abd9cf');drawFrog(480,365,1.65);txt('¡MISIÓN '+(missionIndex+1)+' COMPLETADA!',480,88,27,'#4c8668','center');txt('¡Excelente trabajo, explorador! Has completado '+missionNames[missionIndex]+'.',480,123,12,'#547a82','center');roundPanel(300,445,360,55,'#fffef6','#c6e3d7',9);txt(missionIndex===5?'ENTER · VOLVER AL CENTRO':'ENTER · SIGUIENTE MISIÓN',480,479,13,'#4b8965','center');}
 function draw(){ctx.clearRect(0,0,W,H);if(mode==='title')titleScreen();else if(mode==='hangar')controlRoom();else if(mode==='flyby')flybyScene();else if(mode==='complete')completeScene();else if(mode==='missed'){flybyScene();roundPanel(280,205,400,115,'#fffef5','#c6e3d7',10);txt('¡EL COMETA YA PASÓ!',480,245,20,'#a66d4d','center');txt('Pulsa R para intentarlo otra vez.',480,277,13,'#547a82','center');}}
 function startGame(){if(mode!=='title')return;mode='hangar';say('¡Hola! Soy Flying. Este es nuestro centro de control.');audio.start();canvas.focus();}
-function keyDown(e){if(['ArrowLeft','ArrowRight','ArrowUp',' ','Space'].includes(e.key))e.preventDefault();keys[e.code]=true;if(e.repeat)return;if(mode==='title'&&(e.code==='Enter'||e.code==='NumpadEnter')){e.preventDefault();startGame();}else if(mode==='hangar'){if(e.code==='KeyE')interactHangar();if(e.code==='Enter')startMission();}else if(mode==='flyby'){if(e.code==='KeyE')interactFlyby();}else if(mode==='missed'&&e.code==='KeyR'){mode='flyby';cometX=1050;observationWindow=0;missionPhase=0;resetPlayer();say('¡Nueva oportunidad! Prepárate.');}else if(mode==='complete'&&e.code==='Enter'){mode='hangar';say('¡Buen trabajo! La siguiente misión se está preparando.');}}
+function keyDown(e){if(['ArrowLeft','ArrowRight','ArrowUp',' ','Space'].includes(e.key))e.preventDefault();keys[e.code]=true;if(e.repeat)return;if(mode==='title'&&(e.code==='Enter'||e.code==='NumpadEnter')){e.preventDefault();startGame();}else if(mode==='hangar'){if(e.code==='KeyE')interactHangar();if(e.code==='Enter')startMission();}else if(mode==='flyby'){if(e.code==='KeyE')interactFlyby();}else if(mode==='missed'&&e.code==='KeyR'){mode='flyby';cometX=1050;observationWindow=0;missionPhase=0;resetPlayer();say('¡Nueva oportunidad! Prepárate.');}else if(mode==='complete'&&e.code==='Enter'){if(missionIndex<5){missionIndex++;installed.clear();mode='hangar';resetPlayer();say('¡Vamos con la misión '+(missionIndex+1)+': '+missionNames[missionIndex]+'. Revisa el centro de control!');}else{missionIndex=0;installed.clear();mode='title';say('¡Has completado las seis misiones espaciales!');}}}
 function loop(now){const dt=Math.min(.035,(now-last)/1000||0);last=now;clock+=dt;if(dialogueTimer>0)dialogueTimer-=dt;if(messageTimer>0)messageTimer-=dt;if(mode==='hangar')updatePlayer(dt);if(mode==='flyby')updateFlyby(dt);draw();requestAnimationFrame(loop);}
-canvas.tabIndex=0;canvas.style.cursor='pointer';document.addEventListener('keydown',keyDown);document.addEventListener('keyup',e=>keys[e.code]=false);window.addEventListener('blur',()=>Object.keys(keys).forEach(k=>keys[k]=false));canvas.addEventListener('pointerdown',()=>{canvas.focus();if(mode==='title')startGame();});canvas.addEventListener('click',()=>{if(mode==='title')startGame();});requestAnimationFrame(loop);
+canvas.tabIndex=0;canvas.style.cursor='pointer';document.addEventListener('keydown',keyDown);document.addEventListener('keyup',e=>keys[e.code]=false);window.addEventListener('blur',()=>Object.keys(keys).forEach(k=>keys[k]=false));canvas.addEventListener('pointerdown',()=>{canvas.focus();if(mode==='title')startGame();else if(mode==='complete')keyDown({key:'Enter',code:'Enter',repeat:false,preventDefault(){}});});canvas.addEventListener('click',()=>{if(mode==='title')startGame();else if(mode==='complete')keyDown({key:'Enter',code:'Enter',repeat:false,preventDefault(){}});});requestAnimationFrame(loop);
