@@ -11,7 +11,7 @@ const player = { x: 118, y: 420, w: 34, h: 42, vx: 0, vy: 0, grounded: true, fac
 const keys = {};
 let mode = 'title', clock = 0, last = 0, dialogue = '', dialogueTimer = 0;
 let installed = new Set(), missionPhase = 0, cometX = 1030, observationWindow = 0, dataSaved = false, dataSent = false;
-let particles = [], pulse = 0, message = '', messageTimer = 0;
+let particles = [], pulse = 0, message = '', messageTimer = 0, jumpWasDown = false;
 
 const stations = [
   { id: 'camera', x: 170, icon: '📷', name: 'CÁMARA', desc: 'Captura imágenes científicas' },
@@ -55,7 +55,7 @@ function hud(){roundPanel(18,14,210,43,'#fffdf5','#c8e3d8',8);txt('VILLA ANURA',
 function dialogBox(t){roundPanel(675,390,265,65,'#fffef8','#c9e4d7',9);txt('FLYING',690,411,10,'#65a078');txt(t.length>35?t.slice(0,34)+'…':t,690,435,11,'#456879');}
 function titleScreen(){background();rect(0,420,W,120,'#b4d9c7');rect(0,420,W,7,'#8dc59e');planet(770,190,105,'#a8d9ce');planet(180,155,42,'#d0e1f2');drawFrog(480,390,2.3);txt('VILLA ANURA',480,88,40,'#478268','center');txt('SPACE MISSION ADVENTURE',480,118,14,'#72988a','center');roundPanel(330,448,300,55,'#fffef6','#c6e3d7',9);txt('PRESIONA ENTER PARA JUGAR',480,482,14,'#4b8965','center');}
 function resetPlayer(){player.x=115;player.y=420;player.vx=0;player.vy=0;player.grounded=true;}
-function updatePlayer(dt){const left=keys.ArrowLeft||keys.KeyA,right=keys.ArrowRight||keys.KeyD,jump=keys.Space||keys.ArrowUp||keys.KeyW;player.vx=((right?1:0)-(left?1:0))*210;if(player.vx)player.facing=Math.sign(player.vx);if(jump&&player.grounded){player.vy=-570;player.grounded=false;audio.jump();}player.vy+=1450*dt;player.x=Math.max(32,Math.min(928,player.x+player.vx*dt));player.y+=player.vy*dt;if(player.y>=420){player.y=420;player.vy=0;player.grounded=true;}player.anim+=dt;}
+function updatePlayer(dt){const left=keys.ArrowLeft||keys.KeyA,right=keys.ArrowRight||keys.KeyD,jump=keys.Space||keys.ArrowUp||keys.KeyW;player.vx=((right?1:0)-(left?1:0))*210;if(player.vx)player.facing=Math.sign(player.vx);if(jump&&!jumpWasDown&&player.grounded){player.vy=-570;player.grounded=false;audio.jump();}jumpWasDown=!!jump;player.vy+=1450*dt;player.x=Math.max(32,Math.min(928,player.x+player.vx*dt));player.y+=player.vy*dt;if(player.y>=420){player.y=420;player.vy=0;player.grounded=true;}player.anim+=dt;}
 function interactHangar(){const station=stations.find(s=>Math.abs(player.x-s.x)<62);if(!station){say('Acércate a una consola para instalar sus sistemas.');return;}if(installed.has(station.id)){say('Ese sistema ya está instalado. ¡Bien hecho!');return;}installed.add(station.id);audio.data();say(station.desc+' instalado.');if(installed.size===4){say('¡Todos los sistemas listos! Pulsa ENTER para despegar.');notify('NAVE PREPARADA');}}
 function startMission(){if(installed.size<4){say('Aún faltan sistemas. Revisa las cuatro consolas.');return;}mode='flyby';missionPhase=0;cometX=1050;observationWindow=0;dataSaved=false;dataSent=false;resetPlayer();say('¡Despegue! El cometa se aproxima por la derecha.');audio.start();}
 function flybyScene(){background();planet(135,140,58,'#b8d9d4');planet(820,110,32,'#d6e3ef');
