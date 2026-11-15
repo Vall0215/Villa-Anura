@@ -715,20 +715,26 @@ function updateLanding(dt){
   landingAudioCooldown=Math.max(0,landingAudioCooldown-dt);
   const brake=!!keys.Space;
   landingThrottle=false;
-  landingSpeed+=4.6*dt;
+  landingSpeed+=4.0*dt;
   if(brake&&landingFuel>0){
-    landingSpeed-=30*dt;landingFuel=Math.max(0,landingFuel-4*dt);landingThrottle=true;
+    landingSpeed-=38*dt;
+    landingFuel=Math.max(0,landingFuel-3.2*dt);
+    landingThrottle=true;
     if(landingAudioCooldown<=0){audio.brake();landingAudioCooldown=.32;}
-    landingMessage='Frenado activo: mantén el control y vigila la reserva de combustible.';
-  }else landingMessage=landingFuel<=0?'Combustible agotado: ya no puedes frenar.':'Caída por gravedad: pulsa ESPACIO para frenar.';
+    landingMessage='FRENADO ACTIVO · Suelta ESPACIO al llegar a 18 km/h. Vigila el combustible.';
+  }else landingMessage=landingFuel<=0?'SIN COMBUSTIBLE · Ya no puedes frenar.':'GRAVEDAD ACTIVA · Mantén ESPACIO para reducir la velocidad.';
   landingSpeed=Math.max(0,Math.min(155,landingSpeed));
   landingAltitude-=landingSpeed/3.6*1.2*dt;
   if(landingAltitude<=0){
     landingAltitude=0;
-    if(landingSpeed<=18&&landingFuel>=0){
-      landingStatus='landed';landingMessage='¡Aterrizaje seguro! Has controlado la velocidad y el combustible.';setFrogMood('proud',8);
+    if(landingSpeed<=18&&landingFuel>0){
+      landingStatus='landed';landingMessage='¡Aterrizaje seguro! Velocidad y combustible dentro del límite.';setFrogMood('proud',8);
       awardCampaignVictory();mode='victory';audio.stopMusic();audio.landing();setTimeout(()=>audio.certificate(),220);
-    }else{landingStatus='crashed';landingMessage='GAME OVER · La nave llegó con demasiada velocidad.';setFrogMood('sad',8);audio.bump();}
+    }else{
+      landingStatus='crashed';
+      landingMessage=landingFuel<=0?'GAME OVER · Te quedaste sin combustible antes de aterrizar.':'GAME OVER · Superaste la velocidad máxima de aterrizaje (18 km/h).';
+      setFrogMood('sad',8);audio.bump();
+    }
   }
 }
 function landingScene(){
@@ -743,10 +749,26 @@ function landingScene(){
   const speedH=184*Math.min(1,landingSpeed/120);rect(827,340-speedH,30,speedH,landingSpeed>75?'#d66b55':landingSpeed>35?'#e3b44b':'#4aa879');txt(Math.round(landingSpeed)+'',842,376,20,landingSpeed>75?'#b65343':'#286b76','center');txt('DESCENSO',842,393,8,'#6b8587','center');
   roundPanel(342,82,276,55,'#fffef8','#b9d8d4',9);txt('ALTITUD RESTANTE',480,102,9,'#6b8587','center');txt(Math.max(0,Math.round(landingAltitude))+' m',480,126,17,'#286b76','center');
   const shipY=165+(460-landingAltitude)*.34;ctx.save();ctx.translate(0,Math.min(150,shipY-165));drawRocketProfile(480,320,rocketProfile);if(landingThrottle){setFrogMood('nervous',.35);ctx.fillStyle='#f3a34b';ctx.beginPath();ctx.moveTo(468,316);ctx.lineTo(480,355+Math.sin(clock*22)*5);ctx.lineTo(492,316);ctx.closePath();ctx.fill();}ctx.restore();
-  roundPanel(220,165,180,190,'#fffef8','#b9d8d4',10);txt('CONTROLES',310,190,11,'#397d6c','center');roundPanel(245,220,130,60,'#e4f5ed','#8dc7ae',8);txt('␣  FRENAR',310,256,15,'#286b62','center');txt('Mantén ESPACIO',310,299,9,'#a16a37','center');
+  roundPanel(220,165,180,190,'#fffef8','#b9d8d4',10);
+  txt('CONTROLES',310,190,11,'#397d6c','center');
+  roundPanel(245,210,130,54,landingThrottle?'#d7f3e5':'#e4f5ed','#58b995',8);
+  txt('␣  FRENAR',310,244,14,'#286b62','center');
+  txt('MANTÉN ESPACIO',310,282,8,'#a16a37','center');
+  txt('OBJETIVO DE ATERRIZAJE',310,310,8,'#397d6c','center');
+  txt('≤ 18 km/h  ·  combustible > 0%',310,329,7,'#b16b38','center');
+  txt(landingThrottle?'FRENANDO AHORA':'Pulsa para reducir velocidad',310,345,7,landingThrottle?'#328b68':'#547782','center');
   drawFrog(660,405,0.55);
-  roundPanel(205,505,550,27,'#fffdf5','#b9d8d4',8);txt(landingStatus==='crashed'?'GAME OVER · PULSA R PARA REINTENTAR':landingMessage,480,523,9,landingStatus==='crashed'?'#a34c43':'#426879','center');
-  if(landingStatus==='crashed'){roundPanel(365,365,230,88,'#fff4ed','#d89b81',10);txt('GAME OVER',480,397,19,'#a34c43','center');txt('Pulsa R para volver a intentar',480,426,10,'#875e52','center');}
+  // Aterrizaje: línea de contacto visible y plataforma claramente delimitada.
+  rect(0,431,W,4,'#e4bd4f');rect(365,426,230,6,'#fff1a8');
+  txt('TOUCHDOWN LINE · 0 m',480,420,9,'#9b6c27','center');
+  roundPanel(205,505,550,27,'#fffdf5','#b9d8d4',8);
+  txt(landingStatus==='crashed'?'GAME OVER · PRESS R TO RETRY':landingMessage,480,523,9,landingStatus==='crashed'?'#a34c43':'#426879','center');
+  if(landingStatus==='crashed'){
+    roundPanel(330,355,300,105,'#fff4ed','#d89b81',10);
+    txt('GAME OVER',480,382,19,'#a34c43','center');
+    wrapText(landingMessage,480,408,260,14,'#875e52','center');
+    txt('PRESS R TO RETRY',480,443,9,'#15516e','center');
+  }
 }
 function victoryScene(){
   const g=ctx.createLinearGradient(0,0,0,H);
