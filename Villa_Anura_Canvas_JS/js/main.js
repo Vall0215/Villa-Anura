@@ -553,7 +553,6 @@ function controlRoom(){
       txt('Marca todas las tecnologías que necesite la misión.',708,400,8,'#547782','center');
     }else if(cat.id==='safety'){
       const chosen=selectedResources.safety?.items||[],rowH=22.5;
-      txt('Selecciona uno o varios sistemas de seguridad.',708,197,8,'#547782','center');
       cat.options.forEach((opt,i)=>{
         const yy=205+i*rowH,checked=chosen.some(v=>v[0]===opt[0]);
         roundPanel(508,yy,400,20,checked?'#dff4e6':'#edf8f5',checked?'#69b78a':'#9acbbd',5);
