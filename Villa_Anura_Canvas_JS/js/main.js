@@ -76,7 +76,7 @@ function botanyScene(){
   txt('VARIABLE',390,207,10,'#6b8587');
   txt('0 · INACTIVO',650,207,10,'#6b8587','center');
   txt('1 · ACTIVO',800,207,10,'#6b8587','center');
-  const factors=[['water','AGUA',235],['uv','RADIACIÓN UV',300],['co2','CO₂',365]];
+  const factors=[['water','AGUA',215],['uv','RADIACIÓN UV',275],['co2','CO₂',335]];
   factors.forEach(([id,label,yy])=>{
     const value=botanyFactors[id];
     roundPanel(382,yy,486,50,'#edf5f2','#d0e1dc',8);
@@ -86,8 +86,8 @@ function botanyScene(){
     roundPanel(744,yy+8,96,34,value===1?'#3a9a67':'#dfe9e7',value===1?'#2c8155':'#c2d5d1',7);
     txt('1',792,yy+30,14,value===1?'#ffffff':'#668080','center');
   });
-  roundPanel(520,402,210,28,'#15516e','#58c9cf',8);
-  txt('EJECUTAR PRUEBA ▶',625,421,10,'#ffffff','center');
+  roundPanel(520,398,210,30,'#15516e','#58c9cf',8);
+  txt('EJECUTAR PRUEBA ▶',625,419,10,'#ffffff','center');
 
   // Resultado y trazabilidad del dato
   roundPanel(65,454,830,63,'#fffef8','#c8ded8',9);
@@ -422,14 +422,14 @@ canvas.tabIndex=0;canvas.style.cursor='pointer';document.addEventListener('keydo
 
   if(mode==='botany'){
     if(botanyTested.size===7&&x>=760&&x<=905&&y>=510&&y<=540){mode='complete';challengeAnswered=false;challengeFeedback='';challengeCorrect=false;return;}
-    const factorRows=[['water',235],['uv',300],['co2',365]];
+    const factorRows=[['water',215],['uv',275],['co2',335]];
     for(const [id,yy] of factorRows){
       if(y>=yy+8&&y<=yy+42){
         if(x>=602&&x<=698){botanyFactors[id]=0;botanyResult=null;return;}
         if(x>=744&&x<=840){botanyFactors[id]=1;botanyResult=null;return;}
       }
     }
-    if(x>=520&&x<=730&&y>=402&&y<=430){
+    if(x>=520&&x<=730&&y>=398&&y<=428){
       const key=botanyKey();
       if(key==='000'){botanyNotice='Activa al menos uno de los tres factores. El Excel contiene siete combinaciones, sin una prueba 000.';return;}
       const result=botanyExperiments[key];
