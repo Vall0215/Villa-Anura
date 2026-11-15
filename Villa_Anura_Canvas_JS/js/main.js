@@ -137,7 +137,7 @@ function controlRoom(){
   txt('VILLA ANURA  ·  CENTRO DE CONTROL',48,33,13,'#397d6c');
   txt('★ '+earnedStars+'  ESTRELLAS',690,42,11,'#a47727','right');
   txt('MISIÓN 1 / 1  ·  EXPLORACIÓN ESPACIAL',48,51,10,'#426879');
-c  txt('SECCIÓN '+(missionIndex+1)+' / 6  ·  '+missionBriefs[missionIndex].title,48,64,9,'#66828a');
+  txt('SECCIÓN '+(missionIndex+1)+' / 6  ·  '+missionBriefs[missionIndex].title,48,64,9,'#66828a');
   // Presupuesto y masa como controles visibles en la esquina izquierda
   roundPanel(38,70,150,42,'#fff0bd','#e4bd55',10);
   txt('$ '+missionBudget.toLocaleString('es-CO'),113,97,18,'#8b5b23','center');
