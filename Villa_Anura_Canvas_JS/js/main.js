@@ -53,49 +53,57 @@ const botanyExperiments = {
 function botanyKey(){return String(botanyFactors.water)+String(botanyFactors.uv)+String(botanyFactors.co2);}
 function botanyScene(){
   background();
+  // Centro de control del experimento: la ranita configura variables binarias.
   roundPanel(28,12,904,50,'#fffdf5','#b9d8d4',12);
-  txt('VILLA ANURA · LABORATORIO DE BOTÁNICA',48,34,14,'#397d6c');
-  txt('MISIÓN 2 · EXPERIMENTO EN MICROGRAVEDAD',48,52,10,'#426879');
-  roundPanel(60,76,840,58,'#e8f5ef','#a9d2c4',10);
-  txt('¿Cómo influyen el agua, la radiación UV y el CO₂ en las plantas?',480,100,14,'#285d60','center');
-  txt('Prueba las siete combinaciones disponibles y compara los resultados.',480,119,10,'#5c7d7b','center');
-  // laboratorio y planta
-  roundPanel(75,150,300,250,'#f5fbf7','#b9d8ce',12);
-  txt('CÁMARA DE CULTIVO',225,176,12,'#397d6c','center');
-  rect(166,220,118,125,'#c7e8e4');rect(177,231,96,104,'#e8f5e8');
-  rect(222,283,8,47,'#3c9c54');rect(198,262,27,9,'#55b96c');rect(229,246,29,9,'#55b96c');
-  rect(198,253,9,17,'#55b96c');rect(251,237,9,18,'#55b96c');
-  rect(185,330,78,8,'#9c7950');rect(185,338,78,7,'#8d6847');
-  txt('AGUA',225,365,9,'#548477','center');
-  // controles de factores
-  roundPanel(400,150,485,250,'#fffef8','#c8ded8',12);
-  txt('CONFIGURA LAS CONDICIONES',642,176,13,'#397d6c','center');
-  const factors=[['water','AGUA',0],['uv','RADIACIÓN UV',1],['co2','CO₂',2]];
-  factors.forEach((f,i)=>{
-    const yy=195+i*54,active=botanyFactors[f[0]]===1;
-    roundPanel(430,yy,425,43,active?'#e3f5e8':'#edf2f1',active?'#6fbd8c':'#c6d8d4',8);
-    txt(f[1],450,yy+26,12,'#31596a');
-    roundPanel(760,yy+6,76,30,active?'#3a9a67':'#8da4a5',active?'#2c8155':'#809798',8);
-    txt(active?'ACTIVO':'INACTIVO',798,yy+26,9,'#ffffff','center');
+  txt('VILLA ANURA · CENTRO DE CONTROL BOTÁNICO',48,34,14,'#397d6c');
+  txt('MISIÓN 2 · EXPERIMENTO EN AUSENCIA DE GRAVEDAD',48,52,10,'#426879');
+  roundPanel(60,76,840,52,'#e8f5ef','#a9d2c4',10);
+  txt('Configura cada variable con 1 (activa) o 0 (inactiva).',480,99,14,'#285d60','center');
+  txt('Prueba las siete combinaciones del experimento y compara sus resultados.',480,116,10,'#5c7d7b','center');
+
+  // Consola izquierda y ranita operadora
+  roundPanel(65,150,265,290,'#e5f1f0','#9dbfc2',12);
+  txt('OPERADORA FLYING',197,177,12,'#397d6c','center');
+  roundPanel(91,194,212,145,'#164e70','#78b8bf',9);
+  for(let i=0;i<4;i++){rect(108,213+i*25,72+(i%2)*42,4,'#6ed8d5');}
+  planet(250,250,24,'#a7dbe4');
+  drawFrog(197,410,0.62);
+  txt('Selecciona los valores',197,430,9,'#547782','center');
+
+  // Panel binario de configuración
+  roundPanel(355,150,540,290,'#fffef8','#c8ded8',12);
+  txt('MATRIZ DE VARIABLES',625,178,13,'#397d6c','center');
+  txt('VARIABLE',390,207,10,'#6b8587');
+  txt('0 · INACTIVO',650,207,10,'#6b8587','center');
+  txt('1 · ACTIVO',800,207,10,'#6b8587','center');
+  const factors=[['water','AGUA',235],['uv','RADIACIÓN UV',300],['co2','CO₂',365]];
+  factors.forEach(([id,label,yy])=>{
+    const value=botanyFactors[id];
+    roundPanel(382,yy,486,50,'#edf5f2','#d0e1dc',8);
+    txt(label,402,yy+30,12,'#31596a');
+    roundPanel(602,yy+8,96,34,value===0?'#3a9a67':'#dfe9e7',value===0?'#2c8155':'#c2d5d1',7);
+    txt('0',650,yy+30,14,value===0?'#ffffff':'#668080','center');
+    roundPanel(744,yy+8,96,34,value===1?'#3a9a67':'#dfe9e7',value===1?'#2c8155':'#c2d5d1',7);
+    txt('1',792,yy+30,14,value===1?'#ffffff':'#668080','center');
   });
-  roundPanel(520,365,245,34,'#15516e','#58c9cf',9);
-  txt('EJECUTAR EXPERIMENTO ▶',642,387,11,'#ffffff','center');
-  // resultados
-  roundPanel(75,414,810,92,'#fffef8','#c8ded8',10);
+  roundPanel(520,402,210,28,'#15516e','#58c9cf',8);
+  txt('EJECUTAR PRUEBA ▶',625,421,10,'#ffffff','center');
+
+  // Resultado y trazabilidad del dato
+  roundPanel(65,454,830,63,'#fffef8','#c8ded8',9);
   if(botanyResult){
-    txt('COMBINACIÓN '+botanyKey()+' · RESULTADO',95,436,10,'#397d6c');
-    wrapText(botanyResult.result,95,456,760,14,'#35596a','left');
-    txt('Fuente: '+botanyResult.source,95,492,8,'#718b8c','left');
+    txt('COMBINACIÓN '+botanyKey()+' · RESULTADO',82,474,9,'#397d6c');
+    wrapText(botanyResult.result,82,490,790,12,'#35596a','left');
+    txt('Fuente: '+botanyResult.source,82,510,8,'#718b8c','left');
   }else{
-    txt('RESULTADO DEL EXPERIMENTO',95,439,10,'#397d6c');
-    wrapText(botanyNotice,480,467,740,15,'#547782','center');
+    txt('RESULTADO DEL EXPERIMENTO',82,478,9,'#397d6c');
+    wrapText(botanyNotice,480,498,780,13,'#547782','center');
   }
-  txt('COMBINACIONES PROBADAS: '+botanyTested.size+'/7',480,526,11,'#397d6c','center');
+  txt('COMBINACIONES PROBADAS: '+botanyTested.size+'/7',480,536,10,'#397d6c','center');
   if(botanyTested.size===7){
-    roundPanel(760,510,145,25,'#ffd13e','#e4b52e',8);
-    txt('CONTINUAR ▶',832,527,9,'#754c24','center');
+    roundPanel(760,520,135,25,'#ffd13e','#e4b52e',8);
+    txt('EVALUACIÓN ▶',827,537,9,'#754c24','center');
   }
-  drawFrog(905,390,0.42);
 }
 
 
@@ -371,7 +379,7 @@ function keyDown(e){
      if(challengeCorrect){audio.win();if(!completedMissions.includes(missionIndex)){earnedStars+=2;completedMissions.push(missionIndex);saveProgress();}}else audio.data();return;
    }
    if(challengeCorrect&&(e.code==='Enter'||e.code==='NumpadEnter')){
-     if(missionIndex<5){missionIndex++;selectedResources={};activeCategory=null;utilityPanel=null;challengeAnswered=false;challengeFeedback='';challengeCorrect=false;mode='hangar';resetPlayer();say('Continúa la misión 1: '+missionBriefs[missionIndex].objective);audio.start();}
+     if(missionIndex<5){missionIndex++;selectedResources={};activeCategory=null;utilityPanel=null;challengeAnswered=false;challengeFeedback='';challengeCorrect=false;resetPlayer();if(missionIndex===1){mode='botany';botanyFactors={water:0,uv:0,co2:0};botanyTested=new Set();botanyResult=null;botanyNotice='Configura las variables con 0 o 1 y ejecuta la prueba.';say('¡Bienvenido al laboratorio! Configura agua, radiación UV y CO₂.');}else{mode='hangar';say('Continúa la misión 1: '+missionBriefs[missionIndex].objective);}audio.start();}
      else{mode='title';say('¡Has completado la misión de exploración espacial y sus seis secciones!');}
    }
  }
@@ -414,9 +422,14 @@ canvas.tabIndex=0;canvas.style.cursor='pointer';document.addEventListener('keydo
 
   if(mode==='botany'){
     if(botanyTested.size===7&&x>=760&&x<=905&&y>=510&&y<=540){mode='complete';challengeAnswered=false;challengeFeedback='';challengeCorrect=false;return;}
-    const factorRows=[['water',195],['uv',249],['co2',303]];
-    for(const [id,yy] of factorRows){if(x>=430&&x<=855&&y>=yy&&y<=yy+43){botanyFactors[id]=botanyFactors[id]===1?0:1;botanyResult=null;return;}}
-    if(x>=520&&x<=765&&y>=365&&y<=399){
+    const factorRows=[['water',235],['uv',300],['co2',365]];
+    for(const [id,yy] of factorRows){
+      if(y>=yy+8&&y<=yy+42){
+        if(x>=602&&x<=698){botanyFactors[id]=0;botanyResult=null;return;}
+        if(x>=744&&x<=840){botanyFactors[id]=1;botanyResult=null;return;}
+      }
+    }
+    if(x>=520&&x<=730&&y>=402&&y<=430){
       const key=botanyKey();
       if(key==='000'){botanyNotice='Activa al menos uno de los tres factores. El Excel contiene siete combinaciones, sin una prueba 000.';return;}
       const result=botanyExperiments[key];
