@@ -498,57 +498,32 @@ function titleScreen(){
   txt('VILLA ANURA v1.0',18,532,9,'#26445a');
 }
 function drawFloatingRocket(){
-  // Horizontal flyby inspired by the supplied GIF: nose points left,
-  // engine flame trails to the right, crossing the full starfield above Flyn.
-  const span=W+260;
-  const progress=(clock*105+span*.48)%span;
-  const x=W+130-progress;
-  const y=263+Math.sin(clock*2.1)*7;
-
-  // Soft cyan engine glow behind the spacecraft.
-  ctx.save();
-  ctx.globalAlpha=.13;
-  ctx.fillStyle='#51cce9';
-  ctx.beginPath();ctx.ellipse(x+48,y,49,15,0,0,Math.PI*2);ctx.fill();
-  ctx.restore();
-
-  // Rotate the existing vertical pixel rocket so its nose points left.
-  ctx.save();
-  ctx.translate(x,y);
-  ctx.rotate(-Math.PI/2);
-  ctx.scale(.43,.43);
-  drawRocketProfile(0,100,rocketProfile);
-
-  // Exhaust extends backward (right on screen) and flickers in pixel blocks.
-  const flicker=Math.sin(clock*19)*7+Math.sin(clock*11)*4;
-  ctx.fillStyle='#f07843';
-  ctx.beginPath();
-  ctx.moveTo(-11,94);
-  ctx.lineTo(-8,116+flicker*.25);
-  ctx.lineTo(0,151+flicker);
-  ctx.lineTo(8,116-flicker*.2);
-  ctx.lineTo(11,94);
-  ctx.closePath();ctx.fill();
-
-  ctx.fillStyle='#ffd45c';
-  ctx.beginPath();
-  ctx.moveTo(-5,94);
-  ctx.lineTo(-4,117);
-  ctx.lineTo(0,139+flicker*.65);
-  ctx.lineTo(4,117);
-  ctx.lineTo(5,94);
-  ctx.closePath();ctx.fill();
-
-  rect(-2,98,4,25,'#fff1b0');
-
-  // Tiny exhaust pixels stream out behind the rocket.
-  for(let i=0;i<8;i++){
-    const phase=(clock*38+i*13)%58;
-    const px=Math.sin(clock*5+i*1.7)*7;
-    const py=151+phase;
-    ctx.globalAlpha=Math.max(0,1-phase/60)*.85;
-    rect(px,py,4,4,i%3===0?'#ffe08a':i%2?'#ffb14f':'#f47a48');
-  }
+  // Continuous horizontal flight from right to left, above Flyn.
+  const span=W+190,speed=105;
+  const x=W+95-((clock*speed)%span);
+  const y=222+Math.sin(clock*1.7)*5;
+  const flame=7+Math.sin(clock*19)*4+Math.sin(clock*11)*2;
+  ctx.save();ctx.translate(Math.round(x),Math.round(y));
+  ctx.globalAlpha=.18;ctx.fillStyle='#4bc9ed';ctx.beginPath();ctx.ellipse(4,0,67,24,0,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
+  // Flame trails to the right as the rocket travels left.
+  ctx.fillStyle='#e95d38';ctx.beginPath();ctx.moveTo(49,-10);ctx.lineTo(65,-flame);ctx.lineTo(91,0);ctx.lineTo(65,flame);ctx.lineTo(49,10);ctx.closePath();ctx.fill();
+  ctx.fillStyle='#ffb23e';ctx.beginPath();ctx.moveTo(49,-6);ctx.lineTo(64,-flame*.65);ctx.lineTo(80,0);ctx.lineTo(64,flame*.65);ctx.lineTo(49,6);ctx.closePath();ctx.fill();
+  ctx.fillStyle='#fff0a1';ctx.beginPath();ctx.moveTo(49,-3);ctx.lineTo(61,-flame*.3);ctx.lineTo(69,0);ctx.lineTo(61,flame*.3);ctx.lineTo(49,3);ctx.closePath();ctx.fill();
+  for(let i=0;i<7;i++){const px=72+i*13+Math.sin(clock*8+i)*3,py=Math.sin(clock*13+i*2.4)*(3+i*.8);ctx.globalAlpha=.85-i*.09;rect(px,py,i%3===0?4:3,i%3===0?4:3,i%2?'#ff9b45':'#ffd36b');}
+  ctx.globalAlpha=1;
+  // Engine, body and stabilizer fins.
+  rect(37,-16,13,32,'#173c53');rect(40,-13,8,26,'#8da7b3');
+  rect(27,-19,13,8,'#169d80');rect(27,11,13,8,'#169d80');rect(17,-25,14,9,'#087d68');rect(17,16,14,9,'#087d68');
+  rect(-39,-17,78,34,'#153d58');rect(-36,-15,72,30,'#dcecf0');rect(-31,-12,61,24,'#f8ffff');
+  rect(-29,-16,56,4,'#2aa98e');rect(-29,12,56,4,'#2aa98e');rect(-22,-10,8,20,'#a7c4cc');
+  rect(-8,-10,20,20,'#d3e5e9');rect(-5,-7,14,14,'#174d70');rect(-3,-5,10,10,'#5fc4d5');
+  rect(17,-8,11,16,'#b7cbd0');rect(19,-5,7,10,'#f8ffff');
+  // Green nose cone points left.
+  ctx.fillStyle='#087d68';ctx.beginPath();ctx.moveTo(-39,-13);ctx.lineTo(-57,0);ctx.lineTo(-39,13);ctx.closePath();ctx.fill();
+  ctx.fillStyle='#4bd2ae';ctx.beginPath();ctx.moveTo(-42,-8);ctx.lineTo(-54,0);ctx.lineTo(-42,8);ctx.closePath();ctx.fill();
+  rect(-39,-4,5,8,'#d8ffff');rect(-21,-9,10,18,'#163d59');rect(-19,-7,6,14,'#5cc8df');rect(-18,-5,3,6,'#d9fbff');
+  ctx.fillStyle='#087d68';ctx.beginPath();ctx.moveTo(14,-16);ctx.lineTo(29,-27);ctx.lineTo(35,-16);ctx.closePath();ctx.fill();ctx.beginPath();ctx.moveTo(14,16);ctx.lineTo(29,27);ctx.lineTo(35,16);ctx.closePath();ctx.fill();
+  rect(22,-21,8,3,'#54d8b5');rect(22,18,8,3,'#54d8b5');
   ctx.restore();
 }
 function resetPlayer(){player.x=115;player.y=420;player.vx=0;player.vy=0;player.grounded=true;}
