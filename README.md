@@ -1,3 +1,5 @@
+![NASA Space Apps Challenge Barranquilla 2026](assets/nasa-space-apps-banner.svg)
+
 # Villa Anura
 
 Videojuego educativo de exploración espacial en el que el jugador acompaña a Flyn en la preparación y ejecución de misiones. El proyecto utiliza una interfaz 2D de estilo pixel art y presenta conceptos básicos de planificación, experimentación y control de una nave espacial.

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="457" height="221" viewBox="0 0 457 221">
+<rect width="457" height="221" fill="#030b2d"/>
+<g fill="none" stroke="#fff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+<circle cx="89" cy="110" r="61"/><path d="M119 58 L137 23 M130 54 L148 29 M139 59 L159 36 M145 68 L174 58"/><circle cx="131" cy="65" r="13"/>
+</g>
+<g font-family="Arial,Helvetica,sans-serif" text-anchor="start">
+<text x="263" y="56" fill="#e32920" font-size="22" font-weight="800" letter-spacing="5">NASA</text>
+<text x="184" y="125" fill="#fff" font-size="48" font-weight="300" textLength="228" lengthAdjust="spacingAndGlyphs">SPACE APPS</text>
+<text x="185" y="153" fill="#fff" font-size="22" font-weight="700" letter-spacing="8">CHALLENGE</text>
+<text x="192" y="181" fill="#fff" font-size="21" font-weight="700" letter-spacing="6">BARRANQUILLA</text>
+<text x="263" y="204" fill="#e32920" font-size="22" font-weight="800" letter-spacing="7">2026</text>
+</g></svg>
